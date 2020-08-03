@@ -22,12 +22,13 @@ router.post(
   upload.array("imagesAnnouncements", 5),
   async (req, res) => {
     try {
-      const { title, descrition, tag, price, indexPreviewImage } = req.body
+      const { title, description, tag, price, indexPreviewImage } = req.body
       const { files, userId } = req
 
+      console.log(req.files)
       const advert = new Announcement({
         title,
-        descrition,
+        description,
         tag,
         price,
         date: new Date(),
@@ -37,12 +38,12 @@ router.post(
 
       for (const img of files) {
         const image = new Image({
-          path: img.path,
+          path: `/${img.path}`,
           announcement: advertNew._id,
           owner: userId,
-          statusPreview: files.indexOf(img) === indexPreviewImage && true,
+          statusPreview:
+            files.indexOf(img) === Number.parseInt(indexPreviewImage) && true,
         })
-
         await image.save()
       }
 

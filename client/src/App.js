@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react"
+import "./App.scss"
+import { useDispatch } from "react-redux"
+import { setToken } from "./redux/auth/authActions"
+import { BrowserRouter as Router } from "react-router-dom"
+import Routes from "./components/Routes"
 
 function App() {
+  const [load, setLoad] = useState(true)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(setToken())
+    setLoad(false)
+  }, [dispatch])
+
+  if (load) {
+    return <div>LOADING..</div>
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Router>
+      <Routes />
+    </Router>
+  )
 }
 
-export default App;
+export default App

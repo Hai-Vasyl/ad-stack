@@ -1,0 +1,203 @@
+$colors: (
+  primary: #4287f5,
+  secondary: #eeee,
+  dark: #333,
+  danger: #e50909,
+  spinner: rgba(51, 51, 51, 0.5),
+  bg-loader: rgba(211, 211, 211, 0.5),
+);
+$transitions: (
+  sudden: 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+  smooth: 0.25s ease,
+  spin: 1s linear infinite,
+);
+
+@function getColor($color-name) {
+  @return map-get($colors, $color-name);
+}
+@function getTransition($transition-name) {
+  @return map-get($transitions, $transition-name);
+}
+
+.auth-form {
+  background-color: white;
+  width: 400px;
+  padding: 20px;
+  position: relative;
+  max-width: 100%;
+  border-radius: 5px;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.2), 0px 14px 15px rgba(0, 0, 0, 0.1);
+  &__title {
+    font-size: 2em;
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: normal;
+  }
+  &__container-fields {
+  }
+  &__btn-handler {
+    display: none;
+  }
+  &__container-btns {
+    width: 260px;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    padding-top: 5px;
+  }
+  &__loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+    transition: getTransition(smooth);
+    background-color: getColor(bg-loader);
+    opacity: 0;
+    visibility: hidden;
+    &--active {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+  &__spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 10px double rgba(255, 255, 255, 0.489);
+    border-left-color: getColor(spinner);
+    animation: spin getTransition(spin);
+    width: 100px;
+    height: 100px;
+  }
+  @keyframes spin {
+    from {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  border-radius: 4px;
+  transition: getTransition(smooth);
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.05), 0px 4px 5px rgba(0, 0, 0, 0.1);
+  &__name,
+  &__icon {
+    margin: 0px 5px;
+  }
+  &:hover {
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05), 0px 3px 3px rgba(0, 0, 0, 0.1);
+  }
+  &:active {
+    box-shadow: none;
+  }
+}
+.btn-primary {
+  color: white;
+  background-color: getColor(primary);
+}
+.btn-simple {
+  background-color: getColor(secondary);
+}
+
+.field {
+  display: block;
+  margin-bottom: 15px;
+  transition: getTransition(smooth);
+  height: 60.38px;
+  position: relative;
+  visibility: visible;
+  opacity: 1;
+  z-index: 2;
+  &--close {
+    margin: 0;
+    height: 0;
+    z-index: 1;
+    visibility: hidden;
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  &__container-info {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+    padding: 3px 0;
+    background-color: white;
+  }
+  &__name {
+    text-transform: capitalize;
+  }
+  &__container-msg {
+    position: relative;
+    display: flex;
+    cursor: pointer;
+    transition: getTransition(smooth);
+    opacity: 1;
+    visibility: visible;
+    &:hover {
+      .field__msg {
+        visibility: visible;
+        opacity: 1;
+        transform: translate(0%, -50%);
+      }
+    }
+    &--close {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+  &__icon {
+    margin: auto;
+    color: getColor(danger);
+  }
+  &__msg {
+    position: absolute;
+    background-color: getColor(dark);
+    color: white;
+    width: 100px;
+    font-size: 0.8em;
+    padding: 5px;
+    border-radius: 4px;
+    position: realtive;
+    right: 26px;
+    text-align: center;
+    transition: getTransition(sudden);
+    top: 50%;
+    visibility: hidden;
+    opacity: 0;
+    transform: translate(-20%, -50%);
+  }
+  &__triangle {
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    border: 8px solid transparent;
+    border-left-color: getColor(dark);
+    transform: translateY(-50%);
+    right: -16px;
+    top: 50%;
+  }
+  &__input {
+    width: 100%;
+    transition: getTransition(smooth);
+    padding: 7px;
+    border: 1.2px solid lightgrey;
+    border-radius: 4px;
+    background-color: getColor(secondary);
+    outline-color: grey;
+    &--warning {
+      border-color: getColor(danger);
+    }
+  }
+}
