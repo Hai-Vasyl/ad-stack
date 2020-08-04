@@ -22,6 +22,15 @@ $transitions: (
   @return map-get($transitions, $transition-name);
 }
 
+.wrapper {
+  width: 1200px;
+  max-width: 100%;
+  padding: 68px 50px 20px 50px;
+  margin: 0 auto;
+  background-color: white;
+  min-height: 100vh;
+}
+
 .auth-form {
   background-color: white;
   width: 400px;
@@ -177,6 +186,9 @@ $transitions: (
     margin: auto;
     color: getColor(danger);
   }
+  &__info-icon {
+    color: getColor(dark);
+  }
   &__msg {
     position: absolute;
     background-color: getColor(dark);
@@ -226,7 +238,8 @@ $transitions: (
   background-color: getColor(dark);
   z-index: 8;
   &__menu {
-    width: 1200px;
+    width: 1300px;
+    padding: 0px 50px;
     max-width: 100%;
     margin: 0 auto;
     display: flex;
@@ -252,7 +265,7 @@ $transitions: (
     }
   }
   &__logo-link {
-    padding: 0 10px;
+    padding: 4px 10px;
     margin-right: auto;
     border: none;
     &:hover {
@@ -266,11 +279,12 @@ $transitions: (
     margin-left: 7px;
   }
   &__search {
-    width: 500px;
-    max-width: 100%;
+    // width: 500px;
+    flex: 1;
+    // max-width: 100%;
     display: flex;
     margin: 0px 10px;
-    margin-right: auto;
+    // margin-right: auto;
     border-radius: 4px;
     overflow: hidden;
   }
@@ -357,5 +371,36 @@ $transitions: (
   &--active {
     visibility: visible;
     opacity: 1;
+  }
+}
+.title {
+  &__container-name {
+    font-size: 1.5em;
+    border-bottom: 1px solid lightgrey;
+    display: flex;
+    align-items: center;
+  }
+  &__icon {
+    font-size: 0.9em;
+  }
+  &__name {
+    margin-left: 7px;
+  }
+  &__description {
+    color: grey;
+  }
+}
+
+.form {
+  &__main-side {
+  }
+  &__container-fields {
+  }
+  &__btn-handler {
+    display: none;
+  }
+  &__container-btns {
+  }
+  &__bg-side {
   }
 }

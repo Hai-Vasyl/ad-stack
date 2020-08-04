@@ -2,7 +2,7 @@ import React from "react"
 
 function CategoriesPage() {
   return (
-    <div>
+    <div className='wrapper'>
       <div>CategoriesPage.</div>
     </div>
   )

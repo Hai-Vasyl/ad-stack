@@ -2,7 +2,7 @@ import React from "react"
 
 function UsersPage() {
   return (
-    <div>
+    <div className='wrapper'>
       <div>UsersPage.</div>
     </div>
   )

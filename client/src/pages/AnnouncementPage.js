@@ -2,7 +2,7 @@ import React from "react"
 
 function AnnouncementPage() {
   return (
-    <div>
+    <div className='wrapper'>
       <div>AnnouncementPage</div>
     </div>
   )
