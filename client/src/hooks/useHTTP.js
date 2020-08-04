@@ -1,6 +1,7 @@
 import { useCallback } from "react"
 import axios from "axios"
 import { useSelector } from "react-redux"
+import { resetNavbar } from "../redux/navbar/navbarActions"
 
 function useHTTP() {
   const { token } = useSelector((state) => state.auth)
@@ -32,6 +33,7 @@ function useHTTP() {
           dispatch(options.fetchStart())
           const data = await makeRequest()
           dispatch(options.fetchSuccess({ data, options }))
+          dispatch(resetNavbar())
         } catch (error) {
           console.log(error)
           options.fetchFailure &&

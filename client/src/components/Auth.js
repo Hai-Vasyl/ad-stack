@@ -20,7 +20,10 @@ function Auth() {
   ])
   const [isLogin, setIsLogin] = useState(true)
   const { fetchData } = useHTTP()
-  const { load, token, error } = useSelector((state) => state.auth)
+  const {
+    auth: { load, error },
+    navbar: { authForm },
+  } = useSelector((state) => state)
   const dispatch = useDispatch()
 
   const handleChange = (e) => {
@@ -116,7 +119,7 @@ function Auth() {
   })
 
   return (
-    <div className='auth-form'>
+    <div className={`auth-form ${authForm && "auth-form--open"}`}>
       <div
         className={`auth-form__loader ${load && "auth-form__loader--active"}`}
       >

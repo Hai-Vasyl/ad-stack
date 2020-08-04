@@ -1,6 +1,6 @@
 import React from "react"
 import { Route, Switch } from "react-router-dom"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 
 import Auth from "../components/Auth"
 import Navbar from "../components/Navbar"
@@ -12,13 +12,25 @@ import AnnouncementPage from "../pages/AnnouncementPage"
 import ModPage from "../pages/ModPage"
 import UserPage from "../pages/UserPage"
 import UsersPage from "../pages/UsersPage"
+import { resetNavbar } from "../redux/navbar/navbarActions"
 
 function Routes() {
-  const { token } = useSelector((state) => state.auth)
+  const {
+    auth: { token },
+    navbar: { dropMenu, authForm },
+  } = useSelector((state) => state)
+  const dispatch = useDispatch()
+
   return (
     <>
       <Navbar />
       <Auth />
+      <div
+        onClick={() => dispatch(resetNavbar())}
+        className={`background ${
+          (dropMenu || authForm) && "background--active"
+        }`}
+      ></div>
       {token.token ? (
         token.user.typeUser === "user" ? (
           <Switch>

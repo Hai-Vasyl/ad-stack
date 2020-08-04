@@ -6,6 +6,7 @@ import {
   SET_ERROR_AUTH,
   CLEAR_SPECIFIC_ERROR_AUTH,
   CLEAR_ERRORS_AUTH,
+  CLEAR_DATA_AUTH,
 } from "./authTypes"
 
 export const fetchStart = () => {
@@ -45,5 +46,10 @@ export const clearErrors = () => {
 export const setToken = () => {
   return {
     type: SET_TOKEN_AUTH,
+  }
+}
+export const clearData = () => {
+  return {
+    type: CLEAR_DATA_AUTH,
   }
 }

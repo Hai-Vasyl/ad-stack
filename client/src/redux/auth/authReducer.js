@@ -6,6 +6,7 @@ import {
   SET_ERROR_AUTH,
   CLEAR_SPECIFIC_ERROR_AUTH,
   CLEAR_ERRORS_AUTH,
+  CLEAR_DATA_AUTH,
 } from "./authTypes"
 
 const initialState = {
@@ -65,6 +66,12 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         token: JSON.parse(auth),
+      }
+    case CLEAR_DATA_AUTH:
+      localStorage.removeItem("auth")
+      return {
+        ...state,
+        token: {},
       }
     default:
       return state
