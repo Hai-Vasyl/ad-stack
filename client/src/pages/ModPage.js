@@ -1,8 +1,11 @@
 import React, { useState } from "react"
 import { BsInfoCircle, BsFilePlus } from "react-icons/bs"
 import { FiPlus } from "react-icons/fi"
+import bgImage from "../imgs/undraw_usability_testing_2xs4.svg"
+import useHTTP from "../hooks/useHTTP"
 
 function ModPage() {
+  const { fetchData } = useHTTP()
   const [form, setForm] = useState([
     {
       param: "title",
@@ -33,7 +36,7 @@ function ModPage() {
     {
       param: "imagesAnnouncements",
       name: "Images",
-      value: null,
+      value: {},
       msg:
         "Attach images of the exhibited product or images that associate this announcement",
     },
@@ -60,59 +63,177 @@ function ModPage() {
     )
   }
 
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      let fd = new FormData()
+
+      form.forEach((item) => {
+        if (item.param === "imagesAnnouncements") {
+          Array.prototype.forEach.call(item.value, (file) => {
+            fd.append("imagesAnnouncements", file, file.name)
+          })
+        } else {
+          fd.set(item.param, item.value)
+        }
+      })
+
+      const data = await fetchData({
+        url: "/announcement/create-announcement",
+        method: "post",
+        data: fd,
+        options: { isLocalStorage: true },
+      })
+      console.log(data)
+    } catch (error) {}
+  }
+
   const fields = form.map((item) => {
     if (item.param === "tag") {
       return (
-        <select name={item.param} value={item.value} onChange={handleChange}>
-          <option value='transport'>Transport</option>
-          <option value='electronics'>Electronics</option>
-          <option value='house_garden'>House and garden</option>
-          <option value='childrens_world'>Children's world</option>
-          <option value='real_estate'>Real estate</option>
-          <option value='spare_parts_for_transport'>
-            Spare parts for transport
-          </option>
-          <option value='work'>Work</option>
-          <option value='animals'>Animals</option>
-          <option value='business_services'>Business and services</option>
-          <option value='fashion_style'>Fashion and style</option>
-          <option value='hobbies_recreation_sports'>
-            Hobbies, recreation and sports
-          </option>
-        </select>
+        <div className='field field-select' key={item.param}>
+          <div className='field__container-info'>
+            <span className='field__name'>{item.name}</span>
+            <div className='field__container-msg'>
+              <BsInfoCircle className='field__icon field__info-icon' />
+              <span className='field__msg field__msg-info'>
+                {item.msg}
+                <span className='field__triangle'></span>
+              </span>
+            </div>
+          </div>
+          <select
+            className='field__select'
+            name={item.param}
+            value={item.value}
+            onChange={handleChange}
+          >
+            <option value='transport' className='field__option'>
+              Transport
+            </option>
+            <option value='electronics' className='field__option'>
+              Electronics
+            </option>
+            <option value='house_garden' className='field__option'>
+              House and garden
+            </option>
+            <option value='childrens_world' className='field__option'>
+              Children's world
+            </option>
+            <option value='real_estate' className='field__option'>
+              Real estate
+            </option>
+            <option value='spare_parts_for_transport' className='field__option'>
+              Spare parts for transport
+            </option>
+            <option value='work' className='field__option'>
+              Work
+            </option>
+            <option value='animals' className='field__option'>
+              Animals
+            </option>
+            <option value='business_services' className='field__option'>
+              Business and services
+            </option>
+            <option value='fashion_style' className='field__option'>
+              Fashion and style
+            </option>
+            <option value='hobbies_recreation_sports' className='field__option'>
+              Hobbies, recreation and sports
+            </option>
+          </select>
+        </div>
       )
     } else if (item.param === "description") {
       return (
-        <textarea
-          cols='30'
-          rows='10'
-          name={item.param}
-          value={item.value}
-          onChange={handleChange}
-        ></textarea>
+        <label key={item.param} className='field field-custom-height'>
+          <div className='field__container-info'>
+            <span className='field__name'>{item.name}:</span>
+            <div className='field__container-msg'>
+              <BsInfoCircle className='field__icon field__info-icon' />
+              <span className='field__msg field__msg-info'>
+                {item.msg}
+                <span className='field__triangle'></span>
+              </span>
+            </div>
+          </div>
+          <textarea
+            name={item.param}
+            value={item.value}
+            onChange={handleChange}
+            className='field__textarea'
+          ></textarea>
+        </label>
       )
     } else if (item.param === "imagesAnnouncements") {
       return (
-        <input type='file' name={item.param} multiple onChange={handleChange} />
+        <div key={item.param} className='field field-select'>
+          <div className='field__container-info'>
+            <span className='field__name'>{item.name}</span>
+            <div className='field__container-msg'>
+              <BsInfoCircle className='field__icon field__info-icon' />
+              <span className='field__msg field__msg-info'>
+                {item.msg}
+                <span className='field__triangle'></span>
+              </span>
+            </div>
+          </div>
+          <label className='field__label-file'>
+            Select Images
+            <input
+              type='file'
+              name={item.param}
+              multiple
+              onChange={handleChange}
+              className='field__input-handler'
+            />
+          </label>
+        </div>
       )
     } else if (item.param === "indexPreviewImage") {
-      let images = []
+      let images = {}
       form.forEach((item) => {
         if (item.param === "imagesAnnouncements") {
           images = item.value
         }
       })
       return (
-        <select name={item.param} value={item.value} onChange={handleChange}>
-          {images &&
-            Array.prototype.map.call(images, (file, index) => {
-              return (
-                <option key={file.name} value={index}>
-                  {file.name}
-                </option>
-              )
-            })}
-        </select>
+        <div
+          className={`field field-select ${
+            Object.entries(images).length === 0 && "field-select--close"
+          }`}
+          key={item.param}
+        >
+          <div className='field__container-info'>
+            <span className='field__name'>{item.name}</span>
+            <div className='field__container-msg'>
+              <BsInfoCircle className='field__icon field__info-icon' />
+              <span className='field__msg field__msg-info'>
+                {item.msg}
+                <span className='field__triangle'></span>
+              </span>
+            </div>
+          </div>
+          <select
+            className='field__select'
+            name={item.param}
+            value={item.value}
+            onChange={handleChange}
+          >
+            {images &&
+              Array.prototype.map.call(images, (file, index) => {
+                return (
+                  <option
+                    key={file.name}
+                    value={index}
+                    className='field__option'
+                  >
+                    {file.name}
+                  </option>
+                )
+              })}
+          </select>
+        </div>
       )
     }
     return (
@@ -121,7 +242,7 @@ function ModPage() {
           <span className='field__name'>{item.name}:</span>
           <div className='field__container-msg'>
             <BsInfoCircle className='field__icon field__info-icon' />
-            <span className='field__msg'>
+            <span className='field__msg field__msg-info'>
               {item.msg}
               <span className='field__triangle'></span>
             </span>
@@ -141,9 +262,9 @@ function ModPage() {
 
   return (
     <div className='wrapper'>
+      {console.log(form)}
       <div className='title'>
         <div className='title__container-name'>
-          {console.log(form)}
           <BsFilePlus className='title__icon' />
           <span className='title__name'>Create</span>
         </div>
@@ -152,18 +273,20 @@ function ModPage() {
 
       <div className='form'>
         <div className='form__main-side'>
-          <form className='form__container-fields'>
+          <form className='form__container-fields' onSubmit={handleSubmit}>
             {fields}
             <button className='form__btn-handler'></button>
           </form>
           <div className='form__container-btns'>
-            <button className='btn btn-primary'>
+            <button className='btn btn-primary' onClick={handleSubmit}>
               <FiPlus className='btn__icon' />
               <span className='btn__name'>Create</span>
             </button>
           </div>
         </div>
-        <div className='form__bg-side'></div>
+        <div className='form__bg-side'>
+          <img src={bgImage} alt='bgImage' className='form__image' />
+        </div>
       </div>
     </div>
   )

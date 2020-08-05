@@ -1,5 +1,5 @@
 import React from "react"
-import { Route, Switch } from "react-router-dom"
+import { Route, Switch, Redirect } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 
 import Auth from "../components/Auth"
@@ -49,6 +49,7 @@ function Routes() {
             />
             <Route path='/edit/:announcementId' component={ModPage} />
             <Route path='/user/:userId' component={UserPage} />
+            <Redirect to='/' />
           </Switch>
         ) : (
           <Switch>
@@ -68,6 +69,7 @@ function Routes() {
             />
             <Route path='/edit/:announcementId' component={ModPage} />
             <Route path='/user/:userId' component={UserPage} />
+            <Redirect to='/' />
           </Switch>
         )
       ) : (
@@ -81,6 +83,7 @@ function Routes() {
           />
           <Route path='/details/:announcementId' component={AnnouncementPage} />
           <Route path='/user/:userId' component={UserPage} />
+          <Redirect to='/' />
         </Switch>
       )}
     </>

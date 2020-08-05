@@ -25,7 +25,6 @@ router.post(
       const { title, description, tag, price, indexPreviewImage } = req.body
       const { files, userId } = req
 
-      console.log(req.files)
       const advert = new Announcement({
         title,
         description,
@@ -36,15 +35,17 @@ router.post(
       })
       const advertNew = await advert.save()
 
-      for (const img of files) {
-        const image = new Image({
-          path: `/${img.path}`,
-          announcement: advertNew._id,
-          owner: userId,
-          statusPreview:
-            files.indexOf(img) === Number.parseInt(indexPreviewImage) && true,
-        })
-        await image.save()
+      if (files) {
+        for (const img of files) {
+          const image = new Image({
+            path: `/${img.path}`,
+            announcement: advertNew._id,
+            owner: userId,
+            statusPreview:
+              files.indexOf(img) === Number.parseInt(indexPreviewImage) && true,
+          })
+          await image.save()
+        }
       }
 
       res.status(201).json("Announcement successfully created!")

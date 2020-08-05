@@ -14,6 +14,7 @@ body {
 select,
 input,
 button,
+textarea,
 label {
   font-size: inherit;
   font-family: inherit;
