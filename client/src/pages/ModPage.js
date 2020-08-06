@@ -138,9 +138,6 @@ function ModPage() {
             <option value='fashion_style' className='field__option'>
               Fashion and style
             </option>
-            <option value='hobbies_recreation_sports' className='field__option'>
-              Hobbies, recreation and sports
-            </option>
           </select>
         </div>
       )
@@ -262,13 +259,12 @@ function ModPage() {
 
   return (
     <div className='wrapper'>
-      {console.log(form)}
       <div className='title'>
         <div className='title__container-name'>
           <BsFilePlus className='title__icon' />
           <span className='title__name'>Create</span>
         </div>
-        <span className='title__description'>Create new announcement</span>
+        <span className='title__description'>Choose what interests you</span>
       </div>
 
       <div className='form'>
