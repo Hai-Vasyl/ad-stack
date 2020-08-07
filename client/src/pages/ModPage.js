@@ -264,7 +264,7 @@ function ModPage() {
           <BsFilePlus className='title__icon' />
           <span className='title__name'>Create</span>
         </div>
-        <span className='title__description'>Choose what interests you</span>
+        <span className='title__description'>Create new announcement</span>
       </div>
 
       <div className='form'>

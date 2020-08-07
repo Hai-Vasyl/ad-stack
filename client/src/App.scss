@@ -659,6 +659,10 @@ $transitions: (
         rgba(211, 35, 202, 0.5)
       );
     }
+    &:active {
+      transform: scale(0.9);
+      box-shadow: none;
+    }
   }
   &__name {
     position: absolute;
@@ -680,5 +684,68 @@ $transitions: (
     object-fit: contain;
     transform: scale(0.85);
     filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.8));
+  }
+}
+
+.announc {
+  display: grid;
+  grid-auto-rows: 1fr;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 25px;
+  margin-top: 15px;
+  text-align: center;
+  &__link {
+    text-decoration: none;
+    transition: getTransition(smooth);
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05), 0px 4px 5px rgba(0, 0, 0, 0.1);
+    &:hover {
+      box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1), 0px 6px 8px rgba(0, 0, 0, 0.1);
+      transform: scale(1.05);
+      border-radius: 5px;
+      .announc__container-img {
+        border: none;
+      }
+    }
+    &:active {
+      transform: scale(0.9);
+      box-shadow: none;
+    }
+  }
+  &__container-img {
+    height: 250px;
+    position: relative;
+    border: 1px solid lightgrey;
+  }
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  &__container-title {
+    padding: 10px 15px;
+    color: getColor(dark);
+    height: 64px;
+    overflow: hidden;
+  }
+  &__price {
+    top: 0;
+    right: 0;
+    padding: 5px;
+  }
+  &__price,
+  &__date {
+    position: absolute;
+    z-index: 3;
+    color: white;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  &__title {
+  }
+  &__date {
+    bottom: 0px;
+    left: 0px;
+    font-size: 0.7em;
+    padding: 4px;
   }
 }

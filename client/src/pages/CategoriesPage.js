@@ -20,7 +20,9 @@ function CategoriesPage() {
           <AiOutlineUnorderedList className='title__icon' />
           <span className='title__name'>Categories</span>
         </div>
-        <span className='title__description'>Create new announcement</span>
+        <span className='title__description'>
+          Choose what you are looking for
+        </span>
       </div>
       <div className='categories'>
         <Link to='/categories/transport' className='categories__link'>

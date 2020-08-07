@@ -55,4 +55,24 @@ router.post(
   }
 )
 
+router.get("/get-announcements/:tagName", async (req, res) => {
+  try {
+    let adverts = await Announcement.find({ tag: req.params.tagName }).select(
+      "price title date"
+    )
+
+    for (let i = 0; i < adverts.length; i++) {
+      const image = await Image.findOne({
+        announcement: adverts[i]._id,
+        statusPreview: true,
+      }).select("path")
+      adverts[i] = { ...adverts[i]._doc, image }
+    }
+
+    res.json(adverts)
+  } catch (error) {
+    res.json(`Error getting all announcements: ${error.message}`)
+  }
+})
+
 module.exports = router
