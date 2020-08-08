@@ -75,4 +75,18 @@ router.get("/get-announcements/:tagName", async (req, res) => {
   }
 })
 
+router.get("/get-announcement/:announId", async (req, res) => {
+  try {
+    const advert = await Announcement.findById(req.params.announId).populate({
+      path: "owner",
+      select: "username ava typeUser",
+    })
+    const images = await Image.find({ announcement: advert._id })
+
+    res.json({ ...advert._doc, images })
+  } catch (error) {
+    res.json(`Error getting all announcements: ${error.message}`)
+  }
+})
+
 module.exports = router
