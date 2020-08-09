@@ -1,6 +1,6 @@
 $colors: (
   primary: #4287f5,
-  secondary: #eeee,
+  secondary: rgba(220, 220, 220, 1),
   dark: #333,
   danger: #e50909,
   spinner: rgba(51, 51, 51, 0.5),
@@ -8,6 +8,7 @@ $colors: (
   light-dark-night: lighten(#333, 15%),
   light-dark: lighten(#333, 10%),
   light-night: lighten(#333, 20%),
+  main: rgba(0, 0, 0, 0.05),
 );
 %main-background {
   background-image: repeating-linear-gradient(
@@ -59,9 +60,9 @@ $transitions: (
 }
 
 .wrapper {
-  width: 1200px;
+  width: 1300px;
   max-width: 100%;
-  padding: 68px 50px 20px 50px;
+  padding: 60px 50px 20px 50px;
   margin: 0 auto;
   background-color: white;
   min-height: 100vh;
@@ -268,7 +269,7 @@ $transitions: (
 .link {
   text-decoration: none;
   color: getColor(dark);
-  border: 1px solid lightgrey;
+  border: 1px solid getColor(secondary);
   box-shadow: none;
   background-color: white;
 }
@@ -440,7 +441,7 @@ $transitions: (
   background-color: getColor(dark);
   z-index: 8;
   &__menu {
-    width: 1300px;
+    width: 1400px;
     padding: 0px 50px;
     max-width: 100%;
     margin: 0 auto;
@@ -450,14 +451,14 @@ $transitions: (
   &__link {
     color: getColor(secondary);
     text-decoration: none;
-    padding: 13px;
+    padding: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: getTransition(smooth);
     background-color: getColor(dark);
-    border-left: 1px solid getColor(light-dark-night);
-    border-right: 1px solid transparent;
+    // border-left: 1px solid getColor(light-dark-night);
+    // border-right: 1px solid transparent;
     &:hover {
       color: white;
     }
@@ -541,7 +542,7 @@ $transitions: (
     position: absolute;
     background-color: getColor(dark);
     transition: getTransition(smooth);
-    border-top: 1px solid getColor(light-dark-night);
+    // border-top: 1px solid getColor(light-dark-night);
     opacity: 0;
     visibility: hidden;
     transform: translateY(-30%) scale(0.9);
@@ -553,8 +554,8 @@ $transitions: (
     }
     .nav__link {
       width: 100%;
-      border-left: none !important;
-      border-bottom: 1px solid getColor(light-dark-night);
+      // border-left: none !important;
+      // border-bottom: 1px solid getColor(light-dark-night);
     }
   }
 }
@@ -577,19 +578,34 @@ $transitions: (
 }
 .title {
   &__container-name {
-    font-size: 1.5em;
-    border-bottom: 1px solid lightgrey;
+    font-size: 1.4em;
+    border-bottom: 1px solid getColor(secondary);
     display: flex;
     align-items: center;
+    padding-bottom: 5px;
   }
   &__icon {
     font-size: 0.9em;
+    width: 27px;
+    height: 27px;
+    border: 1px solid getColor(secondary);
+    border-radius: 5px;
+    padding: 3px;
+    color: grey;
   }
   &__name {
     margin-left: 7px;
   }
   &__description {
+    display: inline-block;
     color: grey;
+    border: 1px solid getColor(secondary);
+    padding: 5px;
+    border-top: none;
+    font-size: 0.85em;
+    background-color: getColor(main);
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
   }
 }
 
@@ -632,35 +648,20 @@ $transitions: (
   margin-top: 15px;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 250px);
   grid-column-gap: 15px;
   grid-row-gap: 30px;
   &__link {
     position: relative;
     border-radius: 4px;
     transition: getTransition(smooth);
-    transform: scale(1);
-    background-image: linear-gradient(
-      135deg,
-      rgba(51, 181, 201, 0.5),
-      rgba(255, 21, 0, 0.5)
-    );
     overflow: hidden;
-    &:hover .categories__name {
-      background-color: getColor(dark);
-      color: white;
-    }
+    border: 1px solid getColor(secondary);
     &:hover {
       transform: scale(1.1);
       z-index: 5;
-      box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1), 0px 5px 5px rgba(0, 0, 0, 0.1);
-    }
-    &:nth-child(even) {
-      background-image: linear-gradient(
-        135deg,
-        rgba(168, 201, 51, 0.5),
-        rgba(211, 35, 202, 0.5)
-      );
+      box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1), 0px 2px 2px rgba(0, 0, 0, 0.1),
+        0px 6px 7px rgba(0, 0, 0, 0.1);
     }
     &:active {
       transform: scale(0.9);
@@ -679,14 +680,19 @@ $transitions: (
     transition: getTransition(smooth);
     color: getColor(dark);
     background-color: rgba(255, 255, 255, 0.7);
-    padding: 2px 0;
+    padding: 10px 0;
+    border-top: 1px solid getColor(secondary);
+    background-color: getColor(main);
   }
   &__image {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    transform: scale(0.85);
-    filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.8));
+    border: 10px solid white;
+    border-bottom: 40px solid white;
+    filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.1));
+    background-color: getColor(main);
+    border-radius: 5px;
   }
 }
 
@@ -697,17 +703,16 @@ $transitions: (
   grid-gap: 25px;
   margin-top: 15px;
   text-align: center;
+
   &__link {
     text-decoration: none;
     transition: getTransition(smooth);
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05), 0px 4px 5px rgba(0, 0, 0, 0.1);
+    border: 1px solid getColor(secondary);
+    border-radius: 5px;
+    // box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05), 0px 4px 5px rgba(0, 0, 0, 0.1);
     &:hover {
       box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1), 0px 6px 8px rgba(0, 0, 0, 0.1);
       transform: scale(1.05);
-      border-radius: 5px;
-      .announc__container-img {
-        border: none;
-      }
     }
     &:active {
       transform: scale(0.9);
@@ -717,18 +722,20 @@ $transitions: (
   &__container-img {
     height: 250px;
     position: relative;
-    border: 1px solid lightgrey;
   }
   &__image {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    padding: 13px;
   }
   &__container-title {
     padding: 10px 15px;
     color: getColor(dark);
     height: 64px;
     overflow: hidden;
+    border-top: 1px solid getColor(secondary);
+    background-color: getColor(main);
   }
   &__price {
     top: 0;
@@ -741,7 +748,9 @@ $transitions: (
     z-index: 3;
     color: white;
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.2);
+    border: 3px solid white;
+    border-radius: 4px;
+    background-color: getColor(secondary);
   }
   &__title {
   }
@@ -755,21 +764,17 @@ $transitions: (
 
 .details-ad {
   display: flex;
-  min-height: 72vh;
-  overflow: hidden;
-
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1), 0px 12px 15px rgba(0, 0, 0, 0.1);
+  margin-top: 15px;
   &__container-imgs {
-    width: 50%;
-    @extend %main-background;
+    width: 55%;
+    border: 1px solid getColor(secondary);
+    border-right: none;
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
   }
   &__container-preview {
-    height: 65vh;
+    height: 59vh;
     position: relative;
-    // padding: 5px;
-    // border: 1px solid getColor(secondary);
-    // background-color: getColor(secondary);
-    // box-shadow: inset 0px 0px 14px rgba(0, 0, 0, 0.2);
   }
   &__preview-img {
     width: 100%;
@@ -816,31 +821,42 @@ $transitions: (
   }
   &__container-imgtabs {
     display: flex;
-    padding: 30px 10px;
+    padding: 30px 5vw;
     border-top: 1px solid getColor(secondary);
     // border-top: none;
     align-items: center;
     justify-content: center;
+    // background-color: rgba(255, 255, 255, 0.2);
+    background-color: getColor(main);
+    backdrop-filter: blur(2px);
     // background-color: getColor(secondary);
   }
   &__container-info {
-    width: 50%;
+    width: 45%;
     padding: 20px;
-    // border: 1px solid lightgrey;
-    background-color: getColor(secondary);
-    // margin-left: 15px;
+    background-color: getColor(main);
+    position: relative;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+    // border-radius: 5px;
+    // box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.1), 0px 4px 8px rgba(0, 0, 0, 0.1),
+    //   0px 12px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid getColor(secondary);
+    // border-left: none;
   }
   &__tab-btn {
-    height: 120px;
+    height: 100px;
     width: 20%;
     margin-left: 10px;
+    border: 1px solid getColor(secondary);
     transition: getTransition(smooth);
     border-radius: 4px;
     overflow: hidden;
+    padding: 5px;
+    background-color: white;
     &--active {
       transform: scale(1.1);
-      // border: 1px solid white;
-      // box-shadow: 0px 4px 13px rgba(0, 0, 0, 0.3);
+      box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1), 0px 3px 5px rgba(0, 0, 0, 0.2);
     }
     &:first-child {
       margin-left: 0px;
@@ -852,14 +868,15 @@ $transitions: (
     object-fit: cover;
   }
   &__title {
-    font-size: 2em;
+    font-size: 1.3em;
     font-weight: normal;
-    text-align: center;
+    // text-align: center;
     margin-bottom: 20px;
     padding: 10px;
-    height: 60px;
-    overflow-y: auto;
+    // height: 60px;
+    // overflow-y: auto;
     border-radius: 4px;
+    border: 5px solid white;
     // background-color: white;
   }
   &__container-price {
@@ -877,37 +894,43 @@ $transitions: (
     // border: 1px solid lightgrey;
     margin-left: 13px;
     border-radius: 4px;
-    background-color: white;
-    box-shadow: inset 0px 0px 2px rgba(0, 0, 0, 0.3),
-      inset 0px 0px 7px rgba(0, 0, 0, 0.15);
+    // background-color: white;
+    // border: 1px solid white;
+    // background-color: rgba(255, 255, 255, 0.5);
+    border: 5px solid white;
+    // box-shadow: inset 0px 0px 2px rgba(0, 0, 0, 0.3),
+    //   inset 0px 0px 7px rgba(0, 0, 0, 0.15);
   }
   &__description-title {
     font-size: 1.3em;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
   }
   &__description {
     padding: 10px;
-    // border: 1px solid lightgrey;
-    font-size: 1.1em;
-    height: 32vh;
+    font-size: 1.05em;
+    // border: 1px solid white;
+    height: 22vh;
     overflow-y: auto;
     margin-bottom: 15px;
     border-radius: 4px;
-    background-color: white;
-    box-shadow: inset 0px 0px 2px rgba(0, 0, 0, 0.3),
-      inset 0px 0px 7px rgba(0, 0, 0, 0.15);
+    // background-color: rgba(255, 255, 255, 0.5);
+    border: 5px solid white;
+    // box-shadow: inset 0px 0px 2px rgba(0, 0, 0, 0.3),
+    //   inset 0px 0px 7px rgba(0, 0, 0, 0.15);
   }
   &__extra-info {
   }
   &__container-row-info {
     display: flex;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
   }
   &__column-info {
     width: 50%;
-    border-left: 3px solid getColor(secondary);
+    display: flex;
+    flex-direction: column;
     &:first-child {
-      border: none;
+      margin-right: 5px;
+      // border: none;
     }
   }
   &__column-title,
@@ -915,40 +938,59 @@ $transitions: (
     text-align: center;
     display: block;
     padding: 5px 0;
+    // height: 100%;
   }
   &__column-title {
-    background-color: getColor(secondary);
+    // background-color: getColor(secondary);
   }
   &__column-content {
-    background-color: white;
-    padding: 10px 0;
+    // background-color: white;
+    padding: 15px 0;
     border-radius: 4px;
     text-decoration: none;
   }
+  &__date {
+    // border: 1.3px dashed lightgrey;
+    // background-color: rgba(255, 255, 255, 0.5);
+    padding: 10px 0;
+    border: 5px solid white;
+  }
   &__container-row-user {
+    // position: absolute;
+    // bottom: 20px;
     display: flex;
+    width: 108%;
     padding: 10px;
     border-radius: 4px;
+    border: 5px solid white;
+    align-items: center;
     background-image: linear-gradient(
       135deg,
-      rgba(38, 185, 218, 0.5),
-      rgba(214, 37, 37, 0.5)
+      rgb(71, 188, 214),
+      rgb(213, 73, 73)
     );
-    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2), 0px 5px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2), 0px 1px 4px rgba(0, 0, 0, 0.2),
+      0px 6px 6px rgba(0, 0, 0, 0.1);
   }
   &__container-ava {
     width: 60px;
     height: 60px;
     border-radius: 50%;
     overflow: hidden;
+
+    &:hover {
+      .details-ad__ava {
+        transform: scale(1.2);
+      }
+    }
   }
   &__ava {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: getTransition(smooth);
   }
   &__container-user-info {
-    border: 1px solid rgba(255, 255, 255, 0.6);
     padding: 5px 10px;
     margin-left: 10px;
     flex: 1;
@@ -957,13 +999,58 @@ $transitions: (
     align-items: flex-start;
     flex-direction: column;
     justify-content: space-around;
+    margin-right: 10px;
   }
   &__username {
     display: inline-block;
     color: white;
     text-decoration: none;
+    // padding: 5px 0;
+    // border: 1px solid lightgrey;
+    margin-bottom: 10px;
   }
   &__typeUser {
-    display: block;
+    display: flex;
+    justify-content: center;
+    font-size: 0.85em;
+  }
+  &__label-user-type {
+    margin-left: 5px;
+    text-transform: capitalize;
+    color: white;
+  }
+  &__label-icon-type {
+    border-radius: 50%;
+    border: 1px solid white;
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+    color: white;
+  }
+  &__btn-user {
+    padding: 10px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 0.9em;
+  }
+  &__btn-edit {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    line-height: 53px;
+    text-align: center;
+    top: -25px;
+    left: -25px;
+    position: absolute;
+    transition: getTransition(smooth);
+    &:hover {
+      box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05),
+        0px 3px 3px rgba(0, 0, 0, 0.1);
+    }
+    &:active {
+      box-shadow: none;
+      transform: scale(0.9);
+    }
   }
 }

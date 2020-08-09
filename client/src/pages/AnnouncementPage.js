@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from "react"
 import useHTTP from "../hooks/useHTTP"
-import { BsCardImage } from "react-icons/bs"
 import { Link } from "react-router-dom"
-import { BsChevronLeft, BsChevronRight, BsChat } from "react-icons/bs"
+import { AiOutlinePicLeft } from "react-icons/ai"
+import {
+  BsChevronLeft,
+  BsChevronRight,
+  BsChat,
+  BsCardImage,
+} from "react-icons/bs"
+import { RiUserSettingsLine, RiUserLine } from "react-icons/ri"
 import { GiLightningSpanner } from "react-icons/gi"
+import { FiEdit } from "react-icons/fi"
 
 function AnnouncementPage(props) {
   const [data, setData] = useState({ images: [] })
   const { fetchData } = useHTTP()
+  const [load, setLoad] = useState(true)
   const { announcementId } = props.match.params
 
   useEffect(() => {
@@ -20,7 +28,7 @@ function AnnouncementPage(props) {
           options: { isLocalStorage: true },
         })
         setData(data)
-        console.log(data)
+        setLoad(false)
       } catch (error) {}
     }
     fetch()
@@ -95,8 +103,19 @@ function AnnouncementPage(props) {
     })
   }
 
+  if (load) {
+    return <div className='wrapper'>LOADING....</div>
+  }
+
   return (
     <div className='wrapper'>
+      <div className='title'>
+        <div className='title__container-name'>
+          <AiOutlinePicLeft className='title__icon' />
+          <span className='title__name'>Details</span>
+        </div>
+        <span className='title__description'>Details of: {data.title}</span>
+      </div>
       <div className='details-ad'>
         <div className='details-ad__container-imgs'>
           <div className='details-ad__container-preview'>
@@ -122,6 +141,9 @@ function AnnouncementPage(props) {
         </div>
 
         <div className='details-ad__container-info'>
+          <Link className='details-ad__btn-edit link' to={`/edit/${data._id}`}>
+            <FiEdit />
+          </Link>
           <h3 className='details-ad__title'>{data.title}</h3>
           <div className='details-ad__container-price'>
             <button className='details-ad__btn-message btn btn-primary'>
@@ -145,33 +167,46 @@ function AnnouncementPage(props) {
               </div>
               <div className='details-ad__column-info'>
                 <span className='details-ad__column-title'>Created:</span>
-                <span className='details-ad__column-content'>
-                  {data.date && data.date.slice(0, 10)}
+                <span className='details-ad__column-content details-ad__date'>
+                  {data.date.slice(0, 10)}
                 </span>
               </div>
             </div>
             <div className='details-ad__container-row-user'>
               <Link
-                to={`/user/${data.owner && data.owner._id}`}
+                to={`/user/${data.owner._id}`}
                 className='details-ad__container-ava'
               >
                 <img
-                  src={data.owner && data.owner.ava}
+                  src={data.owner.ava}
                   alt='userImg'
                   className='details-ad__ava'
                 />
               </Link>
               <div className='details-ad__container-user-info'>
                 <Link
-                  to={`/user/${data.owner && data.owner._id}`}
+                  to={`/user/${data.owner._id}`}
                   className='details-ad__username'
                 >
-                  {data.owner && data.owner.username}
+                  {data.owner.username}
                 </Link>
                 <span className='details-ad__typeUser'>
-                  {data.owner && data.owner.typeUser}
+                  {data.owner.typeUser === "admin" ? (
+                    <RiUserSettingsLine className='details-ad__label-icon-type' />
+                  ) : (
+                    <RiUserLine className='details-ad__label-icon-type' />
+                  )}
+                  <span className='details-ad__label-user-type'>
+                    {data.owner.typeUser}
+                  </span>
                 </span>
               </div>
+              <Link
+                to={`/user/${data.owner._id}`}
+                className='details-ad__btn-user btn link'
+              >
+                Other announce
+              </Link>
             </div>
           </div>
         </div>
