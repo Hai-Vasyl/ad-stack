@@ -9,7 +9,7 @@ import {
   BsCardImage,
 } from "react-icons/bs"
 import { RiUserSettingsLine, RiUserLine } from "react-icons/ri"
-import { GiLightningSpanner } from "react-icons/gi"
+// import { GiLightningSpanner } from "react-icons/gi"
 import { FiEdit } from "react-icons/fi"
 
 function AnnouncementPage(props) {
@@ -35,16 +35,13 @@ function AnnouncementPage(props) {
   }, [announcementId, fetchData])
 
   const getPreviewImage = () => {
-    let previewImage
-    if (!data.images) {
-      return
-    }
+    let path
     data.images.forEach((img) => {
       if (img.statusPreview) {
-        previewImage = img.path
+        path = img.path
       }
     })
-    return previewImage
+    return path
   }
 
   const handleTabActive = (id) => {
@@ -109,7 +106,7 @@ function AnnouncementPage(props) {
 
   return (
     <div className='wrapper'>
-      <div className='title'>
+      <div className='title title-simple'>
         <div className='title__container-name'>
           <AiOutlinePicLeft className='title__icon' />
           <span className='title__name'>Details</span>
@@ -119,23 +116,32 @@ function AnnouncementPage(props) {
       <div className='details-ad'>
         <div className='details-ad__container-imgs'>
           <div className='details-ad__container-preview'>
-            <img
-              src={getPreviewImage()}
-              className='details-ad__preview-img'
-              alt='PreviewImg'
-            />
-            <button
-              className='details-ad__move-btn details-ad__right-btn'
-              onClick={() => handleMove(false)}
-            >
-              <BsChevronRight />
-            </button>
-            <button
-              className='details-ad__move-btn details-ad__left-btn'
-              onClick={() => handleMove(true)}
-            >
-              <BsChevronLeft />
-            </button>
+            {data.images.length ? (
+              <>
+                <img
+                  src={getPreviewImage()}
+                  className='details-ad__preview-img'
+                  alt='PreviewImg'
+                />
+                <button
+                  className='details-ad__move-btn details-ad__right-btn'
+                  onClick={() => handleMove(false)}
+                >
+                  <BsChevronRight />
+                </button>
+                <button
+                  className='details-ad__move-btn details-ad__left-btn'
+                  onClick={() => handleMove(true)}
+                >
+                  <BsChevronLeft />
+                </button>
+              </>
+            ) : (
+              <div className='announc__plug-image'>
+                <BsCardImage className='announc__plug-icon' />
+                <span className='announc__plug-name'>No Images</span>
+              </div>
+            )}
           </div>
           <div className='details-ad__container-imgtabs'>{imgTabs}</div>
         </div>
@@ -166,7 +172,7 @@ function AnnouncementPage(props) {
                 </Link>
               </div>
               <div className='details-ad__column-info'>
-                <span className='details-ad__column-title'>Created:</span>
+                <span className='details-ad__column-title'>Last updated:</span>
                 <span className='details-ad__column-content details-ad__date'>
                   {data.date.slice(0, 10)}
                 </span>

@@ -1,8 +1,12 @@
 const { Router } = require("express")
-const Announcement = require("../models/Announcement")
-const Image = require("../models/Image")
-const auth = require("../middlewares/auth.middleware")
 const multer = require("multer")
+const auth = require("../middlewares/auth.middleware")
+const {
+  announcement_create_edit,
+  announcement_get,
+  announcementEdit_get,
+  announcementsTagName_get,
+} = require("../controllers/announcements")
 const router = Router()
 
 const storage = multer.diskStorage({
@@ -20,73 +24,20 @@ router.post(
   "/create-announcement",
   auth,
   upload.array("imagesAnnouncements", 5),
-  async (req, res) => {
-    try {
-      const { title, description, tag, price, indexPreviewImage } = req.body
-      const { files, userId } = req
-
-      const advert = new Announcement({
-        title,
-        description,
-        tag,
-        price,
-        date: new Date(),
-        owner: userId,
-      })
-      const advertNew = await advert.save()
-
-      if (files) {
-        for (const img of files) {
-          const image = new Image({
-            path: `/${img.path}`,
-            announcement: advertNew._id,
-            owner: userId,
-            statusPreview:
-              files.indexOf(img) === Number.parseInt(indexPreviewImage) && true,
-          })
-          await image.save()
-        }
-      }
-
-      res.status(201).json("Announcement successfully created!")
-    } catch (error) {
-      res.json(`Error creating announcement: ${error.message}`)
-    }
-  }
+  announcement_create_edit
 )
 
-router.get("/get-announcements/:tagName", async (req, res) => {
-  try {
-    let adverts = await Announcement.find({ tag: req.params.tagName }).select(
-      "price title date"
-    )
+router.post(
+  "/edit-announcement/:announId",
+  auth,
+  upload.array("imagesAnnouncements", 5),
+  announcement_create_edit
+)
 
-    for (let i = 0; i < adverts.length; i++) {
-      const image = await Image.findOne({
-        announcement: adverts[i]._id,
-        statusPreview: true,
-      }).select("path")
-      adverts[i] = { ...adverts[i]._doc, image }
-    }
+router.get("/get-announcements/:tagName", announcementsTagName_get)
 
-    res.json(adverts)
-  } catch (error) {
-    res.json(`Error getting all announcements: ${error.message}`)
-  }
-})
+router.get("/get-announcement/:announId", announcement_get)
 
-router.get("/get-announcement/:announId", async (req, res) => {
-  try {
-    const advert = await Announcement.findById(req.params.announId).populate({
-      path: "owner",
-      select: "username ava typeUser",
-    })
-    const images = await Image.find({ announcement: advert._id })
-
-    res.json({ ...advert._doc, images })
-  } catch (error) {
-    res.json(`Error getting all announcements: ${error.message}`)
-  }
-})
+router.get("/get-announcement_for_edit/:announId", auth, announcementEdit_get)
 
 module.exports = router

@@ -11,6 +11,7 @@ import {
 import { GrWorkshop } from "react-icons/gr"
 import { RiToolsLine } from "react-icons/ri"
 import { FaDog } from "react-icons/fa"
+import { BsCardImage } from "react-icons/bs"
 
 function AnnouncementsPage(props) {
   const [data, setData] = useState([])
@@ -38,12 +39,21 @@ function AnnouncementsPage(props) {
     return (
       <Link className='announc__link' key={ad._id} to={`/details/${ad._id}`}>
         <div className='announc__container-img'>
-          <span className='announc__price'>{ad.price} &#8372;</span>
-          <img
-            className='announc__image'
-            src={ad.image.path}
-            alt={`${categoryName}Img`}
-          />
+          <span className='announc__price'>
+            {ad.price} <span className='announc__grivna-sign'>&#8372;</span>
+          </span>
+          {ad.image ? (
+            <img
+              className='announc__image'
+              src={ad.image.path}
+              alt={`${categoryName}Img`}
+            />
+          ) : (
+            <div className='announc__plug-image'>
+              <BsCardImage className='announc__plug-icon' />
+              <span className='announc__plug-name'>No Images</span>
+            </div>
+          )}
           <span className='announc__date'>{ad.date.slice(0, 10)}</span>
         </div>
         <div className='announc__container-title'>

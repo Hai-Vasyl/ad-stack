@@ -1,52 +1,87 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { BsInfoCircle, BsFilePlus } from "react-icons/bs"
 import { FiPlus } from "react-icons/fi"
 import bgImage from "../imgs/undraw_usability_testing_2xs4.svg"
 import useHTTP from "../hooks/useHTTP"
 
-function ModPage() {
+function ModPage(props) {
   const { fetchData } = useHTTP()
-  const [form, setForm] = useState([
-    {
-      param: "title",
-      name: "Title",
-      value: "",
-      msg: "Give some name to your announcement",
-    },
-    {
-      param: "description",
-      name: "Description",
-      value: "",
-      msg: "Describe what you want to expose, give some characteristics",
-    },
-    {
-      param: "tag",
-      name: "Tag name",
-      value: "electronics",
-      msg:
-        "Tag name is the name of the category to which you want to place your announcement",
-    },
-    {
-      param: "price",
-      name: "Price",
-      value: "0",
-      msg:
-        "The price of exhibited product or service (It is not a required attribute)",
-    },
-    {
-      param: "imagesAnnouncements",
-      name: "Images",
-      value: {},
-      msg:
-        "Attach images of the exhibited product or images that associate this announcement",
-    },
-    {
-      param: "indexPreviewImage",
-      name: "Preview image",
-      value: "0",
-      msg: "Select preview image among chosen",
-    },
-  ])
+  const { announcementId } = props.match.params
+  const [load, setLoad] = useState(true)
+
+  const [form, setForm] = useState([])
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const data = await fetchData({
+          url: `/announcement/get-announcement_for_edit/${announcementId}`,
+          method: "get",
+          data: null,
+          options: { isLocalStorage: true },
+        })
+
+        setForm((prevForm) =>
+          prevForm.map((item) => {
+            Object.keys(data).forEach((key) => {
+              if (item.param === key) {
+                item.value = data[key]
+              }
+            })
+            return item
+          })
+        )
+        setLoad(false)
+      } catch (error) {}
+    }
+
+    setForm([
+      {
+        param: "title",
+        name: "Title",
+        value: "",
+        msg: "Give some name to your announcement",
+      },
+      {
+        param: "description",
+        name: "Description",
+        value: "",
+        msg: "Describe what you want to expose, give some characteristics",
+      },
+      {
+        param: "tag",
+        name: "Tag name",
+        value: "electronics",
+        msg:
+          "Tag name is the name of the category to which you want to place your announcement",
+      },
+      {
+        param: "price",
+        name: "Price",
+        value: "0",
+        msg:
+          "The price of exhibited product or service (It is not a required attribute)",
+      },
+      {
+        param: "imagesAnnouncements",
+        name: "Images",
+        value: {},
+        msg:
+          "Attach images of the exhibited product or images that associate this announcement",
+      },
+      {
+        param: "indexPreviewImage",
+        name: "Preview image",
+        value: "0",
+        msg: "Select preview image among chosen",
+      },
+    ])
+
+    if (announcementId) {
+      fetch()
+    }
+    setLoad(false)
+  }, [announcementId, fetchData])
 
   const handleChange = (e) => {
     setForm(
@@ -79,7 +114,9 @@ function ModPage() {
       })
 
       const data = await fetchData({
-        url: "/announcement/create-announcement",
+        url: announcementId
+          ? `/announcement/edit-announcement/${announcementId}`
+          : "/announcement/create-announcement",
         method: "post",
         data: fd,
         options: { isLocalStorage: true },
@@ -256,6 +293,10 @@ function ModPage() {
       </label>
     )
   })
+
+  if (load) {
+    return <div className='wrapper'>LOADING...</div>
+  }
 
   return (
     <div className='wrapper'>
