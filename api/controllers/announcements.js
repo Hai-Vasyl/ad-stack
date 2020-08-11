@@ -45,6 +45,8 @@ exports.announcement_create_edit = async (req, res) => {
         }
         await createImages(announId)
       }
+
+      res.status(201).json({ id: announId })
     } else {
       const advert = new Announcement({
         title,
@@ -59,9 +61,9 @@ exports.announcement_create_edit = async (req, res) => {
       if (files.length) {
         await createImages(advertNew._id)
       }
-    }
 
-    res.status(201).json("Announcement successfully modified!")
+      res.status(201).json({ id: advertNew._id })
+    }
   } catch (error) {
     res.json(`Error creating announcement: ${error.message}`)
   }
@@ -110,5 +112,30 @@ exports.announcementsTagName_get = async (req, res) => {
     res.json(adverts)
   } catch (error) {
     res.json(`Error getting all announcements: ${error.message}`)
+  }
+}
+
+exports.announcement_delete = async (req, res) => {
+  try {
+    const { announId } = req.params
+
+    const images = await Image.find({ announcement: announId })
+
+    if (images.length) {
+      for (let i = 0; i < images.length; i++) {
+        let path = images[i].path.split("\\").join("/")
+        path = path.split("")
+        path[0] = ""
+        fs.unlinkSync(path.join(""))
+      }
+
+      await Image.deleteMany({ announcement: announId })
+    }
+
+    await Announcement.findByIdAndDelete(announId)
+
+    res.json("Announcement successfully deleted!")
+  } catch (error) {
+    res.json(`Error deleting announcement: ${error.message}`)
   }
 }

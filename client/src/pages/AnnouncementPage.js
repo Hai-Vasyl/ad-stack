@@ -9,13 +9,14 @@ import {
   BsCardImage,
 } from "react-icons/bs"
 import { RiUserSettingsLine, RiUserLine } from "react-icons/ri"
-// import { GiLightningSpanner } from "react-icons/gi"
-import { FiEdit } from "react-icons/fi"
+import { useSelector } from "react-redux"
+import { BsGear } from "react-icons/bs"
 
 function AnnouncementPage(props) {
   const [data, setData] = useState({ images: [] })
   const { fetchData } = useHTTP()
   const [load, setLoad] = useState(true)
+  const { token } = useSelector((state) => state.auth)
   const { announcementId } = props.match.params
 
   useEffect(() => {
@@ -147,9 +148,14 @@ function AnnouncementPage(props) {
         </div>
 
         <div className='details-ad__container-info'>
-          <Link className='details-ad__btn-edit link' to={`/edit/${data._id}`}>
-            <FiEdit />
-          </Link>
+          {token.token && (
+            <Link
+              className='details-ad__btn-edit link'
+              to={`/edit/${data._id}`}
+            >
+              <BsGear />
+            </Link>
+          )}
           <h3 className='details-ad__title'>{data.title}</h3>
           <div className='details-ad__container-price'>
             <button className='details-ad__btn-message btn btn-primary'>

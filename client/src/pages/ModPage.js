@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react"
-import { BsInfoCircle, BsFilePlus } from "react-icons/bs"
-import { FiPlus } from "react-icons/fi"
-import bgImage from "../imgs/undraw_usability_testing_2xs4.svg"
+import { BsInfoCircle, BsFilePlus, BsUpload } from "react-icons/bs"
+import { FiPlus, FiEdit } from "react-icons/fi"
+import bgCreateImage from "../imgs/undraw_data_trends_b0wg.svg"
+import bgEditImage from "../imgs/undraw_content_vbqo.svg"
+import { AiOutlineDelete } from "react-icons/ai"
 import useHTTP from "../hooks/useHTTP"
 
 function ModPage(props) {
@@ -121,8 +123,26 @@ function ModPage(props) {
         data: fd,
         options: { isLocalStorage: true },
       })
-      console.log(data)
+
+      props.history.push(`/details/${data.id}`)
     } catch (error) {}
+  }
+
+  const handleDelete = async () => {
+    await fetchData({
+      url: `/announcement/delete-announcement/${announcementId}`,
+      method: "delete",
+      data: null,
+      options: { isLocalStorage: true },
+    })
+
+    let tagName
+    form.forEach((item) => {
+      if (item.param === "tag") {
+        tagName = item.value
+      }
+    })
+    props.history.push(`/categories/${tagName}`)
   }
 
   const fields = form.map((item) => {
@@ -140,7 +160,7 @@ function ModPage(props) {
             </div>
           </div>
           <select
-            className='field__select'
+            className='field__select btn'
             name={item.param}
             value={item.value}
             onChange={handleChange}
@@ -212,8 +232,11 @@ function ModPage(props) {
               </span>
             </div>
           </div>
-          <label className='field__label-file'>
-            Select Images
+          <label className='field__label-file btn'>
+            <BsUpload className='btn__icon' />{" "}
+            <span className='btn__name'>
+              {announcementId ? "Reselect images" : "Select images"}
+            </span>
             <input
               type='file'
               name={item.param}
@@ -249,7 +272,7 @@ function ModPage(props) {
             </div>
           </div>
           <select
-            className='field__select'
+            className='field__select btn'
             name={item.param}
             value={item.value}
             onChange={handleChange}
@@ -300,12 +323,22 @@ function ModPage(props) {
 
   return (
     <div className='wrapper'>
-      <div className='title'>
+      <div className='title title-simple'>
         <div className='title__container-name'>
-          <BsFilePlus className='title__icon' />
-          <span className='title__name'>Create</span>
+          {announcementId ? (
+            <FiEdit className='title__icon' />
+          ) : (
+            <BsFilePlus className='title__icon' />
+          )}
+          <span className='title__name'>
+            {announcementId ? "Edit" : "Create"}
+          </span>
         </div>
-        <span className='title__description'>Create new announcement</span>
+        <span className='title__description'>
+          {announcementId
+            ? "Edit or delete your announcement"
+            : "Create new announcement"}
+        </span>
       </div>
 
       <div className='form'>
@@ -315,14 +348,36 @@ function ModPage(props) {
             <button className='form__btn-handler'></button>
           </form>
           <div className='form__container-btns'>
-            <button className='btn btn-primary' onClick={handleSubmit}>
-              <FiPlus className='btn__icon' />
-              <span className='btn__name'>Create</span>
+            <button
+              className={`btn ${
+                announcementId ? "btn-warning" : "btn-succcess"
+              }`}
+              onClick={handleSubmit}
+            >
+              {announcementId ? (
+                <FiEdit className='btn__icon' />
+              ) : (
+                <FiPlus className='btn__icon' />
+              )}
+              <span className='btn__name'>
+                {announcementId ? "Edit" : "Create"}
+              </span>
             </button>
+
+            {announcementId && (
+              <button className='btn btn-danger' onClick={handleDelete}>
+                <AiOutlineDelete className='btn__icon' />
+                <span className='btn__name'>Delete</span>
+              </button>
+            )}
           </div>
         </div>
         <div className='form__bg-side'>
-          <img src={bgImage} alt='bgImage' className='form__image' />
+          <img
+            src={announcementId ? bgEditImage : bgCreateImage}
+            alt='bgImage'
+            className='form__image'
+          />
         </div>
       </div>
     </div>
