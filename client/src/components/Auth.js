@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import useHTTP from "../hooks/useHTTP"
-import { BsInfoCircle } from "react-icons/bs"
+import { BsInfoCircle, BsX } from "react-icons/bs"
 import { AiOutlineLogin, AiOutlineCheckCircle } from "react-icons/ai"
 import { useSelector, useDispatch } from "react-redux"
 import {
@@ -11,6 +11,7 @@ import {
   clearSpecificError,
   clearErrors,
 } from "../redux/auth/authActions"
+import { resetNavbar } from "../redux/navbar/navbarActions"
 
 function Auth() {
   const [form, setForm] = useState([
@@ -125,7 +126,15 @@ function Auth() {
       >
         <div className='auth-form__spinner'></div>
       </div>
-      <h2 className='auth-form__title'>{isLogin ? "Login" : "Register"}</h2>
+      <h2 className='auth-form__title'>
+        <button
+          className='auth-form__btn btn'
+          onClick={() => dispatch(resetNavbar())}
+        >
+          <BsX />
+        </button>
+        {isLogin ? "Login" : "Register"}
+      </h2>
       <form onSubmit={handleSubmit} className='auth-form__container-fields'>
         {fields}
         <button className='auth-form__btn-handler'></button>

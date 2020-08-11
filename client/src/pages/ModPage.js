@@ -3,14 +3,18 @@ import { BsInfoCircle, BsFilePlus, BsUpload } from "react-icons/bs"
 import { FiPlus, FiEdit } from "react-icons/fi"
 import bgCreateImage from "../imgs/undraw_data_trends_b0wg.svg"
 import bgEditImage from "../imgs/undraw_content_vbqo.svg"
-import { AiOutlineDelete } from "react-icons/ai"
+import { AiOutlineDelete, AiOutlineWarning } from "react-icons/ai"
 import useHTTP from "../hooks/useHTTP"
+import { useSelector, useDispatch } from "react-redux"
+import { togglePopupWarning, resetNavbar } from "../redux/navbar/navbarActions"
+import { FaRegTimesCircle, FaRegCheckCircle } from "react-icons/fa"
 
 function ModPage(props) {
   const { fetchData } = useHTTP()
   const { announcementId } = props.match.params
   const [load, setLoad] = useState(true)
-
+  const { popupWarning } = useSelector((state) => state.navbar)
+  const dispatch = useDispatch()
   const [form, setForm] = useState([])
 
   useEffect(() => {
@@ -100,6 +104,24 @@ function ModPage(props) {
     )
   }
 
+  const isEmptyFields = () => {
+    let isEmpty = false
+    form.forEach((item) => {
+      if (!item.value.length) {
+        if (
+          item.param === "imagesAnnouncements" ||
+          item.param === "indexPreviewImage" ||
+          item.value === 0 ||
+          item.value > 0
+        ) {
+          return
+        }
+        isEmpty = true
+      }
+    })
+    return isEmpty
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
@@ -129,6 +151,7 @@ function ModPage(props) {
   }
 
   const handleDelete = async () => {
+    dispatch(resetNavbar())
     await fetchData({
       url: `/announcement/delete-announcement/${announcementId}`,
       method: "delete",
@@ -341,6 +364,27 @@ function ModPage(props) {
         </span>
       </div>
 
+      <div className={`popup ${popupWarning && "popup--active"}`}>
+        <div className='popup__container-info'>
+          <AiOutlineWarning className='popup__icon' />
+          <span className='popup__title'>WARNING</span>
+          <p className='popup__description'>Are you sure about that?</p>
+        </div>
+        <div className='popup__container-bts'>
+          <button className='btn btn-warning' onClick={handleDelete}>
+            <FaRegCheckCircle className='btn__icon' />
+            <span className='btn__name'>Yes</span>
+          </button>
+          <button
+            className='btn btn-simple'
+            onClick={() => dispatch(resetNavbar())}
+          >
+            <FaRegTimesCircle className='btn__icon' />
+            <span className='btn__name'>No</span>
+          </button>
+        </div>
+      </div>
+
       <div className='form'>
         <div className='form__main-side'>
           <form className='form__container-fields' onSubmit={handleSubmit}>
@@ -350,10 +394,18 @@ function ModPage(props) {
           <div className='form__container-btns'>
             <button
               className={`btn ${
-                announcementId ? "btn-warning" : "btn-succcess"
+                isEmptyFields()
+                  ? "btn-disabled"
+                  : announcementId
+                  ? "btn-warning"
+                  : "btn-succcess"
               }`}
-              onClick={handleSubmit}
+              onClick={isEmptyFields() ? () => {} : handleSubmit}
             >
+              <div className='btn__msg'>
+                Fill all fields!
+                <span className='btn__triangle'></span>
+              </div>
               {announcementId ? (
                 <FiEdit className='btn__icon' />
               ) : (
@@ -365,7 +417,10 @@ function ModPage(props) {
             </button>
 
             {announcementId && (
-              <button className='btn btn-danger' onClick={handleDelete}>
+              <button
+                className='btn btn-danger'
+                onClick={() => dispatch(togglePopupWarning())}
+              >
                 <AiOutlineDelete className='btn__icon' />
                 <span className='btn__name'>Delete</span>
               </button>

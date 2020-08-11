@@ -17,7 +17,7 @@ import { resetNavbar } from "../redux/navbar/navbarActions"
 function Routes() {
   const {
     auth: { token },
-    navbar: { dropMenu, authForm },
+    navbar: { dropMenu, authForm, popupWarning },
   } = useSelector((state) => state)
   const dispatch = useDispatch()
 
@@ -28,7 +28,7 @@ function Routes() {
       <div
         onClick={() => dispatch(resetNavbar())}
         className={`background ${
-          (dropMenu || authForm) && "background--active"
+          (dropMenu || authForm || popupWarning) && "background--active"
         }`}
       ></div>
       {token.token ? (
