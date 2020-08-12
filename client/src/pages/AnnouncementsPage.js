@@ -1,22 +1,14 @@
 import React, { useEffect, useState } from "react"
 import useHTTP from "../hooks/useHTTP"
+import useTags from "../hooks/useTags"
 import { Link } from "react-router-dom"
-import { AiOutlineCar, AiOutlineLaptop, AiOutlineEye } from "react-icons/ai"
-import {
-  GiGreenhouse,
-  GiShakingHands,
-  GiTrojanHorse,
-  GiHouseKeys,
-} from "react-icons/gi"
-import { GrWorkshop } from "react-icons/gr"
-import { RiToolsLine } from "react-icons/ri"
-import { FaDog } from "react-icons/fa"
 import { BsCardImage } from "react-icons/bs"
 
 function AnnouncementsPage(props) {
   const [data, setData] = useState([])
   const [load, setLoad] = useState(true)
   const { fetchData } = useHTTP()
+  const tags = useTags()
   const { categoryName } = props.match.params
 
   useEffect(() => {
@@ -63,69 +55,15 @@ function AnnouncementsPage(props) {
     )
   })
 
-  const categories = [
-    {
-      param: "transport",
-      name: "Transport",
-      icon: <AiOutlineCar className='title__icon' />,
-    },
-    {
-      param: "house_garden",
-      name: "House and garden",
-      icon: <GiGreenhouse className='title__icon' />,
-    },
-    {
-      param: "electronics",
-      name: "Electronics",
-      icon: <AiOutlineLaptop className='title__icon' />,
-    },
-    {
-      param: "childrens_world",
-      name: "Children's world",
-      icon: <GiTrojanHorse className='title__icon' />,
-    },
-    {
-      param: "real_estate",
-      name: "Real estate",
-      icon: <GiHouseKeys className='title__icon' />,
-    },
-    {
-      param: "spare_parts_for_transport",
-      name: "Spare parts for transport",
-      icon: <RiToolsLine className='title__icon' />,
-    },
-    {
-      param: "work",
-      name: "Work",
-      icon: <GrWorkshop className='title__icon' />,
-    },
-    {
-      param: "animals",
-      name: "Animals",
-      icon: <FaDog className='title__icon' />,
-    },
-    {
-      param: "business_services",
-      name: "Business and services",
-      icon: <GiShakingHands className='title__icon' />,
-    },
-    {
-      param: "fashion_style",
-      name: "Fashion and style",
-      icon: <AiOutlineEye className='title__icon' />,
-    },
-  ]
-
-  const getTitle = () => {
-    let properties = {}
-    categories.forEach((item) => {
-      if (item.param === categoryName) {
-        properties.title = item.name
-        properties.icon = item.icon
+  const getTitleProps = () => {
+    let props
+    tags.forEach((tag) => {
+      if (tag.param === categoryName) {
+        props = tag
       }
     })
 
-    return properties
+    return props
   }
 
   if (load) {
@@ -136,8 +74,8 @@ function AnnouncementsPage(props) {
     <div className='wrapper'>
       <div className='title'>
         <div className='title__container-name'>
-          {getTitle().icon}
-          <span className='title__name'>{getTitle().title}</span>
+          {getTitleProps().icon}
+          <span className='title__name'>{getTitleProps().name}</span>
         </div>
         <span className='title__description'>Choose what interests you</span>
       </div>

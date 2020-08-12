@@ -95,11 +95,19 @@ exports.announcementEdit_get = async (req, res) => {
   }
 }
 
-exports.announcementsTagName_get = async (req, res) => {
+exports.announcements_get = async (req, res) => {
   try {
-    let adverts = await Announcement.find({ tag: req.params.tagName }).select(
-      "price title date"
-    )
+    const { tagName } = req.params
+    const { searchText } = req.body
+
+    const query = tagName
+      ? { tag: tagName }
+      : {
+          // title: { $regex: new RegExp(searchText, "g") },
+          $text: { $search: searchText },
+        }
+
+    let adverts = await Announcement.find(query).select("price title date")
 
     for (let i = 0; i < adverts.length; i++) {
       const image = await Image.findOne({

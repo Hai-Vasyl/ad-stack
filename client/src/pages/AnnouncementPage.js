@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import useHTTP from "../hooks/useHTTP"
+import useTags from "../hooks/useTags"
 import { Link } from "react-router-dom"
 import { AiOutlinePicLeft } from "react-icons/ai"
 import {
@@ -10,11 +11,12 @@ import {
 } from "react-icons/bs"
 import { RiUserSettingsLine, RiUserLine } from "react-icons/ri"
 import { useSelector } from "react-redux"
-import { BsGear } from "react-icons/bs"
+import { BsGear, BsArrowRight } from "react-icons/bs"
 
 function AnnouncementPage(props) {
   const [data, setData] = useState({ images: [] })
   const { fetchData } = useHTTP()
+  const tags = useTags()
   const [load, setLoad] = useState(true)
   const { token } = useSelector((state) => state.auth)
   const { announcementId } = props.match.params
@@ -101,6 +103,17 @@ function AnnouncementPage(props) {
     })
   }
 
+  const getTagProps = () => {
+    let props
+    tags.forEach((tag) => {
+      if (tag.param === data.tag) {
+        props = tag
+      }
+    })
+
+    return props
+  }
+
   if (load) {
     return <div className='wrapper'>LOADING....</div>
   }
@@ -144,11 +157,13 @@ function AnnouncementPage(props) {
               </div>
             )}
           </div>
-          <div className='details-ad__container-imgtabs'>{imgTabs}</div>
+          <div className='details-ad__imgtabs'>
+            <div className='details-ad__container-imgtabs'>{imgTabs}</div>
+          </div>
         </div>
 
         <div className='details-ad__container-info'>
-          {token.token && (
+          {token.token && token.user.typeUser === data.owner.typeUser && (
             <Link
               className='details-ad__btn-edit link'
               to={`/edit/${data._id}`}
@@ -170,11 +185,9 @@ function AnnouncementPage(props) {
             <div className='details-ad__container-row-info'>
               <div className='details-ad__column-info'>
                 <span className='details-ad__column-title'>Category:</span>
-                <Link
-                  to={`/categories/${data.tag}`}
-                  className='details-ad__column-content btn link'
-                >
-                  <span className='btn__name'>{data.tag}</span>
+                <Link to={`/categories/${data.tag}`} className='btn link'>
+                  {getTagProps().icon}
+                  <span className='btn__name'>{getTagProps().name}</span>
                 </Link>
               </div>
               <div className='details-ad__column-info'>
@@ -217,7 +230,8 @@ function AnnouncementPage(props) {
                 to={`/user/${data.owner._id}`}
                 className='details-ad__btn-user btn link'
               >
-                Other announce
+                <span className='btn__name'>Other announce</span>
+                <BsArrowRight className='btn__icon' />
               </Link>
             </div>
           </div>

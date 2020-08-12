@@ -8,9 +8,11 @@ import useHTTP from "../hooks/useHTTP"
 import { useSelector, useDispatch } from "react-redux"
 import { togglePopupWarning, resetNavbar } from "../redux/navbar/navbarActions"
 import { FaRegTimesCircle, FaRegCheckCircle } from "react-icons/fa"
+import useTags from "../hooks/useTags"
 
 function ModPage(props) {
   const { fetchData } = useHTTP()
+  const tags = useTags()
   const { announcementId } = props.match.params
   const [load, setLoad] = useState(true)
   const { popupWarning } = useSelector((state) => state.navbar)
@@ -188,36 +190,17 @@ function ModPage(props) {
             value={item.value}
             onChange={handleChange}
           >
-            <option value='transport' className='field__option'>
-              Transport
-            </option>
-            <option value='electronics' className='field__option'>
-              Electronics
-            </option>
-            <option value='house_garden' className='field__option'>
-              House and garden
-            </option>
-            <option value='childrens_world' className='field__option'>
-              Children's world
-            </option>
-            <option value='real_estate' className='field__option'>
-              Real estate
-            </option>
-            <option value='spare_parts_for_transport' className='field__option'>
-              Spare parts for transport
-            </option>
-            <option value='work' className='field__option'>
-              Work
-            </option>
-            <option value='animals' className='field__option'>
-              Animals
-            </option>
-            <option value='business_services' className='field__option'>
-              Business and services
-            </option>
-            <option value='fashion_style' className='field__option'>
-              Fashion and style
-            </option>
+            {tags.map((tag) => {
+              return (
+                <option
+                  value={tag.param}
+                  key={tag.param}
+                  className='field__option'
+                >
+                  {tag.name}
+                </option>
+              )
+            })}
           </select>
         </div>
       )

@@ -248,11 +248,14 @@ $transitions: (
   }
   &__btn {
     position: absolute !important;
-    top: 0;
-    right: 0;
-    // padding:
-    border: 1px solid black;
-    border-radius: 50% !important;
+    top: 4px;
+    right: 4px;
+    padding: 5px !important;
+    font-size: 0.5em;
+    // border: 1px solid getColor(secondary);
+    // border-radius: 50% !important;
+    // background-color: white;
+    box-shadow: none !important;
   }
   @keyframes spin {
     from {
@@ -668,13 +671,7 @@ $transitions: (
     font-weight: bold;
   }
   &__icon {
-    font-size: 0.9em;
-    width: 27px;
-    height: 27px;
-    border: 1px solid getColor(secondary);
-    border-radius: 5px;
-    padding: 3px;
-    color: grey;
+    margin: 0px 5px;
   }
   &__name {
     margin-left: 7px;
@@ -789,7 +786,7 @@ $transitions: (
     object-fit: contain;
     border: 10px solid white;
     border-bottom: 40px solid white;
-    filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.1));
+    // filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.1));
     background-color: getColor(main);
     border-radius: 5px;
   }
@@ -941,14 +938,19 @@ $transitions: (
       transform: translate(1px, -50%) scale(0.9);
     }
   }
-  &__container-imgtabs {
+  &__imgtabs {
     display: flex;
-    min-height: 161px;
-    padding: 30px 5vw;
     border-top: 1px solid getColor(secondary);
+    background-color: getColor(main);
+    height: 161px;
+  }
+  &__container-imgtabs {
+    margin: auto;
+    width: 550px;
+    max-width: 100%;
+    display: flex;
     align-items: center;
     justify-content: center;
-    background-color: getColor(main);
   }
   &__container-info {
     width: 45%;
@@ -966,11 +968,11 @@ $transitions: (
   }
   &__tab-btn {
     height: 100px;
-    width: 20%;
-    margin-left: 10px;
+    width: 18%;
     border: 1px solid getColor(secondary);
     transition: getTransition(smooth);
     border-radius: 4px;
+    margin-left: 10px;
     overflow: hidden;
     padding: 5px;
     background-color: white;
@@ -1035,7 +1037,9 @@ $transitions: (
     // box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2), 0px 1px 4px rgba(0, 0, 0, 0.2),
     //   0px 6px 6px rgba(0, 0, 0, 0.1);
     height: 25vh;
+    // overflow-x: hidden;
     overflow-y: auto;
+    white-space: pre-wrap;
     margin-bottom: 15px;
     border-radius: 4px;
     background-color: getColor(accent);
@@ -1043,6 +1047,22 @@ $transitions: (
     // background-color: getColor(accent);
     // box-shadow: inset 0px 0px 2px rgba(0, 0, 0, 0.3),
     //   inset 0px 0px 7px rgba(0, 0, 0, 0.15);
+    &::-webkit-scrollbar {
+      width: 0.7em;
+      overflow: hidden;
+    }
+    &::-webkit-scrollbar-track {
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+
+      border-bottom-right-radius: 5px;
+      border-top-right-radius: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: darkgrey;
+      outline: 1px solid slategrey;
+
+      border-radius: 5px;
+    }
   }
   &__extra-info {
   }

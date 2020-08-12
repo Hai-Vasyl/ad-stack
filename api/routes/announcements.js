@@ -5,8 +5,8 @@ const {
   announcement_create_edit,
   announcement_get,
   announcementEdit_get,
-  announcementsTagName_get,
   announcement_delete,
+  announcements_get,
 } = require("../controllers/announcements")
 const router = Router()
 
@@ -35,12 +35,14 @@ router.post(
   announcement_create_edit
 )
 
-router.get("/get-announcements/:tagName", announcementsTagName_get)
+router.get("/get-announcements/:tagName", announcements_get)
 
 router.get("/get-announcement/:announId", announcement_get)
 
 router.get("/get-announcement_for_edit/:announId", auth, announcementEdit_get)
 
 router.delete("/delete-announcement/:announId", auth, announcement_delete)
+
+router.post("/search-announcements", announcements_get)
 
 module.exports = router
