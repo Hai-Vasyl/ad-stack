@@ -16,14 +16,18 @@ import {
   toggleAuthForm,
   resetNavbar,
 } from "../redux/navbar/navbarActions"
+import { setText } from "../redux/search/searchActions"
+import { useLocation, useHistory } from "react-router-dom"
 
-function Navbar() {
+function Navbar(props) {
   const {
     auth: { token },
     navbar: { dropMenu, authForm },
   } = useSelector((state) => state)
   const dispatch = useDispatch()
   const [search, setSearch] = useState("")
+  const location = useLocation()
+  const history = useHistory()
 
   const handleChange = (e) => {
     setSearch(e.target.value)
@@ -38,7 +42,11 @@ function Navbar() {
   const handleSubmit = (e) => {
     e.preventDefault()
     dispatch(resetNavbar())
-    console.log("submit")
+    dispatch(setText(search))
+    if (location.pathname === "/search") {
+      return
+    }
+    history.push("/search")
   }
 
   return (

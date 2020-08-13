@@ -3,11 +3,14 @@ import useHTTP from "../hooks/useHTTP"
 import useTags from "../hooks/useTags"
 import { Link } from "react-router-dom"
 import { BsCardImage } from "react-icons/bs"
+import { useSelector } from "react-redux"
+import { AiOutlineFileSearch } from "react-icons/ai"
 
 function AnnouncementsPage(props) {
   const [data, setData] = useState([])
   const [load, setLoad] = useState(true)
   const { fetchData } = useHTTP()
+  const { text } = useSelector((state) => state.search)
   const tags = useTags()
   const { categoryName } = props.match.params
 
@@ -15,9 +18,11 @@ function AnnouncementsPage(props) {
     const fetch = async () => {
       try {
         const data = await fetchData({
-          url: `/announcement/get-announcements/${categoryName}`,
-          method: "get",
-          data: null,
+          url: categoryName
+            ? `/announcement/get-announcements/${categoryName}`
+            : "/announcement/search-announcements",
+          method: categoryName ? "get" : "post",
+          data: categoryName ? null : { searchText: text },
           options: { isLocalStorage: true },
         })
         setData(data)
@@ -25,7 +30,7 @@ function AnnouncementsPage(props) {
       } catch (error) {}
     }
     fetch()
-  }, [categoryName, fetchData])
+  }, [categoryName, fetchData, text])
 
   const announcements = data.map((ad) => {
     return (
@@ -74,10 +79,16 @@ function AnnouncementsPage(props) {
     <div className='wrapper'>
       <div className='title'>
         <div className='title__container-name'>
-          {getTitleProps().icon}
-          <span className='title__name'>{getTitleProps().name}</span>
+          {categoryName ? getTitleProps().icon : <AiOutlineFileSearch />}
+          <span className='title__name'>
+            {categoryName ? getTitleProps().name : "Search"}
+          </span>
         </div>
-        <span className='title__description'>Choose what interests you</span>
+        <span className='title__description'>
+          {categoryName
+            ? "Choose what interests you"
+            : `Search results for: ${text}`}
+        </span>
       </div>
       <div className='announc'>{announcements}</div>
     </div>

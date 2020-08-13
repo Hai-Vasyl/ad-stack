@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from "react-redux"
 import Auth from "../components/Auth"
 import Navbar from "../components/Navbar"
 import MainPage from "../pages/MainPage"
-import SearchPage from "../pages/SearchPage"
 import CategoriesPage from "../pages/CategoriesPage"
 import AnnouncementsPage from "../pages/AnnouncementsPage"
 import AnnouncementPage from "../pages/AnnouncementPage"
@@ -35,7 +34,7 @@ function Routes() {
         token.user.typeUser === "user" ? (
           <Switch>
             <Route exact path='/' component={MainPage} />
-            <Route path='/search' component={SearchPage} />
+            <Route path='/search' component={AnnouncementsPage} />
             <Route exact path='/categories' component={CategoriesPage} />
             <Route path='/create' component={ModPage} />
             <Route exact path='/user' component={UserPage} />
@@ -54,7 +53,7 @@ function Routes() {
         ) : (
           <Switch>
             <Route exact path='/' component={MainPage} />
-            <Route path='/search' component={SearchPage} />
+            <Route path='/search' component={AnnouncementsPage} />
             <Route exact path='/categories' component={CategoriesPage} />
             <Route path='/create' component={ModPage} />
             <Route path='/users' component={UsersPage} />
@@ -75,7 +74,7 @@ function Routes() {
       ) : (
         <Switch>
           <Route exact path='/' component={MainPage} />
-          <Route path='/search' component={SearchPage} />
+          <Route path='/search' component={AnnouncementsPage} />
           <Route exact path='/categories' component={CategoriesPage} />
           <Route
             path='/categories/:categoryName'
