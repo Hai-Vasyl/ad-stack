@@ -1,6 +1,7 @@
 const { Router } = require("express")
 const { check } = require("express-validator")
-const { user_login, user_register } = require("../controllers/users")
+const { user_login, user_register, users_get } = require("../controllers/users")
+const auth = require("../middlewares/auth.middleware")
 
 const router = Router()
 
@@ -27,5 +28,7 @@ router.post(
   ],
   user_login
 )
+
+router.get("/get-users", auth, users_get)
 
 module.exports = router

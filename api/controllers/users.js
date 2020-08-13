@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken")
 const User = require("../models/User")
 const { validationResult } = require("express-validator")
 require("dotenv").config()
+const Announcement = require("../models/Announcement")
 
 exports.user_login = async (req, res) => {
   try {
@@ -93,3 +94,31 @@ exports.user_register = async (req, res) => {
     res.status(500).json(`Register error: ${error.message}`)
   }
 }
+
+exports.users_get = async (req, res) => {
+  try {
+    const users = await User.find().select("username typeUser ava")
+
+    res.json(users)
+  } catch (error) {
+    res.status(500).json(`Error getting all users: ${error.message}`)
+  }
+}
+
+// exports.user_delete = async (req, res) => {
+//   try {
+//     const {userId} = req.body
+
+//     const images = await Announcement.find(({owner: userId}))
+
+//     forEach()
+
+//     await Announcement.deleteMany(({owner: userId}))
+
+//     await User.findByIdAndDelete(userId)
+
+//     res.json(users)
+//   } catch (error) {
+//     res.status(500).json(`Error getting all users: ${error.message}`)
+//   }
+// }
