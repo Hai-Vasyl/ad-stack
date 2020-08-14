@@ -37,12 +37,12 @@ router.post(
 
 router.get("/get-announcements/:tagName", announcements_get)
 
+router.post("/search-announcements", announcements_get)
+
 router.get("/get-announcement/:announId", announcement_get)
 
 router.get("/get-announcement_for_edit/:announId", auth, announcementEdit_get)
 
 router.delete("/delete-announcement/:announId", auth, announcement_delete)
-
-router.post("/search-announcements", announcements_get)
 
 module.exports = router

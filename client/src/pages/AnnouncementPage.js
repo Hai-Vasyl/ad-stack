@@ -12,6 +12,7 @@ import {
 import { RiUserSettingsLine, RiUserLine } from "react-icons/ri"
 import { useSelector } from "react-redux"
 import { BsGear, BsArrowRight } from "react-icons/bs"
+import Questions from "../components/Questions"
 
 function AnnouncementPage(props) {
   const [data, setData] = useState({ images: [] })
@@ -237,6 +238,7 @@ function AnnouncementPage(props) {
           </div>
         </div>
       </div>
+      <Questions announcement={data._id} />
     </div>
   )
 }

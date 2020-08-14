@@ -23,6 +23,7 @@ const startServer = async () => {
     )
     app.use("/uploads", express.static("uploads"))
     app.use("/auth", require("./api/routes/users"))
+    app.use("/message", require("./api/routes/messages"))
     app.use("/announcement", require("./api/routes/announcements"))
 
     app.listen(PORT, () => console.log(`Server started on port: ${PORT}`))

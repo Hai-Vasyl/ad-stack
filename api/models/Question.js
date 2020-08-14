@@ -2,9 +2,9 @@ const { Schema, model, Types } = require("mongoose")
 
 const schema = new Schema({
   owner: { type: Types.ObjectId, ref: "User", required: true },
-  receiver: { type: Types.ObjectId, ref: "User", required: true },
+  announcement: { type: Types.ObjectId, ref: "Announcement", required: true },
+  content: { type: String, required: true },
   date: { type: Date, required: true },
-  message: { type: String, required: true },
 })
 
-module.exports = model("Message", schema)
+module.exports = model("Question", schema)

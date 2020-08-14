@@ -1,6 +1,11 @@
 const { Router } = require("express")
 const { check } = require("express-validator")
-const { user_login, user_register, users_get } = require("../controllers/users")
+const {
+  user_login,
+  user_register,
+  users_get,
+  user_delete,
+} = require("../controllers/users")
 const auth = require("../middlewares/auth.middleware")
 
 const router = Router()
@@ -30,5 +35,7 @@ router.post(
 )
 
 router.get("/get-users", auth, users_get)
+
+router.delete("/delete-user", auth, user_delete)
 
 module.exports = router

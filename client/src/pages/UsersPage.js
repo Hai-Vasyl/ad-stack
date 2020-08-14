@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import useHTTP from "../hooks/useHTTP"
 import { RiUserSettingsLine, RiUserLine } from "react-icons/ri"
 import { BsX } from "react-icons/bs"
+import { FiUsers } from "react-icons/fi"
 
 function UsersPage(props) {
   const { fetchData } = useHTTP()
@@ -18,7 +19,6 @@ function UsersPage(props) {
           options: { isLocalStorage: true },
         })
         setData(data)
-        console.log(data)
         setLoad(false)
       } catch (error) {}
     }
@@ -68,6 +68,15 @@ function UsersPage(props) {
 
   return (
     <div className='wrapper'>
+      <div className='title'>
+        <div className='title__container-name'>
+          <FiUsers />
+          <span className='title__name'>All users</span>
+        </div>
+        <span className='title__description'>
+          Access only for administrator
+        </span>
+      </div>
       <div className='users'>{users}</div>
     </div>
   )

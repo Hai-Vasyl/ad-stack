@@ -4,6 +4,7 @@ const User = require("../models/User")
 const { validationResult } = require("express-validator")
 require("dotenv").config()
 const Announcement = require("../models/Announcement")
+const Image = require("../models/Image")
 
 exports.user_login = async (req, res) => {
   try {
@@ -105,20 +106,28 @@ exports.users_get = async (req, res) => {
   }
 }
 
-// exports.user_delete = async (req, res) => {
-//   try {
-//     const {userId} = req.body
+exports.user_delete = async (req, res) => {
+  try {
+    const { userId } = req.body
 
-//     const images = await Announcement.find(({owner: userId}))
+    const images = await Image.find({ owner: userId })
 
-//     forEach()
+    if (images.length) {
+      for (let i = 0; i < images.length; i++) {
+        let path = images[i].path.split("\\").join("/")
+        path = path.split("")
+        path[0] = ""
+        fs.unlinkSync(path.join(""))
+      }
 
-//     await Announcement.deleteMany(({owner: userId}))
+      await Image.deleteMany({ owner: userId })
+    }
 
-//     await User.findByIdAndDelete(userId)
+    await Announcement.deleteMany({ owner: userId })
+    await User.findByIdAndDelete(userId)
 
-//     res.json(users)
-//   } catch (error) {
-//     res.status(500).json(`Error getting all users: ${error.message}`)
-//   }
-// }
+    res.json("User successfully deleted!")
+  } catch (error) {
+    res.status(500).json(`Error getting all users: ${error.message}`)
+  }
+}
