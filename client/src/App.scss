@@ -1,8 +1,9 @@
 $colors: (
   primary: #4287f5,
-  secondary: rgb(202, 202, 202),
+  secondary: rgb(215, 215, 215),
   dark: #333,
   danger: #d34545,
+  danger-accent: #fa4545,
   success: rgb(52, 174, 52),
   warning: rgb(255, 174, 0),
   spinner: rgba(51, 51, 51, 0.5),
@@ -10,10 +11,11 @@ $colors: (
   light-dark-night: lighten(#333, 15%),
   light-dark: lighten(#333, 10%),
   light-night: lighten(#333, 20%),
-  main: rgba(0, 0, 0, 0.1),
+  main: rgb(239, 240, 240),
   accent: rgba(255, 255, 255, 0.7),
   main-solid: rgb(230, 230, 230),
   bg-danger: rgba(241, 42, 42, 0.2),
+  link: rgb(13, 52, 130),
 );
 %main-background {
   background-image: repeating-linear-gradient(
@@ -358,7 +360,16 @@ $transitions: (
   box-shadow: none;
   background-color: white;
 }
-
+%field {
+  width: 100%;
+  transition: getTransition(smooth);
+  padding: 7px;
+  border: none;
+  border: 1px solid getColor(secondary);
+  border-radius: 4px;
+  background-color: white;
+  outline-color: grey;
+}
 .field {
   display: block;
   margin-bottom: 15px;
@@ -442,16 +453,6 @@ $transitions: (
   &__msg-info {
     width: 130px;
     z-index: 10;
-  }
-  %field {
-    width: 100%;
-    transition: getTransition(smooth);
-    padding: 7px;
-    border: none;
-    border: 1px solid getColor(secondary);
-    border-radius: 4px;
-    background-color: white;
-    outline-color: grey;
   }
   &__input {
     @extend %field;
@@ -683,7 +684,7 @@ $transitions: (
     padding: 5px;
     border-top: none;
     font-size: 0.85em;
-    background-color: getColor(main-solid);
+    background-color: getColor(main);
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
   }
@@ -994,10 +995,7 @@ $transitions: (
     // text-align: center;
     margin-bottom: 20px;
     padding: 10px;
-    // height: 60px;
-    // overflow-y: auto;
     border-radius: 4px;
-    // border: 5px solid white;
     // background-color: white;
   }
   &__container-price {
@@ -1006,13 +1004,15 @@ $transitions: (
   }
   &__btn-message {
     width: 50%;
+    padding: 10px 0;
   }
   &__price {
     width: 50%;
     text-align: center;
-    font-size: 1.3em;
-    line-height: 50px;
+    font-size: 1.05em;
+    // line-height: 50px;
     // border: 1px solid lightgrey;
+    border: 1px dashed getColor(secondary);
     margin-left: 13px;
     border-radius: 4px;
     // background-color: white;
@@ -1022,24 +1022,26 @@ $transitions: (
     background-color: getColor(accent);
     // box-shadow: inset 0px 0px 2px rgba(0, 0, 0, 0.3),
     //   inset 0px 0px 7px rgba(0, 0, 0, 0.15);
+    // height: 40px;
+    padding: 10px 0;
   }
   &__description-title {
-    font-size: 1.1em;
+    font-size: 1.05em;
     margin-bottom: 5px;
   }
   &__description {
     padding: 10px;
-    font-size: 1.05em;
+    border: 1px dashed getColor(secondary);
     // border: 1px solid white;
     // width: 109%;
     // border: 5px solid white;
     // box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2), 0px 1px 4px rgba(0, 0, 0, 0.2),
     //   0px 6px 6px rgba(0, 0, 0, 0.1);
-    height: 25vh;
+    height: 28vh;
     // overflow-x: hidden;
     overflow-y: auto;
     white-space: pre-wrap;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     border-radius: 4px;
     background-color: getColor(accent);
     // border: 5px solid white;
@@ -1047,20 +1049,18 @@ $transitions: (
     // box-shadow: inset 0px 0px 2px rgba(0, 0, 0, 0.3),
     //   inset 0px 0px 7px rgba(0, 0, 0, 0.15);
     &::-webkit-scrollbar {
-      width: 0.7em;
+      width: 0.5em;
       overflow: hidden;
     }
     &::-webkit-scrollbar-track {
       box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-
       border-bottom-right-radius: 5px;
       border-top-right-radius: 5px;
     }
     &::-webkit-scrollbar-thumb {
-      background-color: darkgrey;
-      outline: 1px solid slategrey;
-
+      background-color: getColor(primary);
       border-radius: 5px;
+      cursor: pointer;
     }
   }
   &__extra-info {
@@ -1086,19 +1086,16 @@ $transitions: (
     // height: 100%;
   }
   &__column-title {
-    // background-color: getColor(secondary);
   }
   &__column-content {
-    // background-color: white;
-    padding: 15px 0;
-    border-radius: 4px;
-    text-decoration: none;
+  }
+  &__link {
+    padding: 10px 0;
   }
   &__date {
-    // border: 1.3px dashed lightgrey;
     background-color: getColor(accent);
-    padding: 15px 0;
-    // border: 5px solid white;
+    padding: 10px 0;
+    border: 1px dashed getColor(secondary);
   }
   &__container-row-user {
     // position: absolute;
@@ -1153,6 +1150,10 @@ $transitions: (
     // padding: 5px 0;
     // border: 1px solid lightgrey;
     margin-bottom: 10px;
+    transition: getTransition(smooth);
+    &:hover {
+      text-decoration: underline;
+    }
   }
   &__typeUser {
     display: flex;
@@ -1206,7 +1207,7 @@ $transitions: (
   top: 50%;
   left: 50%;
   z-index: 8;
-  background-color: getColor(main-solid);
+  background-color: getColor(main);
   width: 350px;
   max-width: 100%;
   box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.2), 0px 14px 15px rgba(0, 0, 0, 0.1);
@@ -1327,4 +1328,171 @@ $transitions: (
   &__username {
     margin-left: 10px;
   }
+}
+
+.msg {
+  display: flex;
+  width: 750px;
+  max-width: 100%;
+  margin-bottom: 1.2em;
+  &__left-side {
+    padding: 10px;
+  }
+  &__right-side {
+    flex: 1;
+    padding: 10px;
+    padding-left: 0px;
+  }
+  &__container-ava {
+    display: block;
+    width: 70px;
+    height: 70px;
+    margin: 0 auto;
+    border: 1px solid getColor(secondary);
+    padding: 5px;
+    border-radius: 50%;
+    background-color: white;
+    &:hover {
+      .msg__ava {
+        transform: scale(1.2);
+      }
+    }
+  }
+  &__ava {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    border: 1px solid getColor(secondary);
+    transition: getTransition(smooth);
+  }
+  &__btn-reply {
+    margin-top: 5px;
+    padding: 5px 8px;
+    font-size: 0.9em;
+  }
+  &__title {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 3px 10px;
+    border: 1px solid getColor(secondary);
+    border-bottom: none;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background-color: getColor(main);
+  }
+  &__type-icon {
+    border: 2px solid getColor(secondary);
+    border-radius: 50%;
+    padding: 2px;
+    width: 22px;
+    color: getColor(dark);
+    height: 22px;
+    &--admin {
+      border-color: getColor(danger-accent);
+      color: getColor(danger-accent);
+    }
+    &--owner {
+      border-color: getColor(warning);
+      color: getColor(danger-accent);
+    }
+  }
+  &__username {
+    text-decoration: none;
+    color: getColor(dark);
+    margin-left: 7px;
+    transition: getTransition(smooth);
+    &:hover {
+      color: getColor(link);
+      text-decoration: underline;
+    }
+  }
+  &__date {
+    margin-left: auto;
+    font-size: 0.8em;
+  }
+  &__content {
+    border: 1px solid getColor(secondary);
+    padding: 10px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    // background-color: white;
+  }
+}
+
+.comment-form {
+  width: 100%;
+  margin-top: 2em;
+  border: 1px solid getColor(secondary);
+  border-radius: 5px;
+  background-color: getColor(main);
+  &__left-side {
+  }
+  &__right-side {
+    flex: none;
+    width: 668px;
+    max-width: 100%;
+  }
+  &__container-ava {
+  }
+  &__ava {
+  }
+  &__title {
+    border-bottom: 1px solid getColor(secondary);
+    border-radius: 5px;
+    padding: 5px 10px;
+  }
+  &__type-icon {
+  }
+  &__username {
+  }
+  &__date {
+  }
+  &__container-text {
+  }
+  &__textarea {
+    resize: none;
+    min-height: 12vh;
+    max-height: 12vh;
+    width: 100%;
+    @extend %field;
+    padding: 10px;
+    margin: 7px 0px 5px 0px;
+  }
+  &__btn-handler {
+    display: none;
+  }
+  &__btn-post {
+    padding: 13px;
+  }
+}
+
+.msg-answer {
+  margin-bottom: 0.8em;
+  // background-color: getColor(main);
+  border-radius: 5px;
+  background-color: getColor(main);
+  border: 1px solid getColor(secondary);
+  .msg__title {
+    border-bottom: 1px solid getColor(secondary);
+    // background-color: getColor(accent);
+  }
+  .msg__content {
+    background-color: white;
+    border: none;
+  }
+  &:last-child() {
+    margin-bottom: 1.5em;
+  }
+}
+
+.container-msgs {
+  padding-left: 5px;
+  border-left: 1px solid getColor(secondary);
+}
+.container-questions {
+  margin-left: 20px;
+  padding-left: 20px;
 }

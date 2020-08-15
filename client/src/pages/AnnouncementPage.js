@@ -186,7 +186,10 @@ function AnnouncementPage(props) {
             <div className='details-ad__container-row-info'>
               <div className='details-ad__column-info'>
                 <span className='details-ad__column-title'>Category:</span>
-                <Link to={`/categories/${data.tag}`} className='btn link'>
+                <Link
+                  to={`/categories/${data.tag}`}
+                  className='details-ad__link btn link'
+                >
                   {getTagProps().icon}
                   <span className='btn__name'>{getTagProps().name}</span>
                 </Link>
@@ -238,7 +241,7 @@ function AnnouncementPage(props) {
           </div>
         </div>
       </div>
-      <Questions announcement={data._id} />
+      <Questions announcement={data._id} owner={data.owner._id} />
     </div>
   )
 }
