@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react"
 import useHTTP from "../hooks/useHTTP"
 import Question from "./Question"
-import { BsArrowRight } from "react-icons/bs"
+import { BsArrowRight, BsInfoCircle } from "react-icons/bs"
 import { RiUserSettingsLine, RiUserLine } from "react-icons/ri"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
+import { AiOutlineLogin } from "react-icons/ai"
 
 function Questions({ announcement, owner }) {
   const [questions, setQuestions] = useState([])
@@ -23,6 +24,7 @@ function Questions({ announcement, owner }) {
           options: { isLocalStorage: true },
         })
 
+        console.log(data)
         setQuestions(data)
         setLoad(false)
       } catch (error) {}
@@ -38,57 +40,93 @@ function Questions({ announcement, owner }) {
     setComment(e.target.value)
   }
 
+  const handleComment = async () => {
+    try {
+      const data = await fetchData({
+        url: "/message/create-message",
+        method: "post",
+        data: { announcement, content: comment },
+        options: { isLocalStorage: true },
+      })
+
+      const owner = {
+        ava: token.user.ava,
+        typeUser: token.user.typeUser,
+        username: token.user.username,
+        _id: token.user._id,
+      }
+      setQuestions([{ ...data, owner }, ...questions])
+      setComment("")
+    } catch (error) {}
+  }
+
   if (load) {
     return <div>LOADING..</div>
   }
 
   return (
     <>
-      <div className='comment-form msg'>
-        <div className='comment-form__left-side msg__left-side'>
-          <Link
-            to='/user'
-            className='comment-form__container-ava msg__container-ava'
-          >
-            <img
-              src={token.user.ava}
-              className='comment-form__ava msg__ava'
-              alt='userAva'
-            />
-          </Link>
-        </div>
-
-        <div className='comment-form__right-side msg__right-side'>
-          <div className='comment-form__title msg__title'>
-            {token.user.typeUser === "admin" ? (
-              <RiUserSettingsLine className='comment-form__type-icon msg__type-icon msg__type-icon--admin' />
-            ) : (
-              <RiUserLine
-                className={`comment-form__type-icon msg__type-icon ${
-                  token.user._id === owner && "msg__type-icon--owner"
-                }`}
+      {token.token ? (
+        <div className='comment-form msg'>
+          <div className='comment-form__left-side msg__left-side'>
+            <Link
+              to='/user'
+              className='comment-form__container-ava msg__container-ava'
+            >
+              <img
+                src={token.user.ava}
+                className='comment-form__ava msg__ava'
+                alt='userAva'
               />
-            )}
-            <Link to='/user' className='comment-form__username msg__username'>
-              {token.user.username}
             </Link>
           </div>
 
-          <form className='comment-form__container-text'>
-            <textarea
-              className='comment-form__textarea msg__content'
-              value={comment}
-              onChange={handleChange}
-              placeholder='Leave a question'
-            ></textarea>
-            <button className='comment-form__btn-handler'></button>
-          </form>
-          <button className='comment-form__btn-post btn btn-primary'>
-            <span className='btn__name'>Comment</span>
-            <BsArrowRight className='btn__icon' />
+          <div className='comment-form__right-side msg__right-side'>
+            <div className='comment-form__title msg__title'>
+              {token.user.typeUser === "admin" ? (
+                <RiUserSettingsLine className='comment-form__type-icon msg__type-icon msg__type-icon--admin' />
+              ) : (
+                <RiUserLine
+                  className={`comment-form__type-icon msg__type-icon ${
+                    token.user._id === owner && "msg__type-icon--owner"
+                  }`}
+                />
+              )}
+              <Link to='/user' className='comment-form__username msg__username'>
+                {token.user.username}
+              </Link>
+            </div>
+
+            <form className='comment-form__container-text'>
+              <textarea
+                className='comment-form__textarea msg__content'
+                value={comment}
+                onChange={handleChange}
+                placeholder='Leave a question'
+              ></textarea>
+              <button className='comment-form__btn-handler'></button>
+            </form>
+            <button
+              className='comment-form__btn-post btn btn-primary'
+              onClick={handleComment}
+            >
+              <span className='btn__name'>Comment</span>
+              <BsArrowRight className='btn__icon' />
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className='comment-warning'>
+          <BsInfoCircle className='comment-warning__icon' />
+          <span className='comment-warning__title'>
+            Please login, to write a question
+          </span>
+          <button className='comment-warning__btn btn btn-simple'>
+            <AiOutlineLogin className='btn__icon' />
+            <span className='btn__name'>Login</span>
           </button>
         </div>
-      </div>
+      )}
 
       <div className='container-msgs'>{messages}</div>
     </>

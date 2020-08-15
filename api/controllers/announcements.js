@@ -107,7 +107,9 @@ exports.announcements_get = async (req, res) => {
           $text: { $search: searchText },
         }
 
-    let adverts = await Announcement.find(query).select("price title date")
+    let adverts = await Announcement.find(query)
+      .select("price title date")
+      .sort({ date: -1 })
 
     for (let i = 0; i < adverts.length; i++) {
       const image = await Image.findOne({

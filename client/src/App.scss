@@ -166,7 +166,7 @@ $transitions: (
 .auth-form {
   width: 400px;
   padding-bottom: 20px;
-  position: absolute;
+  position: fixed;
   max-width: 100%;
   border-radius: 5px;
   transition: getTransition(sudden);
@@ -880,6 +880,7 @@ $transitions: (
 .details-ad {
   display: flex;
   margin-top: -29.5px;
+  margin-bottom: 2em;
   &__container-imgs {
     width: 55%;
     border: 1px solid getColor(secondary);
@@ -1330,11 +1331,23 @@ $transitions: (
   }
 }
 
+@keyframes fadeScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .msg {
   display: flex;
   width: 750px;
   max-width: 100%;
   margin-bottom: 1.2em;
+  animation: fadeScale getTransition(smooth);
   &__left-side {
     padding: 10px;
   }
@@ -1368,9 +1381,15 @@ $transitions: (
     transition: getTransition(smooth);
   }
   &__btn-reply {
-    margin-top: 5px;
     padding: 5px 8px;
     font-size: 0.9em;
+    &--close {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      font-size: 1em;
+      padding: 0px;
+    }
   }
   &__title {
     display: flex;
@@ -1418,13 +1437,44 @@ $transitions: (
     padding: 10px;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-    // background-color: white;
+    position: relative;
+    z-index: 3;
+    background-color: white;
+  }
+  &__container-reply {
+    display: flex;
+    margin-top: 5px;
+    height: 30px;
+  }
+  &__form-reply {
+    position: relative;
+    display: flex;
+    opacity: 0;
+    transform: translateY(-50px);
+    visibility: hidden;
+    transition: getTransition(smooth);
+    flex: 1;
+    z-index: 1;
+    &--open {
+      opacity: 1;
+      transform: translateY(0px);
+      visibility: visible;
+    }
+  }
+  &__input {
+    @extend %field;
+    flex: 1;
+    padding: 3px 4px;
+    margin: 0px 5px;
+  }
+  &__btn-apply {
+    padding: 5px 8px;
+    font-size: 0.9em;
   }
 }
 
 .comment-form {
   width: 100%;
-  margin-top: 2em;
   border: 1px solid getColor(secondary);
   border-radius: 5px;
   background-color: getColor(main);
@@ -1466,6 +1516,26 @@ $transitions: (
   }
   &__btn-post {
     padding: 13px;
+  }
+}
+
+.comment-warning {
+  display: flex;
+  align-items: center;
+  border: 1px solid getColor(secondary);
+  padding: 10px 15px;
+  background-color: getColor(main);
+  border-radius: 7px;
+  border-bottom-left-radius: 0px;
+  &__icon {
+    font-size: 1.3em;
+  }
+  &__title {
+    margin-left: 10px;
+  }
+  &__btn {
+    padding: 12px;
+    margin-left: 10px;
   }
 }
 

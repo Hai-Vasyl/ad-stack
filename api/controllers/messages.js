@@ -16,7 +16,7 @@ exports.message_create = async (req, res) => {
       })
       answerNew = await answerNew.save()
 
-      return res.json(answerNew._id)
+      return res.json(answerNew)
     }
     let questionNew = new Question({
       owner: userId,
@@ -25,7 +25,7 @@ exports.message_create = async (req, res) => {
       date: new Date(),
     })
     questionNew = await questionNew.save()
-    res.json(questionNew._id)
+    res.json(questionNew)
   } catch (error) {
     res.json(`Error creating message: ${error.message}`)
   }
@@ -39,14 +39,18 @@ exports.message_get = async (req, res) => {
       const answers = await Answer.find({
         question,
         announcement,
-      }).populate({ path: "owner", select: "username typeUser ava" })
+      })
+        .populate({ path: "owner", select: "username typeUser ava" })
+        .sort({ date: -1 })
       return res.json(answers)
     }
 
-    const questions = await Question.find({ announcement }).populate({
-      path: "owner",
-      select: "username typeUser ava",
-    })
+    const questions = await Question.find({ announcement })
+      .populate({
+        path: "owner",
+        select: "username typeUser ava",
+      })
+      .sort({ date: -1 })
 
     res.json(questions)
   } catch (error) {

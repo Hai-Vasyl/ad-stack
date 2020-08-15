@@ -1,9 +1,29 @@
-import React from "react"
-import { RiQuestionAnswerLine } from "react-icons/ri"
+import React, { useState } from "react"
 import { Link } from "react-router-dom"
-import { RiUserSettingsLine, RiUserLine } from "react-icons/ri"
+import {
+  RiQuestionAnswerLine,
+  RiUserSettingsLine,
+  RiUserLine,
+} from "react-icons/ri"
+import { BsX, BsCheck } from "react-icons/bs"
 
 function Message({ message, isQuestion, owner }) {
+  const [dropReply, setDropReply] = useState(false)
+  const [answer, setAnswer] = useState("")
+
+  const toggleReply = () => {
+    setDropReply(!dropReply)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log("Submit")
+  }
+
+  const handleChange = (e) => {
+    setAnswer(e.target.value)
+  }
+
   return (
     <div className={`msg ${!isQuestion && "msg-answer"}`}>
       <div className='msg__left-side'>
@@ -31,10 +51,41 @@ function Message({ message, isQuestion, owner }) {
 
         <div className='msg__content'>{message.content}</div>
         {isQuestion && (
-          <button className='msg__btn-reply btn btn-simple'>
-            <RiQuestionAnswerLine className='btn__icon' />
-            <span className='btn__name'>Reply</span>
-          </button>
+          <div className='msg__container-reply'>
+            <button
+              className={`msg__btn-reply btn btn-simple ${
+                dropReply && "msg__btn-reply--close"
+              }`}
+              onClick={toggleReply}
+            >
+              {dropReply ? (
+                <BsX />
+              ) : (
+                <>
+                  <RiQuestionAnswerLine className='btn__icon' />
+                  <span className='btn__name'>Reply</span>
+                </>
+              )}
+            </button>
+            <form
+              onSubmit={handleSubmit}
+              className={`msg__form-reply ${
+                dropReply && "msg__form-reply--open"
+              }`}
+            >
+              <input
+                type='text'
+                className='msg__input'
+                value={answer}
+                onChange={handleChange}
+                placeholder='Write your answer here'
+              />
+              <button className='msg__btn-apply btn btn-primary'>
+                <BsCheck className='btn__icon' />
+                <span className='btn__name'>Apply</span>
+              </button>
+            </form>
+          </div>
         )}
       </div>
     </div>
