@@ -8,18 +8,30 @@ import {
   BsChevronRight,
   BsChat,
   BsCardImage,
+  BsGear,
+  BsArrowRight,
+  BsBookmarkCheck,
+  BsBookmarkPlus,
 } from "react-icons/bs"
 import { RiUserSettingsLine, RiUserLine } from "react-icons/ri"
-import { useSelector } from "react-redux"
-import { BsGear, BsArrowRight } from "react-icons/bs"
+import { useSelector, useDispatch } from "react-redux"
 import Questions from "../components/Questions"
+import {
+  addBookmark,
+  removeBookmark,
+} from "../redux/bookmarks/bookmarksActions"
 
 function AnnouncementPage(props) {
   const [data, setData] = useState({ images: [] })
   const { fetchData } = useHTTP()
   const tags = useTags()
   const [load, setLoad] = useState(true)
-  const { token } = useSelector((state) => state.auth)
+  const [includeBkmarks, setIncludeBkmarks] = useState(false)
+  const {
+    auth: { token },
+    bkmarks: { bookmarks },
+  } = useSelector((state) => state)
+  const dispatch = useDispatch()
   const { announcementId } = props.match.params
 
   useEffect(() => {
@@ -38,6 +50,17 @@ function AnnouncementPage(props) {
     fetch()
   }, [announcementId, fetchData])
 
+  useEffect(() => {
+    let isInclude = false
+    bookmarks.forEach((item) => {
+      if (item._id === data._id) {
+        isInclude = true
+      }
+    })
+
+    setIncludeBkmarks(isInclude)
+  }, [bookmarks, data._id])
+
   const getPreviewImage = () => {
     let path
     data.images.forEach((img) => {
@@ -46,6 +69,34 @@ function AnnouncementPage(props) {
       }
     })
     return path
+  }
+
+  const handleBookmark = async () => {
+    if (includeBkmarks) {
+      dispatch(removeBookmark(data._id))
+    } else {
+      const announcement = {
+        image: getPreviewImage(),
+        owner: {
+          ava: data.owner.ava,
+          typeUser: data.owner.typeUser,
+          username: data.owner.username,
+          _id: data.owner._id,
+        },
+        price: data.price,
+        tag: data.tag,
+        title: data.title,
+        _id: data._id,
+      }
+      dispatch(addBookmark({ ...announcement }))
+    }
+
+    await fetchData({
+      url: includeBkmarks ? "/auth/delete-bookmark" : "/auth/create-bookmark",
+      method: includeBkmarks ? "delete" : "post",
+      data: { announcement: data._id, isCreate: !includeBkmarks && true },
+      options: { isLocalStorage: true },
+    })
   }
 
   const handleTabActive = (id) => {
@@ -164,14 +215,24 @@ function AnnouncementPage(props) {
         </div>
 
         <div className='details-ad__container-info'>
-          {token.token && token.user.typeUser === data.owner.typeUser && (
-            <Link
-              className='details-ad__btn-edit link'
-              to={`/edit/${data._id}`}
-            >
-              <BsGear />
-            </Link>
-          )}
+          {token.token &&
+            (token.user.typeUser === data.owner.typeUser ? (
+              <Link
+                className='details-ad__btn-edit link'
+                to={`/edit/${data._id}`}
+              >
+                <BsGear />
+              </Link>
+            ) : (
+              <button
+                className={`details-ad__btn-edit link ${
+                  includeBkmarks && "details-ad__bookmark"
+                }`}
+                onClick={handleBookmark}
+              >
+                {includeBkmarks ? <BsBookmarkCheck /> : <BsBookmarkPlus />}
+              </button>
+            ))}
           <h3 className='details-ad__title'>{data.title}</h3>
           <div className='details-ad__container-price'>
             <button className='details-ad__btn-message btn btn-primary'>

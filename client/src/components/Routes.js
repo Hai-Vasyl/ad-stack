@@ -1,6 +1,9 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Route, Switch, Redirect } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
+import useHTTP from "../hooks/useHTTP"
+import { resetNavbar } from "../redux/navbar/navbarActions"
+import { fetchSuccess } from "../redux/bookmarks/bookmarksActions"
 
 import Auth from "../components/Auth"
 import Navbar from "../components/Navbar"
@@ -11,19 +14,34 @@ import AnnouncementPage from "../pages/AnnouncementPage"
 import ModPage from "../pages/ModPage"
 import UserPage from "../pages/UserPage"
 import UsersPage from "../pages/UsersPage"
-import { resetNavbar } from "../redux/navbar/navbarActions"
 
 function Routes() {
   const {
     auth: { token },
     navbar: { dropMenu, authForm, popupWarning },
+    bkmarks: { bookmarks },
   } = useSelector((state) => state)
   const dispatch = useDispatch()
+  const { fetchData } = useHTTP()
+
+  useEffect(() => {
+    if (token.token) {
+      dispatch(
+        fetchData({
+          url: "/auth/get-bookmarks",
+          method: "get",
+          data: null,
+          options: { fetchSuccess },
+        })
+      )
+    }
+  }, [dispatch, fetchData, token.token])
 
   return (
     <>
       <Navbar />
       <Auth />
+      {console.log(bookmarks)}
       <div
         onClick={() => dispatch(resetNavbar())}
         className={`background ${

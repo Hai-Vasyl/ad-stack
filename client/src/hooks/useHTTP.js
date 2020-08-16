@@ -30,7 +30,7 @@ function useHTTP() {
       }
       return async (dispatch) => {
         try {
-          dispatch(options.fetchStart())
+          options.fetchStart && dispatch(options.fetchStart())
           const data = await makeRequest()
           dispatch(options.fetchSuccess({ data, options }))
           dispatch(resetNavbar())

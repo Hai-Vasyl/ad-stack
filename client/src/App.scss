@@ -322,7 +322,7 @@ $transitions: (
   border: 1px solid getColor(secondary);
   box-shadow: none;
 }
-.btn-succcess {
+.btn-success {
   background-color: getColor(success);
   color: white;
 }
@@ -1117,7 +1117,8 @@ $transitions: (
     height: 60px;
     border-radius: 50%;
     overflow: hidden;
-
+    padding: 4px;
+    border: 1px solid white;
     &:hover {
       .details-ad__ava {
         transform: scale(1.2);
@@ -1129,6 +1130,8 @@ $transitions: (
     height: 100%;
     object-fit: cover;
     transition: getTransition(smooth);
+    border-radius: 50%;
+    border: 1px solid white;
   }
   &__container-user-info {
     padding: 5px 10px;
@@ -1145,8 +1148,6 @@ $transitions: (
     display: inline-block;
     color: white;
     text-decoration: none;
-    // padding: 5px 0;
-    // border: 1px solid lightgrey;
     margin-bottom: 10px;
     transition: getTransition(smooth);
     &:hover {
@@ -1197,6 +1198,9 @@ $transitions: (
       box-shadow: none;
       transform: scale(0.9);
     }
+  }
+  &__bookmark {
+    background-color: getColor(main);
   }
 }
 
