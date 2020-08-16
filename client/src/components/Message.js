@@ -6,18 +6,47 @@ import {
   RiUserLine,
 } from "react-icons/ri"
 import { BsX, BsCheck } from "react-icons/bs"
+import { useSelector } from "react-redux"
+import useHTTP from "../hooks/useHTTP"
 
-function Message({ message, isQuestion, owner }) {
+function Message({ message, isQuestion, owner, setNewAnswer }) {
   const [dropReply, setDropReply] = useState(false)
   const [answer, setAnswer] = useState("")
+  const { fetchData } = useHTTP()
+  const { token } = useSelector((state) => state.auth)
 
   const toggleReply = () => {
-    setDropReply(!dropReply)
+    if (token.token) {
+      setDropReply(!dropReply)
+    }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log("Submit")
+    try {
+      if (!answer.trim().length) {
+        return
+      }
+
+      const { announcement, content } = message
+      const data = await fetchData({
+        url: "/message/create-message",
+        method: "post",
+        data: { announcement, content, question: message._id },
+        options: { isLocalStorage: true },
+      })
+
+      const owner = {
+        ava: token.user.ava,
+        typeUser: token.user.typeUser,
+        username: token.user.username,
+        _id: token.user._id,
+      }
+
+      setNewAnswer({ ...data, owner })
+      setAnswer("")
+      setDropReply(false)
+    } catch (error) {}
   }
 
   const handleChange = (e) => {
@@ -54,10 +83,16 @@ function Message({ message, isQuestion, owner }) {
           <div className='msg__container-reply'>
             <button
               className={`msg__btn-reply btn btn-simple ${
-                dropReply && "msg__btn-reply--close"
+                token.token
+                  ? dropReply && "msg__btn-reply--close"
+                  : "btn-disabled"
               }`}
               onClick={toggleReply}
             >
+              <div className='btn__msg'>
+                Login, to reply!
+                <span className='btn__triangle'></span>
+              </div>
               {dropReply ? (
                 <BsX />
               ) : (
@@ -80,7 +115,15 @@ function Message({ message, isQuestion, owner }) {
                 onChange={handleChange}
                 placeholder='Write your answer here'
               />
-              <button className='msg__btn-apply btn btn-primary'>
+              <button
+                className={`msg__btn-apply btn btn-primary ${
+                  !answer.trim().length && "btn-disabled"
+                }`}
+              >
+                <div className='btn__msg'>
+                  Type something to reply!
+                  <span className='btn__triangle'></span>
+                </div>
                 <BsCheck className='btn__icon' />
                 <span className='btn__name'>Apply</span>
               </button>

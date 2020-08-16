@@ -109,7 +109,7 @@ function ModPage(props) {
   const isEmptyFields = () => {
     let isEmpty = false
     form.forEach((item) => {
-      if (!item.value.length) {
+      if (typeof item.value === "string" && !item.value.trim().length) {
         if (
           item.param === "imagesAnnouncements" ||
           item.param === "indexPreviewImage" ||

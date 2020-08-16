@@ -24,7 +24,6 @@ function Questions({ announcement, owner }) {
           options: { isLocalStorage: true },
         })
 
-        console.log(data)
         setQuestions(data)
         setLoad(false)
       } catch (error) {}
@@ -42,6 +41,9 @@ function Questions({ announcement, owner }) {
 
   const handleComment = async () => {
     try {
+      if (!comment.trim().length) {
+        return
+      }
       const data = await fetchData({
         url: "/message/create-message",
         method: "post",
@@ -97,19 +99,24 @@ function Questions({ announcement, owner }) {
               </Link>
             </div>
 
-            <form className='comment-form__container-text'>
+            <div className='comment-form__container-text'>
               <textarea
                 className='comment-form__textarea msg__content'
                 value={comment}
                 onChange={handleChange}
                 placeholder='Leave a question'
               ></textarea>
-              <button className='comment-form__btn-handler'></button>
-            </form>
+            </div>
             <button
-              className='comment-form__btn-post btn btn-primary'
+              className={`comment-form__btn-post btn btn-primary ${
+                !comment.trim().length && "btn-disabled"
+              }`}
               onClick={handleComment}
             >
+              <div className='btn__msg'>
+                Type something to comment!
+                <span className='btn__triangle'></span>
+              </div>
               <span className='btn__name'>Comment</span>
               <BsArrowRight className='btn__icon' />
             </button>

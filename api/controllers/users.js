@@ -131,3 +131,52 @@ exports.user_delete = async (req, res) => {
     res.status(500).json(`Error getting all users: ${error.message}`)
   }
 }
+
+exports.user_bookmarks_modify = async (req, res) => {
+  try {
+    const { userId } = req
+    const { announcement, isCreate } = req.body
+
+    if (isCreate) {
+      const user = await User.findById(userId)
+      user.bookmarks.push(announcement)
+      await user.save()
+
+      return res.json("Bookmark created successfully!")
+    }
+
+    await User.findByIdAndUpdate(userId, {
+      $pull: { bookmarks: announcement },
+    })
+
+    res.json("Bookmark deleted successfully!")
+  } catch (error) {
+    res.status(500).json(`Error modify bookmarks: ${error.message}`)
+  }
+}
+
+exports.user_bookmarks_get = async (req, res) => {
+  try {
+    const { userId } = req
+    const user = await User.findById(userId)
+      .select("bookmarks")
+      .populate({
+        path: "bookmarks",
+        select: "title tag price owner image",
+        populate: { path: "owner", select: "ava username typeUser" },
+      })
+
+    let { bookmarks } = user
+    for (let i = 0; i < bookmarks.length; i++) {
+      const image = await Image.findOne({
+        announcement: bookmarks[i]._id,
+        statusPreview: true,
+      }).select("path")
+
+      bookmarks[i] = { ...bookmarks[i]._doc, image: image.path }
+    }
+    res.json(bookmarks)
+  } catch (error) {
+    res.status(500).json(`Error modify bookmarks: ${error.message}`)
+  }
+}

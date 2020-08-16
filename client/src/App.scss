@@ -193,14 +193,14 @@ $transitions: (
     font-size: 2em;
     text-align: center;
     margin-bottom: 15px;
-    color: white;
+    color: grey;
     font-weight: normal;
     border: 1px solid getColor(secondary);
     padding: 13px 20px;
     border-radius: 5px;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
-    background-color: getColor(main);
+    background-color: getColor(bg-loader);
     backdrop-filter: blur(4px);
     position: relative;
   }
@@ -252,11 +252,8 @@ $transitions: (
     position: absolute !important;
     top: 4px;
     right: 4px;
-    padding: 5px !important;
+    padding: 7px !important;
     font-size: 0.5em;
-    // border: 1px solid getColor(secondary);
-    // border-radius: 50% !important;
-    // background-color: white;
     box-shadow: none !important;
   }
   @keyframes spin {
@@ -293,7 +290,7 @@ $transitions: (
     border-radius: 4px;
     text-align: center;
     transition: getTransition(sudden);
-    top: -35px;
+    bottom: 60px;
     visibility: hidden;
     opacity: 0;
     transform: translate(0, -20%);
@@ -338,8 +335,8 @@ $transitions: (
   color: white;
 }
 .btn-disabled {
-  background-color: getColor(main);
-  color: white;
+  background-color: getColor(secondary);
+  color: getColor(light-night);
   box-shadow: none;
   &:hover {
     box-shadow: none;
@@ -1390,6 +1387,9 @@ $transitions: (
       font-size: 1em;
       padding: 0px;
     }
+    .btn__msg {
+      bottom: 40px;
+    }
   }
   &__title {
     display: flex;
@@ -1438,8 +1438,6 @@ $transitions: (
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     position: relative;
-    z-index: 3;
-    background-color: white;
   }
   &__container-reply {
     display: flex;
@@ -1450,14 +1448,14 @@ $transitions: (
     position: relative;
     display: flex;
     opacity: 0;
-    transform: translateY(-50px);
+    transform: scale(0.9);
     visibility: hidden;
     transition: getTransition(smooth);
     flex: 1;
     z-index: 1;
     &--open {
       opacity: 1;
-      transform: translateY(0px);
+      transform: scale(1);
       visibility: visible;
     }
   }
@@ -1466,10 +1464,14 @@ $transitions: (
     flex: 1;
     padding: 3px 4px;
     margin: 0px 5px;
+    font-size: 0.9em;
   }
   &__btn-apply {
     padding: 5px 8px;
     font-size: 0.9em;
+    .btn__msg {
+      bottom: 40px;
+    }
   }
 }
 
@@ -1511,11 +1513,12 @@ $transitions: (
     padding: 10px;
     margin: 7px 0px 5px 0px;
   }
-  &__btn-handler {
-    display: none;
-  }
   &__btn-post {
-    padding: 13px;
+    padding: 12px;
+    .btn__msg {
+      width: 110px;
+      bottom: 54px;
+    }
   }
 }
 

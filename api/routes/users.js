@@ -5,6 +5,8 @@ const {
   user_register,
   users_get,
   user_delete,
+  user_bookmarks_modify,
+  user_bookmarks_get,
 } = require("../controllers/users")
 const auth = require("../middlewares/auth.middleware")
 
@@ -37,5 +39,11 @@ router.post(
 router.get("/get-users", auth, users_get)
 
 router.delete("/delete-user", auth, user_delete)
+
+router.post("/create-bookmark", auth, user_bookmarks_modify)
+
+router.delete("/delete-bookmark", auth, user_bookmarks_modify)
+
+router.get("/get-bookmarks", auth, user_bookmarks_get)
 
 module.exports = router

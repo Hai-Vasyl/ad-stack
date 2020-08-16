@@ -24,6 +24,10 @@ function Question({ question, owner }) {
     fetch()
   }, [fetchData, question])
 
+  const setNewAnswer = (answerNew) => {
+    setAnswers([answerNew, ...answers])
+  }
+
   const answersJSX = answers.map((answer) => {
     return <Message message={answer} key={answer._id} owner={owner} />
   })
@@ -34,7 +38,12 @@ function Question({ question, owner }) {
 
   return (
     <div>
-      <Message message={question} isQuestion owner={owner} />
+      <Message
+        message={question}
+        isQuestion
+        owner={owner}
+        setNewAnswer={setNewAnswer}
+      />
       <div className='container-msgs container-questions'>{answersJSX}</div>
     </div>
   )

@@ -41,6 +41,9 @@ function Navbar(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    if (!search.trim().length) {
+      return
+    }
     dispatch(resetNavbar())
     dispatch(setText(search))
     if (location.pathname === "/search") {

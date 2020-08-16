@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose")
+const { Schema, model, Types } = require("mongoose")
 
 const schema = new Schema({
   username: { type: String, unique: true, required: true },
@@ -17,6 +17,7 @@ const schema = new Schema({
   brief: { type: String, default: "" },
   typeUser: { type: String, required: true, default: "user" },
   date: { type: Date, required: true },
+  bookmarks: [{ type: Types.ObjectId, ref: "Announcement" }],
 })
 
 module.exports = model("User", schema)
