@@ -16,7 +16,7 @@ const bookmarksReducer = (state = initialState, action) => {
       }
     case ADD_BOOKMARK_MARKS:
       return {
-        bookmarks: [action.payload, ...state.bookmarks],
+        bookmarks: [...state.bookmarks, action.payload],
       }
     case REMOVE_BOOKMARK_MARKS:
       return {

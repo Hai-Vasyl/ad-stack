@@ -14,12 +14,12 @@ import AnnouncementPage from "../pages/AnnouncementPage"
 import ModPage from "../pages/ModPage"
 import UserPage from "../pages/UserPage"
 import UsersPage from "../pages/UsersPage"
+import BookmarksPage from "../pages/BookmarksPage"
 
 function Routes() {
   const {
     auth: { token },
     navbar: { dropMenu, authForm, popupWarning },
-    bkmarks: { bookmarks },
   } = useSelector((state) => state)
   const dispatch = useDispatch()
   const { fetchData } = useHTTP()
@@ -41,7 +41,6 @@ function Routes() {
     <>
       <Navbar />
       <Auth />
-      {console.log(bookmarks)}
       <div
         onClick={() => dispatch(resetNavbar())}
         className={`background ${
@@ -56,6 +55,7 @@ function Routes() {
             <Route exact path='/categories' component={CategoriesPage} />
             <Route path='/create' component={ModPage} />
             <Route exact path='/user' component={UserPage} />
+            <Route path='/bookmarks' component={BookmarksPage} />
             <Route
               path='/categories/:categoryName'
               component={AnnouncementsPage}
@@ -76,6 +76,7 @@ function Routes() {
             <Route path='/create' component={ModPage} />
             <Route path='/users' component={UsersPage} />
             <Route exact path='/user' component={UserPage} />
+            <Route path='/bookmarks' component={BookmarksPage} />
             <Route
               path='/categories/:categoryName'
               component={AnnouncementsPage}

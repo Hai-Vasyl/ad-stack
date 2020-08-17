@@ -10,6 +10,7 @@ import {
 } from "react-icons/ai"
 import { FiUsers, FiPlus } from "react-icons/fi"
 import { RiSearch2Line } from "react-icons/ri"
+import { BsBookmarks } from "react-icons/bs"
 import { clearData } from "../redux/auth/authActions"
 import {
   toggleDropMenu,
@@ -139,6 +140,15 @@ function Navbar(props) {
                 >
                   <AiOutlineUser />
                   <span className='nav__link-name'>Profile</span>
+                </NavLink>
+                <NavLink
+                  to='/bookmarks'
+                  activeClassName='nav__link--active'
+                  className='nav__link'
+                  onClick={() => dispatch(resetNavbar())}
+                >
+                  <BsBookmarks />
+                  <span className='nav__link-name'>Bookmarks</span>
                 </NavLink>
                 <button className='nav__link' onClick={handleLogout}>
                   <AiOutlineLogout />

@@ -72,31 +72,33 @@ function AnnouncementPage(props) {
   }
 
   const handleBookmark = async () => {
-    if (includeBkmarks) {
-      dispatch(removeBookmark(data._id))
-    } else {
-      const announcement = {
-        image: getPreviewImage(),
-        owner: {
-          ava: data.owner.ava,
-          typeUser: data.owner.typeUser,
-          username: data.owner.username,
-          _id: data.owner._id,
-        },
-        price: data.price,
-        tag: data.tag,
-        title: data.title,
-        _id: data._id,
+    try {
+      if (includeBkmarks) {
+        dispatch(removeBookmark(data._id))
+      } else {
+        const announcement = {
+          image: getPreviewImage(),
+          owner: {
+            ava: data.owner.ava,
+            typeUser: data.owner.typeUser,
+            username: data.owner.username,
+            _id: data.owner._id,
+          },
+          price: data.price,
+          tag: data.tag,
+          title: data.title,
+          _id: data._id,
+        }
+        dispatch(addBookmark({ ...announcement }))
       }
-      dispatch(addBookmark({ ...announcement }))
-    }
 
-    await fetchData({
-      url: includeBkmarks ? "/auth/delete-bookmark" : "/auth/create-bookmark",
-      method: includeBkmarks ? "delete" : "post",
-      data: { announcement: data._id, isCreate: !includeBkmarks && true },
-      options: { isLocalStorage: true },
-    })
+      await fetchData({
+        url: includeBkmarks ? "/auth/delete-bookmark" : "/auth/create-bookmark",
+        method: includeBkmarks ? "delete" : "post",
+        data: { announcement: data._id, isCreate: !includeBkmarks && true },
+        options: { isLocalStorage: true },
+      })
+    } catch (error) {}
   }
 
   const handleTabActive = (id) => {
@@ -170,6 +172,7 @@ function AnnouncementPage(props) {
     return <div className='wrapper'>LOADING....</div>
   }
 
+  const { icon, name } = getTagProps()
   return (
     <div className='wrapper'>
       <div className='title title-simple'>
@@ -251,8 +254,8 @@ function AnnouncementPage(props) {
                   to={`/categories/${data.tag}`}
                   className='details-ad__link btn link'
                 >
-                  {getTagProps().icon}
-                  <span className='btn__name'>{getTagProps().name}</span>
+                  {icon}
+                  <span className='btn__name'>{name}</span>
                 </Link>
               </div>
               <div className='details-ad__column-info'>

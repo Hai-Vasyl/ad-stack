@@ -173,7 +173,7 @@ exports.user_bookmarks_get = async (req, res) => {
         statusPreview: true,
       }).select("path")
 
-      bookmarks[i] = { ...bookmarks[i]._doc, image: image.path }
+      bookmarks[i] = { ...bookmarks[i]._doc, image: image && image.path }
     }
     res.json(bookmarks)
   } catch (error) {

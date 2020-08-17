@@ -678,7 +678,7 @@ $transitions: (
     display: inline-block;
     color: grey;
     border: 1px solid getColor(secondary);
-    padding: 5px;
+    padding: 5px 10px;
     border-top: none;
     font-size: 0.85em;
     background-color: getColor(main);
@@ -1572,4 +1572,157 @@ $transitions: (
 .container-questions {
   margin-left: 20px;
   padding-left: 20px;
+}
+
+.bookmarks {
+  margin-top: 15px;
+}
+.bookmark {
+  display: flex;
+  align-items: center;
+  padding: 13px;
+  border: 1px solid getColor(secondary);
+  width: 900px;
+  max-width: 100%;
+  border-radius: 5px;
+  margin: 0 auto;
+  margin-bottom: 1.2em;
+  background-color: getColor(main);
+  &__image-side {
+    padding-right: 15px;
+  }
+  &__content-side {
+    align-self: stretch;
+    position: relative;
+    flex: 1;
+    margin-right: 15px;
+    padding: 10px;
+    border: 1px dashed getColor(secondary);
+    border-radius: 6px;
+    background-color: getColor(accent);
+  }
+  &__container-img {
+    width: 130px;
+    height: 130px;
+    display: block;
+    border-radius: 5px;
+    padding: 6px;
+    border: 1px solid getColor(secondary);
+    background-color: white;
+    overflow: hidden;
+    position: relative;
+    &:hover {
+      .bookmark__img {
+        transform: scale(1.2);
+      }
+    }
+  }
+  &__img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border: 1px solid getColor(secondary);
+    transition: getTransition(smooth);
+  }
+  &__price {
+    text-align: center;
+    margin-top: 5px;
+  }
+  &__grivna-sign {
+    font-size: 0.9em;
+    margin-left: 7px;
+    color: grey;
+  }
+  &__title {
+    text-decoration: none;
+    color: getColor(dark);
+    margin-bottom: 10px;
+    display: block;
+    font-weight: bold;
+    font-size: 1.1em;
+    display: block;
+    transition: getTransition(smmoth);
+    &:hover {
+      text-decoration: underline;
+      color: getColor(link);
+    }
+  }
+  &__container-category {
+    display: flex;
+    align-items: center;
+    color: grey;
+    font-size: 0.9em;
+  }
+  &__category {
+    margin-left: 10px;
+    padding: 5px;
+    font-size: 0.9em;
+  }
+  &__owner {
+    text-decoration: none;
+    color: getColor(dark);
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    border: 1px solid getColor(secondary);
+    border-bottom: none;
+    padding: 5px 10px;
+    background-color: getColor(main);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+  &__container-ava {
+    display: block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    padding: 3px;
+    border: 1px solid getColor(secondary);
+    background-color: white;
+    &:hover {
+      .bookmark__ava {
+        transform: scale(1.2);
+      }
+    }
+  }
+  &__ava {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid getColor(secondary);
+    transition: getTransition(smooth);
+  }
+  &__username {
+    margin-left: 7px;
+    &:hover {
+      text-decoration: underline;
+      color: getColor(link);
+    }
+  }
+  &__btn-delete {
+    margin-left: auto;
+    padding: 10px;
+    border-radius: 50%;
+  }
+  &__plug-image {
+    color: getColor(secondary);
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  &__plug-name {
+    font-size: 0.75em;
+  }
+  &__plug-icon {
+    font-size: 3.5em;
+  }
 }
