@@ -9,7 +9,7 @@ import { BsX, BsCheck } from "react-icons/bs"
 import { useSelector } from "react-redux"
 import useHTTP from "../hooks/useHTTP"
 
-function Message({ message, isQuestion, owner, setNewAnswer }) {
+function Message({ message, isQuestion, owner, setNewAnswer, deleteHandler }) {
   const [dropReply, setDropReply] = useState(false)
   const [answer, setAnswer] = useState("")
   const { fetchData } = useHTTP()
@@ -28,11 +28,11 @@ function Message({ message, isQuestion, owner, setNewAnswer }) {
         return
       }
 
-      const { announcement, content } = message
+      const { announcement } = message
       const data = await fetchData({
         url: "/message/create-message",
         method: "post",
-        data: { announcement, content, question: message._id },
+        data: { announcement, content: answer, question: message._id },
         options: { isLocalStorage: true },
       })
 
@@ -49,6 +49,19 @@ function Message({ message, isQuestion, owner, setNewAnswer }) {
     } catch (error) {}
   }
 
+  const handleDelete = async (msgId) => {
+    try {
+      deleteHandler(msgId)
+
+      await fetchData({
+        url: `/message/delete-message/${msgId}`,
+        method: "delete",
+        data: { isQuestion },
+        options: { isLocalStorage: true },
+      })
+    } catch (error) {}
+  }
+
   const handleChange = (e) => {
     setAnswer(e.target.value)
   }
@@ -56,6 +69,14 @@ function Message({ message, isQuestion, owner, setNewAnswer }) {
   return (
     <div className={`msg ${!isQuestion && "msg-answer"}`}>
       <div className='msg__left-side'>
+        {token.token && message.owner._id === token.user._id && (
+          <button
+            className='msg__btn-delete btn btn-simple'
+            onClick={() => handleDelete(message._id)}
+          >
+            <BsX />
+          </button>
+        )}
         <Link to={`/user/${message.owner._id}`} className='msg__container-ava'>
           <img src={message.owner.ava} className='msg__ava' alt='userAva' />
         </Link>

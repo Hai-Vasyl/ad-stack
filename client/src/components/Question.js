@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import Message from "./Message"
 import useHTTP from "../hooks/useHTTP"
 
-function Question({ question, owner }) {
+function Question({ question, owner, deleteQuestion }) {
   const [answers, setAnswers] = useState([])
   const [load, setLoad] = useState(true)
   const { fetchData } = useHTTP()
@@ -28,8 +28,19 @@ function Question({ question, owner }) {
     setAnswers([answerNew, ...answers])
   }
 
+  const deleteAnswer = (answerId) => {
+    setAnswers(answers.filter((answer) => answer._id !== answerId))
+  }
+
   const answersJSX = answers.map((answer) => {
-    return <Message message={answer} key={answer._id} owner={owner} />
+    return (
+      <Message
+        message={answer}
+        key={answer._id}
+        owner={owner}
+        deleteHandler={deleteAnswer}
+      />
+    )
   })
 
   if (load) {
@@ -43,6 +54,7 @@ function Question({ question, owner }) {
         isQuestion
         owner={owner}
         setNewAnswer={setNewAnswer}
+        deleteHandler={deleteQuestion}
       />
       <div className='container-msgs container-questions'>{answersJSX}</div>
     </div>

@@ -31,8 +31,19 @@ function Questions({ announcement, owner }) {
     fetch()
   }, [fetchData, announcement])
 
+  const deleteQuestion = (questionId) => {
+    setQuestions(questions.filter((item) => item._id !== questionId))
+  }
+
   const messages = questions.map((question) => {
-    return <Question key={question._id} question={question} owner={owner} />
+    return (
+      <Question
+        key={question._id}
+        question={question}
+        owner={owner}
+        deleteQuestion={deleteQuestion}
+      />
+    )
   })
 
   const handleChange = (e) => {

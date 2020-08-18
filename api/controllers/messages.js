@@ -57,3 +57,20 @@ exports.message_get = async (req, res) => {
     res.json(`Error getting messages: ${error.message}`)
   }
 }
+
+exports.message_delele = async (req, res) => {
+  try {
+    const { msgId } = req.params
+    const { isQuestion } = req.body
+
+    if (isQuestion) {
+      await Question.findByIdAndDelete(msgId)
+    } else {
+      await Answer.findByIdAndDelete(msgId)
+    }
+
+    res.json("Message successfully deleted!")
+  } catch (error) {
+    res.json(`Error deleting message: ${error.message}`)
+  }
+}

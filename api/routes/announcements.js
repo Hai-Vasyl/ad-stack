@@ -7,6 +7,7 @@ const {
   announcementEdit_get,
   announcement_delete,
   announcements_get,
+  announcementsUser_get,
 } = require("../controllers/announcements")
 const router = Router()
 
@@ -42,6 +43,8 @@ router.post("/search-announcements", announcements_get)
 router.get("/get-announcement/:announId", announcement_get)
 
 router.get("/get-announcement_for_edit/:announId", auth, announcementEdit_get)
+
+router.get("/get-user-announcements", auth, announcementsUser_get)
 
 router.delete("/delete-announcement/:announId", auth, announcement_delete)
 

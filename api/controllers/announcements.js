@@ -149,3 +149,25 @@ exports.announcement_delete = async (req, res) => {
     res.json(`Error deleting announcement: ${error.message}`)
   }
 }
+
+exports.announcementsUser_get = async (req, res) => {
+  try {
+    const { userId } = req
+
+    let adverts = await Announcement.find({ owner: userId }).select(
+      "date price tag title"
+    )
+
+    for (let i = 0; i < adverts.length; i++) {
+      const image = await Image.findOne({
+        announcement: adverts[i]._id,
+        statusPreview: true,
+      }).select("path")
+      adverts[i] = { ...adverts[i]._doc, image }
+    }
+
+    res.json(adverts)
+  } catch (error) {
+    res.json(`Error getting user announcements: ${error.message}`)
+  }
+}
