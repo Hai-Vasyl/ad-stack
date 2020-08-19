@@ -163,7 +163,8 @@ exports.announcementsUser_get = async (req, res) => {
         announcement: adverts[i]._id,
         statusPreview: true,
       }).select("path")
-      adverts[i] = { ...adverts[i]._doc, image }
+
+      adverts[i] = { ...adverts[i]._doc, image: image && image.path }
     }
 
     res.json(adverts)

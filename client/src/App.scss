@@ -1740,51 +1740,217 @@ $transitions: (
 
 .user {
   display: flex;
+  align-items: flex-start;
+  margin-top: -29px;
   &__image-side {
-    border: 1px solid black;
+    border: 1px solid getColor(secondary);
+    width: 342px;
     max-width: 100%;
-    padding: 15px;
+    padding: 20px;
+    padding-top: 45px;
+    border-radius: 5px;
+    border-top-right-radius: 0px;
   }
   &__content-side {
-    border: 1px solid black;
+    border-top: 1px solid getColor(secondary);
     flex: 1;
+    position: relative;
+    z-index: 5;
+    // padding: 0px 20px;
   }
   &__brief {
     position: relative;
   }
-  &__container-image {
+  &__btn-edit-img {
     width: 300px;
     height: 300px;
-    border-radius: 50%;
     padding: 10px;
     background-color: white;
-    border: 1px solid getColor(secondary);
+    border-radius: 50%;
+    overflow: hidden;
+    // border: 1px solid getColor(secondary);
+    box-shadow: 0px 0px 20px rgba(41, 19, 208, 0.2),
+      0px 0px 5px rgba(130, 13, 48, 0.2);
   }
   &__image {
     width: 100%;
     height: 100%;
     display: block;
-    border-radius: 50%;
     object-fit: cover;
+    border-radius: 50%;
     border: 1px solid getColor(secondary);
+    // box-shadow: inset 0px 0px 3px black;
   }
   &__type-icon {
     position: absolute;
     bottom: 20px;
     right: 20px;
-    border: 1px solid getColor(secondary);
+    // border: 1px solid getColor(secondary);
     width: 50px;
     height: 50px;
     padding: 10px;
     border-radius: 50%;
     background-color: white;
+    box-shadow: 0px 0px 10px rgba(96, 16, 101, 0.1),
+      0px 0px 5px rgba(22, 16, 186, 0.3);
   }
   &__username {
     text-align: center;
     font-size: 1.4em;
-    margin: 15px 0;
+    margin-top: 15px;
+  }
+  &__container-email {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    margin-bottom: 10px;
+    color: grey;
+  }
+  &__email {
+    margin-left: 10px;
+  }
+  &__brief-info {
+    padding: 15px 0;
+    border: 1px solid getColor(main);
+    border-left: none;
+    border-right: none;
+  }
+  &__link-edit {
+    border: 1px solid getColor(secondary);
+    padding: 3px 5px;
+    background-color: transparent;
+    border-radius: 4px;
+    font-size: 0.9em;
+    transition: getTransition(smooth);
+    &:hover {
+      box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1);
+    }
+  }
+  &__fullname {
+    color: grey;
+    text-align: center;
+    margin-bottom: 10px;
   }
   &__btn-bookmarks {
-    padding: 13px 0px;
+    padding: 13px;
+    width: 200px;
+    margin: auto;
+    max-width: 100%;
+    text-decoration: none;
+    margin-top: 20px;
+  }
+  &__container-btntabs {
+    display: flex;
+    border-bottom: 1px solid getColor(secondary);
+  }
+  &__btntab {
+    background-color: transparent;
+    border-radius: 0px;
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    box-shadow: none;
+    padding: 13px 10px;
+    transform: translateY(1px);
+    &--active {
+      border-bottom-color: red;
+      &:hover {
+        box-shadow: none;
+      }
+      &:active {
+        transform: translateY(1px);
+      }
+    }
+  }
+  &__tabpage {
+    padding: 30px 35px;
+    transform: scale(0);
+    transition: getTransition(smooth);
+    &--open {
+      transform: scale(1);
+    }
+  }
+}
+
+.announc-item {
+  display: flex;
+  align-items: center;
+  border: 1px solid getColor(secondary);
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 1.3em;
+  background-color: getColor(main);
+  &__image-side {
+    width: 130px;
+    height: 130px;
+    border-radius: 5px;
+    padding: 7px;
+    background-color: white;
+    text-decoration: none;
+    display: block;
+    color: getColor(dark);
+    position: relative;
+    border: 1px solid getColor(secondary);
+  }
+  &__content-side {
+    flex: 1;
+    align-self: stretch;
+    padding: 0px 10px;
+    margin: 0px 10px;
+    border-radius: 5px;
+    border: 1px dashed getColor(secondary);
+    position: relative;
+    background-color: getColor(accent);
+  }
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border: 1px solid getColor(secondary);
+  }
+  &__plug {
+  }
+  &__plug-icon {
+    font-size: 3.5em;
+  }
+  &__plug-name {
+  }
+  &__date {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 1px solid getColor(secondary);
+    text-align: center;
+    font-size: 0.8em;
+    padding: 3px 0;
+    background-color: getColor(accent);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  &__title {
+    text-decoration: none;
+    color: getColor(dark);
+    font-weight: bold;
+    display: block;
+    font-size: 1.1em;
+    padding: 7px 0;
+    margin-bottom: 5px;
+  }
+  &__price {
+    margin-top: 5px;
+    border: 1px solid getColor(secondary);
+    position: absolute;
+    left: 0px;
+    padding: 5px 10px;
+    border-left: none;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: getColor(main);
+  }
+  &__btn-edit {
+    border-radius: 50%;
+    padding: 12px;
+    font-size: 0.9em;
   }
 }
