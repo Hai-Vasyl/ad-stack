@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import useHTTP from "../hooks/useHTTP"
 import { RiUserSettingsLine, RiUserLine } from "react-icons/ri"
 import { Link } from "react-router-dom"
@@ -8,26 +8,51 @@ import {
   BsBookmarks,
   BsCollection,
   BsGear,
-  BsAt,
   BsCardImage,
   BsTools,
+  BsX,
+  BsCheck,
 } from "react-icons/bs"
 import { AiOutlineUser } from "react-icons/ai"
 import useTags from "../hooks/useTags"
+import {
+  updateStart,
+  updateSuccess,
+  updateFailure,
+} from "../redux/auth/authActions"
 
 function UserPage() {
   const {
+    error,
     token: { user },
   } = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
   const [announcements, setAnnouncements] = useState([])
   const { fetchData } = useHTTP()
   const [load, setLoad] = useState(true)
   const [statusPage, setStatusPage] = useState(0)
   const tags = useTags()
-  const [btnTabs, setBtnTabs] = useState([
-    { name: "Announcements", icon: <BsCollection className='btn__icon' /> },
-    { name: "Contacts", icon: <FiPhoneCall className='btn__icon' /> },
-    { name: "Settings", icon: <BsTools className='btn__icon' /> },
+
+  const [form, setForm] = useState([
+    { param: "username", name: "Username", value: user.username },
+    { param: "email", name: "Email", value: user.email },
+    { param: "firstname", name: "Firstname", value: user.firstname },
+    { param: "lastname", name: "Lastname", value: user.lastname },
+    { param: "address", name: "Address", value: user.address },
+    { param: "phone", name: "Phone", value: user.phone },
+    {
+      param: "brief",
+      name: "Bio",
+      value: user.brief,
+      placeholder: "Type something about yourself, about your profession",
+    },
+    {
+      param: "contacts",
+      name: "Other contacts",
+      value: user.contacts,
+      placeholder:
+        "Here you can add extra contacts or write how other can get in touch with you",
+    },
   ])
 
   useEffect(() => {
@@ -46,6 +71,89 @@ function UserPage() {
     }
     fetch()
   }, [fetchData])
+
+  const handleChange = (e) => {
+    setForm(
+      form.map((item) => {
+        if (item.param === e.target.name) {
+          item.value = e.target.value
+        }
+        return item
+      })
+    )
+  }
+
+  const handleSubmit = (e) => {
+    try {
+      e.preventDefault()
+
+      let data = {}
+      form.forEach((elem) => {
+        data[elem.param] = elem.value
+      })
+
+      dispatch(
+        fetchData({
+          url: "/auth/update-user",
+          method: "post",
+          data,
+          options: {
+            fetchStart: updateStart,
+            fetchSuccess: updateSuccess,
+            fetchFailure: updateFailure,
+          },
+        })
+      )
+    } catch (error) {}
+  }
+
+  const fields = form.map((item) => {
+    // const msg = getMsg(item)
+    if (item.param === "brief" || item.param === "contacts") {
+      return (
+        <label key={item.param} className='field field-custom-height'>
+          <div className='field__container-info'>
+            <span className='field__name'>{item.name}:</span>
+          </div>
+          <textarea
+            className='field__textarea field__textarea-short'
+            name={item.param}
+            value={item.value}
+            onChange={handleChange}
+            placeholder={item.placeholder}
+          ></textarea>
+        </label>
+      )
+    }
+    return (
+      <label key={item.param} className='field'>
+        <div className='field__container-info'>
+          <span className='field__name'>{item.param}:</span>
+          {/* <div
+            className={`field__container-msg ${
+              !msg && "field__container-msg--close"
+            }`}
+          >
+            <BsInfoCircle className='field__icon' />
+            <span className='field__msg'>
+              {msg}
+              <span className='field__triangle'></span>
+            </span>
+          </div> */}
+
+          {/* ${msg && "field__input--warning"}` */}
+        </div>
+        <input
+          className='field__input'
+          type='text'
+          value={item.value}
+          name={item.param}
+          onChange={handleChange}
+          autoComplete='off'
+        />
+      </label>
+    )
+  })
 
   const getTagProps = (announce) => {
     let tagProps
@@ -119,6 +227,20 @@ function UserPage() {
     )
   })
 
+  const btnTabs = [
+    { name: "Announcements", icon: <BsCollection className='btn__icon' /> },
+    { name: "Contacts", icon: <FiPhoneCall className='btn__icon' /> },
+    { name: "Settings", icon: <BsTools className='btn__icon' /> },
+  ]
+  const contacts = [
+    { name: "Firstname", value: user.firstname },
+    { name: "Lastname", value: user.lastname },
+    { name: "Email", value: user.email },
+    { name: "Phone", value: user.phone },
+    { name: "Address", value: user.address },
+    { name: "Other", value: user.contacts },
+  ]
+
   const btnTabsJSX = btnTabs.map((btn, index) => {
     return (
       <button
@@ -134,13 +256,28 @@ function UserPage() {
     )
   })
 
+  const contactsJSX = contacts.map((item) => {
+    return (
+      <div className='user__contact-name' key={item.name}>
+        {item.name}:
+        <span className='user__contact'>
+          {item.value ? (
+            item.value
+          ) : (
+            <span className='user__contact-plug'>(Empty)</span>
+          )}
+        </span>
+      </div>
+    )
+  })
+
   if (load) {
     return <div className='wrapper'>LOADING....</div>
   }
 
   return (
     <div className='wrapper'>
-      {console.log(user)}
+      {console.log(user, error)}
       <div className='title title-simple'>
         <div className='title__container-name'>
           <AiOutlineUser />
@@ -205,14 +342,26 @@ function UserPage() {
                 getStatus(1) && "user__tabpage--open"
               }`}
             >
-              Page Contacts
+              <div className='user__container-contacts'>{contactsJSX}</div>
             </div>
             <div
               className={`user__tabpage ${
                 getStatus(2) && "user__tabpage--open"
               }`}
             >
-              Page Settings
+              <form className='user-form' onSubmit={handleSubmit}>
+                <div className='user-form__fields'>{fields}</div>
+                <div className='user-form__container-btns'>
+                  <button className='user-form__btn-cancel btn btn-simple'>
+                    <BsX className='btn__icon' />
+                    <span className='btn__name'>Cancel</span>
+                  </button>
+                  <button className='user-form__btn-apply btn btn-primary'>
+                    <BsCheck className='btn__icon' />
+                    <span className='btn__name'>Apply</span>
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

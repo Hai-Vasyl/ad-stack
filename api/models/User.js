@@ -18,6 +18,7 @@ const schema = new Schema({
   typeUser: { type: String, required: true, default: "user" },
   date: { type: Date, required: true },
   bookmarks: [{ type: Types.ObjectId, ref: "Announcement" }],
+  contacts: { type: String, default: "" },
 })
 
 module.exports = model("User", schema)

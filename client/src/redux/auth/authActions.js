@@ -7,6 +7,9 @@ import {
   CLEAR_SPECIFIC_ERROR_AUTH,
   CLEAR_ERRORS_AUTH,
   CLEAR_DATA_AUTH,
+  UPDATE_START_AUTH,
+  UPDATE_SUCCESS_AUTH,
+  UPDATE_FAILURE_AUTH,
 } from "./authTypes"
 
 export const fetchStart = () => {
@@ -51,5 +54,22 @@ export const setToken = () => {
 export const clearData = () => {
   return {
     type: CLEAR_DATA_AUTH,
+  }
+}
+export const updateStart = () => {
+  return {
+    type: UPDATE_START_AUTH,
+  }
+}
+export const updateSuccess = (user) => {
+  return {
+    type: UPDATE_SUCCESS_AUTH,
+    payload: user,
+  }
+}
+export const updateFailure = (errors) => {
+  return {
+    type: UPDATE_FAILURE_AUTH,
+    payload: errors,
   }
 }

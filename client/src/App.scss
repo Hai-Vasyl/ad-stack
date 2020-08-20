@@ -464,6 +464,10 @@ $transitions: (
     width: 100%;
     @extend %field;
   }
+  &__textarea-short {
+    min-height: 12vh;
+    max-height: 12vh;
+  }
   &__select {
     width: 50%;
     background-color: getColor(primary);
@@ -1750,13 +1754,14 @@ $transitions: (
     padding-top: 45px;
     border-radius: 5px;
     border-top-right-radius: 0px;
+    position: sticky;
+    top: 25px;
   }
   &__content-side {
     border-top: 1px solid getColor(secondary);
     flex: 1;
     position: relative;
     z-index: 5;
-    // padding: 0px 20px;
   }
   &__brief {
     position: relative;
@@ -1842,6 +1847,11 @@ $transitions: (
   &__container-btntabs {
     display: flex;
     border-bottom: 1px solid getColor(secondary);
+    position: sticky;
+    z-index: 6;
+    top: 47px;
+    background-color: getColor(accent);
+    backdrop-filter: blur(4px);
   }
   &__btntab {
     background-color: transparent;
@@ -1861,13 +1871,53 @@ $transitions: (
       }
     }
   }
-  &__tabpage {
-    padding: 30px 35px;
-    transform: scale(0);
-    transition: getTransition(smooth);
-    &--open {
+  &__pagetabs {
+  }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
       transform: scale(1);
     }
+  }
+  &__tabpage {
+    padding: 30px 35px;
+    display: none;
+    animation: fadeIn getTransition(smooth);
+    &--open {
+      display: block;
+    }
+  }
+  &__container-contacts {
+    border: 1px solid getColor(secondary);
+    padding: 15px;
+    border-radius: 5px;
+  }
+  &__contact-name {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: getColor(main);
+    margin-bottom: 10px;
+    font-size: 0.95em;
+    border: 1px dashed getColor(main);
+    &:nth-child(even) {
+      background-color: transparent;
+    }
+    &:last-child {
+      margin-bottom: 0px;
+    }
+  }
+  &__contact {
+    font-size: 1.1em;
+    margin-left: 10px;
+    font-weight: bold;
+  }
+  &__contact-plug {
+    color: lightgrey;
+    font-weight: normal;
   }
 }
 
@@ -1952,5 +2002,28 @@ $transitions: (
     border-radius: 50%;
     padding: 12px;
     font-size: 0.9em;
+  }
+}
+
+.user-form {
+  padding: 15px;
+  background-color: getColor(main);
+  border: 1px solid getColor(secondary);
+  border-radius: 5px;
+  &__fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 20px;
+    align-items: flex-start;
+  }
+  &__container-btns {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  &__btn-cancel {
+  }
+  &__btn-apply {
+    margin-left: 10px;
   }
 }

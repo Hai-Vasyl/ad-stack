@@ -180,3 +180,56 @@ exports.user_bookmarks_get = async (req, res) => {
     res.status(500).json(`Error modify bookmarks: ${error.message}`)
   }
 }
+
+exports.user_update = async (req, res) => {
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json(errors)
+    }
+
+    const { userId } = req
+    const { username, email } = req.body
+
+    const userByUsername = await User.findOne({
+      _id: { $ne: userId },
+      username,
+    })
+    const userByEmail = await User.findOne({ _id: { $ne: userId }, email })
+    if (userByUsername && userByEmail) {
+      return res.status(400).json({
+        errors: [
+          { param: "username", msg: "Username must be unique!" },
+          { param: "email", msg: "Email must be unique!" },
+        ],
+      })
+    } else if (userByUsername || userByEmail) {
+      if (userByUsername) {
+        return res.status(400).json({
+          errors: [
+            {
+              param: "username",
+              msg: "User with this username is already exists!",
+            },
+          ],
+        })
+      } else {
+        return res.status(400).json({
+          errors: [
+            {
+              param: "email",
+              msg: "User with this email is already exists!",
+            },
+          ],
+        })
+      }
+    }
+
+    await User.updateOne({ _id: userId }, req.body)
+    const user = await User.findById(userId)
+
+    res.json(user)
+  } catch (error) {
+    res.status(500).json(`Error updating user: ${error.message}`)
+  }
+}

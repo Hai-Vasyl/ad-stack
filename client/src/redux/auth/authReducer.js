@@ -7,6 +7,9 @@ import {
   CLEAR_SPECIFIC_ERROR_AUTH,
   CLEAR_ERRORS_AUTH,
   CLEAR_DATA_AUTH,
+  UPDATE_START_AUTH,
+  UPDATE_SUCCESS_AUTH,
+  UPDATE_FAILURE_AUTH,
 } from "./authTypes"
 
 const initialState = {
@@ -28,7 +31,7 @@ const authReducer = (state = initialState, action) => {
       localStorage.setItem("auth", JSON.stringify(data))
       return {
         load: false,
-        token: action.payload.data,
+        token: data,
         error: [],
       }
     case FETCH_FAILURE_AUTH:
@@ -72,6 +75,25 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         token: {},
+      }
+    case UPDATE_START_AUTH:
+      return {
+        ...state,
+        load: true,
+      }
+    case UPDATE_SUCCESS_AUTH:
+      const token = { ...state.token, user: action.payload.data }
+      localStorage.setItem("auth", JSON.stringify(token))
+      return {
+        error: [],
+        load: false,
+        token,
+      }
+    case UPDATE_FAILURE_AUTH:
+      return {
+        ...state,
+        load: false,
+        error: action.payload,
       }
     default:
       return state

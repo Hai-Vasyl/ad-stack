@@ -7,6 +7,7 @@ const {
   user_delete,
   user_bookmarks_modify,
   user_bookmarks_get,
+  user_update,
 } = require("../controllers/users")
 const auth = require("../middlewares/auth.middleware")
 
@@ -45,5 +46,18 @@ router.post("/create-bookmark", auth, user_bookmarks_modify)
 router.delete("/delete-bookmark", auth, user_bookmarks_modify)
 
 router.get("/get-bookmarks", auth, user_bookmarks_get)
+
+router.post(
+  "/update-user",
+  auth,
+  [
+    check(
+      "username",
+      "Username must contain at least 4 - 15 characters!"
+    ).isLength({ min: 4, max: 15 }),
+    check("email", "Email is not correct!").isEmail(),
+  ],
+  user_update
+)
 
 module.exports = router
