@@ -44,7 +44,7 @@ router.get("/get-announcement/:announId", announcement_get)
 
 router.get("/get-announcement_for_edit/:announId", auth, announcementEdit_get)
 
-router.get("/get-user-announcements", auth, announcementsUser_get)
+router.get("/get-user-announcements/:userId", announcementsUser_get)
 
 router.delete("/delete-announcement/:announId", auth, announcement_delete)
 

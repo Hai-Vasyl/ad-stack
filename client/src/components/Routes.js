@@ -19,7 +19,7 @@ import BookmarksPage from "../pages/BookmarksPage"
 function Routes() {
   const {
     auth: { token },
-    navbar: { dropMenu, authForm, popupWarning },
+    navbar: { dropMenu, authForm, popupWarning, popupImage },
   } = useSelector((state) => state)
   const dispatch = useDispatch()
   const { fetchData } = useHTTP()
@@ -44,7 +44,8 @@ function Routes() {
       <div
         onClick={() => dispatch(resetNavbar())}
         className={`background ${
-          (dropMenu || authForm || popupWarning) && "background--active"
+          (dropMenu || authForm || popupWarning || popupImage) &&
+          "background--active"
         }`}
       ></div>
       {token.token ? (

@@ -3,6 +3,7 @@ import {
   TOGGLE_AUTH_FORM_NAVBAR,
   RESET_NAVBAR,
   TOGGLE_POPUP_WARNING_NAVBAR,
+  TOGGLE_POPUP_IMAGE,
 } from "./navbarTypes"
 
 export const toggleDropMenu = () => {
@@ -23,5 +24,10 @@ export const resetNavbar = () => {
 export const togglePopupWarning = () => {
   return {
     type: TOGGLE_POPUP_WARNING_NAVBAR,
+  }
+}
+export const togglePopupImage = () => {
+  return {
+    type: TOGGLE_POPUP_IMAGE,
   }
 }

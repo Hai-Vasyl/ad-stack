@@ -226,7 +226,7 @@ exports.user_update = async (req, res) => {
       }
     }
 
-    await User.updateOne({ _id: userId }, req.body)
+    await User.updateOne({ _id: userId }, { ...req.body, date: new Date() })
     const user = await User.findById(userId)
 
     res.json(user)
@@ -240,7 +240,7 @@ exports.user_image_update = async (req, res) => {
     const { userId } = req
     const user = await User.findById(userId)
 
-    if (user.ava !== "https://amp.spark.ru/public/img/user_ava_big.png") {
+    if (user.ava !== "/avatars\\34576358234-avatar.png") {
       let path = user.ava.split("\\").join("/")
       path = path.split("")
       path[0] = ""
@@ -253,5 +253,17 @@ exports.user_image_update = async (req, res) => {
     res.json(ava)
   } catch (error) {
     res.status(500).json(`Error updating user image: ${error.message}`)
+  }
+}
+
+exports.user_get = async (req, res) => {
+  try {
+    const { userId } = req.params
+    const user = await User.findById(userId).select(
+      "username email ava firstname lastname phone address brief typeUser contacts"
+    )
+    res.json(user)
+  } catch (error) {
+    res.status(500).json(`Error getting user: ${error.message}`)
   }
 }

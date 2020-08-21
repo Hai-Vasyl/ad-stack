@@ -7,7 +7,7 @@ const schema = new Schema({
   ava: {
     type: String,
     required: true,
-    default: "https://amp.spark.ru/public/img/user_ava_big.png",
+    default: "/avatars\\34576358234-avatar.png",
   },
   firstname: { type: String, default: "" },
   lastname: { type: String, default: "" },

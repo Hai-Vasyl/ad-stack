@@ -202,7 +202,6 @@ $transitions: (
     border-bottom-right-radius: 0px;
     background-color: getColor(bg-loader);
     backdrop-filter: blur(4px);
-    position: relative;
   }
   &__container-fields {
     padding: 0px 20px;
@@ -253,8 +252,8 @@ $transitions: (
     top: 4px;
     right: 4px;
     padding: 7px !important;
-    font-size: 0.5em;
     box-shadow: none !important;
+    z-index: 3;
   }
   @keyframes spin {
     from {
@@ -1316,8 +1315,8 @@ $transitions: (
     }
   }
   &__img {
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     display: block;
     transition: getTransition(smooth);
@@ -1774,16 +1773,48 @@ $transitions: (
   &__brief {
     position: relative;
   }
-  &__btn-edit-img {
+  &__btn-img {
     width: 300px;
     height: 300px;
     padding: 10px;
+    display: block;
     background-color: white;
     border-radius: 50%;
     overflow: hidden;
-    // border: 1px solid getColor(secondary);
     box-shadow: 0px 0px 20px rgba(41, 19, 208, 0.2),
       0px 0px 5px rgba(130, 13, 48, 0.2);
+    cursor: pointer;
+    position: relative;
+    &:hover .user__background-ava {
+      opacity: 1;
+      backdrop-filter: blur(4px);
+    }
+  }
+  &__file-handler {
+    display: none;
+  }
+  &__background-ava {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border-radius: 50%;
+    position: absolute;
+    background-color: getColor(spinner);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+    transition: getTransition(smooth);
+    backdrop-filter: none;
+    opacity: 0;
+  }
+  &__upload-icon {
+    font-size: 2.3em;
+    margin-bottom: 10px;
+  }
+  &__upload-name {
   }
   &__image {
     width: 100%;
@@ -2057,5 +2088,42 @@ $transitions: (
   }
   &__btn-apply {
     margin-left: 10px;
+  }
+}
+
+.popup-img {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  border-radius: 5px;
+  padding: 15px;
+  z-index: 8;
+  background-color: getColor(bg-loader);
+  backdrop-filter: blur(6px);
+  visibility: hidden;
+  transition: getTransition(sudden);
+  opacity: 0;
+  border: 1px solid getColor(secondary);
+  &--active {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  &__container-ava {
+    width: 500px;
+    height: 500px;
+    max-width: 100%;
+  }
+  &__ava {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  &__username {
+    text-align: center;
+    padding: 5px;
+    display: block;
   }
 }

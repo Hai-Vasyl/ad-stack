@@ -152,7 +152,7 @@ exports.announcement_delete = async (req, res) => {
 
 exports.announcementsUser_get = async (req, res) => {
   try {
-    const { userId } = req
+    const { userId } = req.params
 
     let adverts = await Announcement.find({ owner: userId }).select(
       "date price tag title"

@@ -9,6 +9,7 @@ const {
   user_bookmarks_get,
   user_update,
   user_image_update,
+  user_get,
 } = require("../controllers/users")
 const multer = require("multer")
 const auth = require("../middlewares/auth.middleware")
@@ -78,5 +79,7 @@ router.post(
   upload.single("avatar"),
   user_image_update
 )
+
+router.get("/get-user/:userId", user_get)
 
 module.exports = router

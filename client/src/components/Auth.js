@@ -126,15 +126,13 @@ function Auth() {
       >
         <div className='auth-form__spinner'></div>
       </div>
-      <h2 className='auth-form__title'>
-        <button
-          className='auth-form__btn btn'
-          onClick={() => dispatch(resetNavbar())}
-        >
-          <BsX />
-        </button>
-        {isLogin ? "Login" : "Register"}
-      </h2>
+      <button
+        className='auth-form__btn btn'
+        onClick={() => dispatch(resetNavbar())}
+      >
+        <BsX />
+      </button>
+      <h2 className='auth-form__title'>{isLogin ? "Login" : "Register"}</h2>
       <form onSubmit={handleSubmit} className='auth-form__container-fields'>
         {fields}
         <button className='auth-form__btn-handler'></button>

@@ -134,6 +134,7 @@ function Navbar(props) {
               >
                 <NavLink
                   to='/user'
+                  exact
                   activeClassName='nav__link--active'
                   className='nav__link'
                   onClick={() => dispatch(resetNavbar())}

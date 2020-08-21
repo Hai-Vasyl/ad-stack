@@ -13,6 +13,7 @@ import {
   BsX,
   BsCheck,
   BsInfoCircle,
+  BsUpload,
 } from "react-icons/bs"
 import useTags from "../hooks/useTags"
 import {
@@ -24,37 +25,48 @@ import {
   clearErrors,
   updateAvatar,
 } from "../redux/auth/authActions"
+import { togglePopupImage, resetNavbar } from "../redux/navbar/navbarActions"
 
-function UserPage() {
-  const {
-    error,
-    token: { user },
-  } = useSelector((state) => state.auth)
+function UserPage(props) {
+  let {
+    auth: {
+      error,
+      token: { user },
+    },
+    navbar: { popupImage },
+  } = useSelector((state) => state)
+
+  const { userId } = props.match.params
   const dispatch = useDispatch()
   const [announcements, setAnnouncements] = useState([])
   const { fetchData } = useHTTP()
   const [load, setLoad] = useState(true)
   const [statusPage, setStatusPage] = useState(0)
   const [reset, setReset] = useState(false)
+  const [userOther, setUserOther] = useState({})
   const tags = useTags()
 
   const initialForm = [
-    { param: "username", name: "Username", value: user.username },
-    { param: "email", name: "Email", value: user.email },
-    { param: "firstname", name: "Firstname", value: user.firstname },
-    { param: "lastname", name: "Lastname", value: user.lastname },
-    { param: "address", name: "Address", value: user.address },
-    { param: "phone", name: "Phone", value: user.phone },
+    { param: "username", name: "Username", value: user ? user.username : "" },
+    { param: "email", name: "Email", value: user ? user.email : "" },
+    {
+      param: "firstname",
+      name: "Firstname",
+      value: user ? user.firstname : "",
+    },
+    { param: "lastname", name: "Lastname", value: user ? user.lastname : "" },
+    { param: "address", name: "Address", value: user ? user.address : "" },
+    { param: "phone", name: "Phone", value: user ? user.phone : "" },
     {
       param: "brief",
       name: "Bio",
-      value: user.brief,
+      value: user ? user.brief : "",
       placeholder: "Type something about yourself, about your profession",
     },
     {
       param: "contacts",
       name: "Other contacts",
-      value: user.contacts,
+      value: user ? user.contacts : "",
       placeholder:
         "Here you can add extra contacts or write how other can get in touch with you",
     },
@@ -69,22 +81,35 @@ function UserPage() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const data = await fetchData({
-          url: "/announcement/get-user-announcements",
+        if (userId) {
+          const userData = await fetchData({
+            url: `/auth/get-user/${userId}`,
+            method: "get",
+            data: null,
+            options: { isLocalStorage: true },
+          })
+          setUserOther(userData)
+        }
+        const announceData = await fetchData({
+          url: `/announcement/get-user-announcements/${
+            userId ? userId : user._id
+          }`,
           method: "get",
           data: null,
           options: { isLocalStorage: true },
         })
-        console.log(data)
-        setAnnouncements(data)
+        setAnnouncements(announceData)
         setLoad(false)
       } catch (error) {}
     }
     fetch()
-  }, [fetchData])
+  }, [fetchData, user, userId])
 
   const handleChangeFile = (e) => {
     const ava = e.target.files[0]
+    if (!ava) {
+      return
+    }
     let data = new FormData()
     data.append("avatar", ava, ava.name)
 
@@ -164,7 +189,6 @@ function UserPage() {
   }
 
   const handleReset = () => {
-    console.log("qwe")
     setForm(initialForm)
     setReset(false)
     dispatch(clearErrors())
@@ -285,30 +309,36 @@ function UserPage() {
             <span className='bookmark__grivna-sign'>&#8372;</span>
           </div>
         </div>
-        <Link
-          className='announc-item__btn-edit btn link'
-          to={`/edit/${item._id}`}
-        >
-          <BsGear />
-        </Link>
+        {!userId && (
+          <Link
+            className='announc-item__btn-edit btn link'
+            to={`/edit/${item._id}`}
+          >
+            <BsGear />
+          </Link>
+        )}
       </div>
     )
   })
 
-  const btnTabs = [
+  let btnTabs = [
     { name: "Announcements", icon: <BsCollection className='btn__icon' /> },
     { name: "Contacts", icon: <FiPhoneCall className='btn__icon' /> },
     { name: "Settings", icon: <BsTools className='btn__icon' /> },
   ]
   const contacts = [
-    { name: "Firstname", value: user.firstname },
-    { name: "Lastname", value: user.lastname },
-    { name: "Email", value: user.email },
-    { name: "Phone", value: user.phone },
-    { name: "Address", value: user.address },
-    { name: "Other contacts", value: user.contacts },
+    { name: "Firstname", value: userId ? userOther.firstname : user.firstname },
+    { name: "Lastname", value: userId ? userOther.lastname : user.lastname },
+    { name: "Email", value: userId ? userOther.email : user.email },
+    { name: "Phone", value: userId ? userOther.phone : user.phone },
+    { name: "Address", value: userId ? userOther.address : user.address },
+    {
+      name: "Other contacts",
+      value: userId ? userOther.contacts : user.contacts,
+    },
   ]
 
+  userId && btnTabs.pop()
   const btnTabsJSX = btnTabs.map((btn, index) => {
     return (
       <button
@@ -347,24 +377,55 @@ function UserPage() {
     return <div className='wrapper'>LOADING....</div>
   }
 
+  user = userId ? userOther : user
   return (
     <div className='wrapper'>
       {console.log(user, error)}
+      <div className={`popup-img ${popupImage && "popup-img--active"}`}>
+        <button
+          className='auth-form__btn btn'
+          onClick={() => dispatch(resetNavbar())}
+        >
+          <BsX />
+        </button>
+        <div className='popup-img__container-ava'>
+          <img src={user.ava} className='popup-img__ava' alt='popupImg' />
+        </div>
+        <span className='popup-img__username'>{user.username}</span>
+      </div>
       <div className='title title-simple'>
         <div className='title__container-name'>
           <RiUserLine />
           <span className='title__name'>Profile</span>
         </div>
-        <span className='title__description'>Your personal cabinet</span>
+        <span className='title__description'>
+          {userId ? "User personal cabinet" : "Your personal cabinet"}
+        </span>
       </div>
       <div className='user'>
         <div className='user__image-side'>
           <div className='user__brief'>
-            <input type='file' onChange={handleChangeFile} />
-
-            <button className='user__btn-edit-img'>
-              <img src={user.ava} className='user__image' alt='userAva' />
-            </button>
+            {userId ? (
+              <button
+                className='user__btn-img'
+                onClick={() => dispatch(togglePopupImage())}
+              >
+                <img src={user.ava} className='user__image' alt='userAva' />
+              </button>
+            ) : (
+              <label className='user__btn-img'>
+                <span className='user__background-ava'>
+                  <BsUpload className='user__upload-icon' />
+                  <span className='user__upload-name'>Update image</span>
+                </span>
+                <img src={user.ava} className='user__image' alt='userAva' />
+                <input
+                  className='user__file-handler'
+                  type='file'
+                  onChange={handleChangeFile}
+                />
+              </label>
+            )}
             {user.typeUser === "admin" ? (
               <RiUserSettingsLine className='user__type-icon' />
             ) : (
@@ -395,10 +456,15 @@ function UserPage() {
             <FiMail />
             <span className='user__email'>{user.email}</span>
           </div>
-          <Link to='/bookmarks' className='user__btn-bookmarks btn btn-primary'>
-            <BsBookmarks className='btn__icon' />
-            <span className='btn__name'>Bookmarks</span>
-          </Link>
+          {!userId && (
+            <Link
+              to='/bookmarks'
+              className='user__btn-bookmarks btn btn-primary'
+            >
+              <BsBookmarks className='btn__icon' />
+              <span className='btn__name'>Bookmarks</span>
+            </Link>
+          )}
         </div>
 
         <div className='user__content-side'>
@@ -418,42 +484,44 @@ function UserPage() {
             >
               <div className='user__container-contacts'>{contactsJSX}</div>
             </div>
-            <div
-              className={`user__tabpage ${
-                getStatus(2) && "user__tabpage--open"
-              }`}
-            >
-              <div className='user-form'>
-                <form className='user-form__fields' onSubmit={handleSubmit}>
-                  {fields}
-                  <button className='user-form__btn-handler'></button>
-                </form>
-                <div className='user-form__container-btns'>
-                  <button
-                    className={`user-form__btn-cancel btn btn-simple ${
-                      reset && "user-form__btn-cancel--show"
-                    }`}
-                    onClick={handleReset}
-                  >
-                    <BsX className='btn__icon' />
-                    <span className='btn__name'>Cancel</span>
-                  </button>
-                  <button
-                    className={`user-form__btn-apply btn btn-primary ${
-                      !reset && "btn-disabled"
-                    }`}
-                    onClick={handleSubmit}
-                  >
-                    <div className='btn__msg'>
-                      Change some field to apply!
-                      <span className='btn__triangle'></span>
-                    </div>
-                    <BsCheck className='btn__icon' />
-                    <span className='btn__name'>Apply</span>
-                  </button>
+            {!userId && (
+              <div
+                className={`user__tabpage ${
+                  getStatus(2) && "user__tabpage--open"
+                }`}
+              >
+                <div className='user-form'>
+                  <form className='user-form__fields' onSubmit={handleSubmit}>
+                    {fields}
+                    <button className='user-form__btn-handler'></button>
+                  </form>
+                  <div className='user-form__container-btns'>
+                    <button
+                      className={`user-form__btn-cancel btn btn-simple ${
+                        reset && "user-form__btn-cancel--show"
+                      }`}
+                      onClick={handleReset}
+                    >
+                      <BsX className='btn__icon' />
+                      <span className='btn__name'>Cancel</span>
+                    </button>
+                    <button
+                      className={`user-form__btn-apply btn btn-primary ${
+                        !reset && "btn-disabled"
+                      }`}
+                      onClick={handleSubmit}
+                    >
+                      <div className='btn__msg'>
+                        Change some field to apply!
+                        <span className='btn__triangle'></span>
+                      </div>
+                      <BsCheck className='btn__icon' />
+                      <span className='btn__name'>Apply</span>
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
