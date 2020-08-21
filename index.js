@@ -22,6 +22,7 @@ const startServer = async () => {
       () => console.log("MongoDB started successfully!")
     )
     app.use("/uploads", express.static("uploads"))
+    app.use("/avatars", express.static("avatars"))
     app.use("/auth", require("./api/routes/users"))
     app.use("/message", require("./api/routes/messages"))
     app.use("/announcement", require("./api/routes/announcements"))

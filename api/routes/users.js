@@ -8,10 +8,22 @@ const {
   user_bookmarks_modify,
   user_bookmarks_get,
   user_update,
+  user_image_update,
 } = require("../controllers/users")
+const multer = require("multer")
 const auth = require("../middlewares/auth.middleware")
-
 const router = Router()
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./avatars/")
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + file.originalname)
+  },
+})
+
+const upload = multer({ storage })
 
 router.post(
   "/register",
@@ -58,6 +70,13 @@ router.post(
     check("email", "Email is not correct!").isEmail(),
   ],
   user_update
+)
+
+router.post(
+  "/update-user-image",
+  auth,
+  upload.single("avatar"),
+  user_image_update
 )
 
 module.exports = router

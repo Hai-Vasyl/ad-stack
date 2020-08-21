@@ -5,6 +5,7 @@ const { validationResult } = require("express-validator")
 require("dotenv").config()
 const Announcement = require("../models/Announcement")
 const Image = require("../models/Image")
+const fs = require("fs")
 
 exports.user_login = async (req, res) => {
   try {
@@ -231,5 +232,26 @@ exports.user_update = async (req, res) => {
     res.json(user)
   } catch (error) {
     res.status(500).json(`Error updating user: ${error.message}`)
+  }
+}
+
+exports.user_image_update = async (req, res) => {
+  try {
+    const { userId } = req
+    const user = await User.findById(userId)
+
+    if (user.ava !== "https://amp.spark.ru/public/img/user_ava_big.png") {
+      let path = user.ava.split("\\").join("/")
+      path = path.split("")
+      path[0] = ""
+      fs.unlinkSync(path.join(""))
+    }
+
+    const ava = `/${req.file.path}`
+    await User.updateOne({ _id: userId }, { ava })
+
+    res.json(ava)
+  } catch (error) {
+    res.status(500).json(`Error updating user image: ${error.message}`)
   }
 }

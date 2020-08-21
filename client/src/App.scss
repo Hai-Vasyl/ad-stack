@@ -376,7 +376,6 @@ $transitions: (
   visibility: visible;
   opacity: 1;
   z-index: 2;
-
   &--close {
     margin: 0;
     height: 0;
@@ -390,9 +389,18 @@ $transitions: (
     align-items: center;
     justify-content: space-between;
     padding: 3px 0;
+    position: relative;
   }
   &__name {
     text-transform: capitalize;
+  }
+  &__important::after {
+    content: "*";
+    color: getColor(danger);
+    position: absolute;
+    top: 0;
+    font-size: 1.3em;
+    margin-left: 3px;
   }
   &__container-msg {
     position: relative;
@@ -1885,6 +1893,7 @@ $transitions: (
   }
   &__tabpage {
     padding: 30px 35px;
+    padding-bottom: 0px;
     display: none;
     animation: fadeIn getTransition(smooth);
     &--open {
@@ -1915,6 +1924,10 @@ $transitions: (
     margin-left: 10px;
     font-weight: bold;
   }
+  &__other-contact {
+    display: block;
+    white-space: pre-wrap;
+  }
   &__contact-plug {
     color: lightgrey;
     font-weight: normal;
@@ -1940,6 +1953,10 @@ $transitions: (
     color: getColor(dark);
     position: relative;
     border: 1px solid getColor(secondary);
+    overflow: hidden;
+    &:hover .announc-item__image {
+      transform: scale(1.2);
+    }
   }
   &__content-side {
     flex: 1;
@@ -1956,6 +1973,7 @@ $transitions: (
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: getTransition(smooth);
     border: 1px solid getColor(secondary);
   }
   &__plug {
@@ -1986,6 +2004,10 @@ $transitions: (
     font-size: 1.1em;
     padding: 7px 0;
     margin-bottom: 5px;
+    &:hover {
+      color: getColor(link);
+      text-decoration: underline;
+    }
   }
   &__price {
     margin-top: 5px;
@@ -2021,7 +2043,17 @@ $transitions: (
     align-items: center;
     justify-content: flex-end;
   }
+  &__btn-handler {
+    display: none;
+  }
   &__btn-cancel {
+    opacity: 0;
+    visibility: hidden;
+    transition: getTransition(smooth);
+    &--show {
+      opacity: 1;
+      visibility: visible;
+    }
   }
   &__btn-apply {
     margin-left: 10px;

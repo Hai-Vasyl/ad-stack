@@ -10,6 +10,7 @@ import {
   UPDATE_START_AUTH,
   UPDATE_SUCCESS_AUTH,
   UPDATE_FAILURE_AUTH,
+  UPDATE_AVATAR_AUTH,
 } from "./authTypes"
 
 const initialState = {
@@ -94,6 +95,16 @@ const authReducer = (state = initialState, action) => {
         ...state,
         load: false,
         error: action.payload,
+      }
+    case UPDATE_AVATAR_AUTH:
+      const tokenNew = {
+        ...state.token,
+        user: { ...state.token.user, ava: action.payload.data },
+      }
+      localStorage.setItem("auth", JSON.stringify(tokenNew))
+      return {
+        ...state,
+        token: tokenNew,
       }
     default:
       return state

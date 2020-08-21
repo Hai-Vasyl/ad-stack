@@ -12,13 +12,17 @@ import {
   BsTools,
   BsX,
   BsCheck,
+  BsInfoCircle,
 } from "react-icons/bs"
-import { AiOutlineUser } from "react-icons/ai"
 import useTags from "../hooks/useTags"
 import {
   updateStart,
   updateSuccess,
   updateFailure,
+  setError,
+  clearSpecificError,
+  clearErrors,
+  updateAvatar,
 } from "../redux/auth/authActions"
 
 function UserPage() {
@@ -31,9 +35,10 @@ function UserPage() {
   const { fetchData } = useHTTP()
   const [load, setLoad] = useState(true)
   const [statusPage, setStatusPage] = useState(0)
+  const [reset, setReset] = useState(false)
   const tags = useTags()
 
-  const [form, setForm] = useState([
+  const initialForm = [
     { param: "username", name: "Username", value: user.username },
     { param: "email", name: "Email", value: user.email },
     { param: "firstname", name: "Firstname", value: user.firstname },
@@ -53,7 +58,13 @@ function UserPage() {
       placeholder:
         "Here you can add extra contacts or write how other can get in touch with you",
     },
-  ])
+  ]
+
+  const [form, setForm] = useState(initialForm)
+
+  useEffect(() => {
+    setReset(false)
+  }, [user])
 
   useEffect(() => {
     const fetch = async () => {
@@ -72,11 +83,30 @@ function UserPage() {
     fetch()
   }, [fetchData])
 
+  const handleChangeFile = (e) => {
+    const ava = e.target.files[0]
+    let data = new FormData()
+    data.append("avatar", ava, ava.name)
+
+    dispatch(
+      fetchData({
+        url: "/auth/update-user-image",
+        method: "post",
+        data,
+        options: { fetchSuccess: updateAvatar },
+      })
+    )
+  }
+
   const handleChange = (e) => {
+    if (!reset) {
+      setReset(true)
+    }
     setForm(
       form.map((item) => {
         if (item.param === e.target.name) {
           item.value = e.target.value
+          dispatch(clearSpecificError(item))
         }
         return item
       })
@@ -84,31 +114,64 @@ function UserPage() {
   }
 
   const handleSubmit = (e) => {
-    try {
-      e.preventDefault()
+    e.preventDefault()
 
-      let data = {}
-      form.forEach((elem) => {
-        data[elem.param] = elem.value
+    if (!reset) {
+      return
+    }
+
+    let isError = false
+    form.forEach((item) => {
+      if (
+        (item.param === "username" || item.param === "email") &&
+        !item.value
+      ) {
+        dispatch(setError(item))
+        isError = true
+      }
+    })
+    if (isError) {
+      return
+    }
+
+    let data = {}
+    form.forEach((elem) => {
+      data[elem.param] = elem.value
+    })
+
+    dispatch(
+      fetchData({
+        url: "/auth/update-user",
+        method: "post",
+        data,
+        options: {
+          fetchStart: updateStart,
+          fetchSuccess: updateSuccess,
+          fetchFailure: updateFailure,
+        },
       })
+    )
+  }
 
-      dispatch(
-        fetchData({
-          url: "/auth/update-user",
-          method: "post",
-          data,
-          options: {
-            fetchStart: updateStart,
-            fetchSuccess: updateSuccess,
-            fetchFailure: updateFailure,
-          },
-        })
-      )
-    } catch (error) {}
+  const getMsg = (item) => {
+    let msg = ""
+    error.forEach((err) => {
+      if (item.param === err.param) {
+        msg = err.msg
+      }
+    })
+    return msg
+  }
+
+  const handleReset = () => {
+    console.log("qwe")
+    setForm(initialForm)
+    setReset(false)
+    dispatch(clearErrors())
   }
 
   const fields = form.map((item) => {
-    // const msg = getMsg(item)
+    const msg = getMsg(item)
     if (item.param === "brief" || item.param === "contacts") {
       return (
         <label key={item.param} className='field field-custom-height'>
@@ -128,8 +191,15 @@ function UserPage() {
     return (
       <label key={item.param} className='field'>
         <div className='field__container-info'>
-          <span className='field__name'>{item.param}:</span>
-          {/* <div
+          <span
+            className={`field__name ${
+              (item.param === "username" || item.param === "email") &&
+              "field__important"
+            }`}
+          >
+            {item.name}:
+          </span>
+          <div
             className={`field__container-msg ${
               !msg && "field__container-msg--close"
             }`}
@@ -139,13 +209,11 @@ function UserPage() {
               {msg}
               <span className='field__triangle'></span>
             </span>
-          </div> */}
-
-          {/* ${msg && "field__input--warning"}` */}
+          </div>
         </div>
         <input
-          className='field__input'
-          type='text'
+          className={`field__input ${msg && "field__input--warning"}`}
+          type={item.param === "email" ? "email" : "text"}
           value={item.value}
           name={item.param}
           onChange={handleChange}
@@ -238,7 +306,7 @@ function UserPage() {
     { name: "Email", value: user.email },
     { name: "Phone", value: user.phone },
     { name: "Address", value: user.address },
-    { name: "Other", value: user.contacts },
+    { name: "Other contacts", value: user.contacts },
   ]
 
   const btnTabsJSX = btnTabs.map((btn, index) => {
@@ -260,7 +328,11 @@ function UserPage() {
     return (
       <div className='user__contact-name' key={item.name}>
         {item.name}:
-        <span className='user__contact'>
+        <span
+          className={`user__contact ${
+            item.name === "Other contacts" && "user__other-contact"
+          }`}
+        >
           {item.value ? (
             item.value
           ) : (
@@ -280,7 +352,7 @@ function UserPage() {
       {console.log(user, error)}
       <div className='title title-simple'>
         <div className='title__container-name'>
-          <AiOutlineUser />
+          <RiUserLine />
           <span className='title__name'>Profile</span>
         </div>
         <span className='title__description'>Your personal cabinet</span>
@@ -288,6 +360,8 @@ function UserPage() {
       <div className='user'>
         <div className='user__image-side'>
           <div className='user__brief'>
+            <input type='file' onChange={handleChangeFile} />
+
             <button className='user__btn-edit-img'>
               <img src={user.ava} className='user__image' alt='userAva' />
             </button>
@@ -349,19 +423,36 @@ function UserPage() {
                 getStatus(2) && "user__tabpage--open"
               }`}
             >
-              <form className='user-form' onSubmit={handleSubmit}>
-                <div className='user-form__fields'>{fields}</div>
+              <div className='user-form'>
+                <form className='user-form__fields' onSubmit={handleSubmit}>
+                  {fields}
+                  <button className='user-form__btn-handler'></button>
+                </form>
                 <div className='user-form__container-btns'>
-                  <button className='user-form__btn-cancel btn btn-simple'>
+                  <button
+                    className={`user-form__btn-cancel btn btn-simple ${
+                      reset && "user-form__btn-cancel--show"
+                    }`}
+                    onClick={handleReset}
+                  >
                     <BsX className='btn__icon' />
                     <span className='btn__name'>Cancel</span>
                   </button>
-                  <button className='user-form__btn-apply btn btn-primary'>
+                  <button
+                    className={`user-form__btn-apply btn btn-primary ${
+                      !reset && "btn-disabled"
+                    }`}
+                    onClick={handleSubmit}
+                  >
+                    <div className='btn__msg'>
+                      Change some field to apply!
+                      <span className='btn__triangle'></span>
+                    </div>
                     <BsCheck className='btn__icon' />
                     <span className='btn__name'>Apply</span>
                   </button>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>

@@ -10,6 +10,7 @@ import {
   UPDATE_START_AUTH,
   UPDATE_SUCCESS_AUTH,
   UPDATE_FAILURE_AUTH,
+  UPDATE_AVATAR_AUTH,
 } from "./authTypes"
 
 export const fetchStart = () => {
@@ -71,5 +72,11 @@ export const updateFailure = (errors) => {
   return {
     type: UPDATE_FAILURE_AUTH,
     payload: errors,
+  }
+}
+export const updateAvatar = (ava) => {
+  return {
+    type: UPDATE_AVATAR_AUTH,
+    payload: ava,
   }
 }
