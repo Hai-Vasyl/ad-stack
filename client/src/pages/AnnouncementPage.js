@@ -20,6 +20,7 @@ import {
   addBookmark,
   removeBookmark,
 } from "../redux/bookmarks/bookmarksActions"
+import PageLoader from "../components/PageLoader"
 
 function AnnouncementPage(props) {
   const [data, setData] = useState({ images: [] })
@@ -169,7 +170,11 @@ function AnnouncementPage(props) {
   }
 
   if (load) {
-    return <div className='wrapper'>LOADING....</div>
+    return (
+      <div className='wrapper'>
+        <PageLoader />
+      </div>
+    )
   }
 
   const { icon, name } = getTagProps()

@@ -55,6 +55,7 @@ function Routes() {
             <Route path='/search' component={AnnouncementsPage} />
             <Route exact path='/categories' component={CategoriesPage} />
             <Route path='/create' component={ModPage} />
+            <Route path='/users' component={UsersPage} />
             <Route exact path='/user' component={UserPage} />
             <Route path='/bookmarks' component={BookmarksPage} />
             <Route
@@ -96,6 +97,7 @@ function Routes() {
           <Route exact path='/' component={MainPage} />
           <Route path='/search' component={AnnouncementsPage} />
           <Route exact path='/categories' component={CategoriesPage} />
+          <Route path='/users' component={UsersPage} />
           <Route
             path='/categories/:categoryName'
             component={AnnouncementsPage}

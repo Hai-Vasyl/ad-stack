@@ -89,17 +89,15 @@ function Navbar(props) {
           <AiOutlineUnorderedList />
           <span className='nav__link-name'>Categories</span>
         </NavLink>
-        {token.user && token.user.typeUser === "admin" && (
-          <NavLink
-            to='/users'
-            activeClassName='nav__link--active'
-            className='nav__link'
-            onClick={() => dispatch(resetNavbar())}
-          >
-            <FiUsers />
-            <span className='nav__link-name'>Users</span>
-          </NavLink>
-        )}
+        <NavLink
+          to='/users'
+          activeClassName='nav__link--active'
+          className='nav__link'
+          onClick={() => dispatch(resetNavbar())}
+        >
+          <FiUsers />
+          <span className='nav__link-name'>Users</span>
+        </NavLink>
         {token.user && token.user.typeUser ? (
           <>
             <NavLink

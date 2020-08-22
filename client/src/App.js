@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux"
 import { setToken } from "./redux/auth/authActions"
 import { BrowserRouter as Router } from "react-router-dom"
 import Routes from "./components/Routes"
+import MainLoader from "./components/MainLoader"
 
 function App() {
   const [load, setLoad] = useState(true)
@@ -11,11 +12,13 @@ function App() {
 
   useEffect(() => {
     dispatch(setToken())
-    setLoad(false)
+    setTimeout(() => {
+      setLoad(false)
+    }, 3000)
   }, [dispatch])
 
   if (load) {
-    return <div>LOADING..</div>
+    return <MainLoader />
   }
   return (
     <Router>

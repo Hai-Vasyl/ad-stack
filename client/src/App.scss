@@ -10,12 +10,13 @@ $colors: (
   bg-loader: rgba(211, 211, 211, 0.5),
   light-dark-night: lighten(#333, 15%),
   light-dark: lighten(#333, 10%),
-  light-night: lighten(#333, 20%),
+  light-night: lighten(#333, 15%),
   main: rgb(239, 240, 240),
   accent: rgba(255, 255, 255, 0.7),
   main-solid: rgb(230, 230, 230),
   bg-danger: rgba(241, 42, 42, 0.2),
   link: rgb(13, 52, 130),
+  loader: rgba(255, 255, 255, 0.489),
 );
 %main-background {
   background-image: repeating-linear-gradient(
@@ -66,6 +67,75 @@ $transitions: (
   @return map-get($transitions, $transition-name);
 }
 
+.page-loader {
+  position: fixed;
+  width: 140px;
+  height: 140px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-block;
+}
+@keyframes spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes spin-simple {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes scale {
+  from {
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.logo {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  &__icon {
+    font-size: 2em;
+    color: getColor(light-dark-night);
+  }
+  &__name {
+    margin-left: 7px;
+  }
+  &__container {
+    display: flex;
+    margin-top: 220px;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    padding: 5px;
+    border-radius: 5px;
+  }
+}
+
+.loader {
+  border: 7px double getColor(loader);
+  border-left-color: getColor(secondary);
+  animation: spin-simple getTransition(spin);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin: 20px 50px;
+}
+
 .wrapper {
   width: 1300px;
   max-width: 100%;
@@ -80,11 +150,11 @@ $transitions: (
   min-height: 100vh;
   position: relative;
   &__bg-content {
-    width: 50%;
+    width: 55%;
     @extend %main-background;
   }
   &__bg-background {
-    width: 50%;
+    width: 45%;
     background-image: radial-gradient(
         circle at top left,
         rgba(218, 67, 67, 0.3) 23%,
@@ -111,15 +181,21 @@ $transitions: (
     transform: translateX(-50%);
     display: flex;
     align-items: center;
+    // background-color: rgba(211, 211, 211, 0.2);
+
+    // border: 1px solid black;
   }
   &__content {
     width: 50%;
-    padding: 0px 20px;
-    padding-right: 7vw;
+    padding: 18vh 20px;
+    // padding-right: 7vw;
     min-height: 35vh;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    // border: 1px solid getColor(secondary);
+    border-radius: 10px;
+    backdrop-filter: filter(5px);
     // border: 1px solrgb(39, 15, 15)rey;
     // border-left: none;
     // border-right: none;
@@ -130,21 +206,27 @@ $transitions: (
     border-radius: 4px;
     align-items: center;
     font-size: 3em;
-    background-color: getColor(bg-loader);
+    margin-bottom: 20px;
+    background-color: getColor(main);
+    backdrop-filter: blur(5px);
   }
   &__name {
     margin-left: 15px;
+    font-size: 0.8em;
   }
   &__icon {
     font-size: 1.2em;
   }
   &__paragraph {
     position: relative;
-    font-size: 1.5em;
-    right: 30px;
-    line-height: 30px;
-    border-left: 1px solid lightgrey;
-    padding-left: 30px;
+    font-size: 1.3em;
+    margin-bottom: 2em;
+    // right: 30px;
+    padding: 15px;
+    border-left: 1px solid getColor(secondary);
+    line-height: 28px;
+    // border-left: 1px solid lightgrey;
+    // padding-left: 30px;
   }
   &__container-btns {
     display: flex;
@@ -159,7 +241,7 @@ $transitions: (
     width: 100%;
     height: 100%;
     object-fit: contain;
-    transform: scale(1.2) translateX(-30px);
+    transform: scale(1.2);
     filter: drop-shadow(0px 3px 4px rgba(0, 0, 0, 0.8));
   }
 }
@@ -170,7 +252,6 @@ $transitions: (
   max-width: 100%;
   border-radius: 5px;
   transition: getTransition(sudden);
-  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.2), 0px 14px 15px rgba(0, 0, 0, 0.1);
   opacity: 0;
   visibility: hidden;
   z-index: 8;
@@ -241,7 +322,7 @@ $transitions: (
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    border: 10px double rgba(255, 255, 255, 0.489);
+    border: 10px double getColor(loader);
     border-left-color: getColor(spinner);
     animation: spin getTransition(spin);
     width: 100px;
@@ -254,14 +335,6 @@ $transitions: (
     padding: 7px !important;
     box-shadow: none !important;
     z-index: 3;
-  }
-  @keyframes spin {
-    from {
-      transform: translate(-50%, -50%) rotate(0deg);
-    }
-    to {
-      transform: translate(-50%, -50%) rotate(360deg);
-    }
   }
 }
 
@@ -532,6 +605,7 @@ $transitions: (
   right: 0;
   background-color: getColor(dark);
   z-index: 8;
+  box-shadow: 0px 4px 5px rgba(51, 51, 51, 0.2);
   &__menu {
     width: 1400px;
     padding: 0px 50px;
@@ -541,16 +615,14 @@ $transitions: (
     align-items: center;
   }
   &__link {
-    color: getColor(secondary);
+    color: getColor(main);
     text-decoration: none;
-    padding: 14px;
+    padding: 14px 11px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: getTransition(smooth);
     background-color: getColor(dark);
-    // border-left: 1px solid getColor(light-dark-night);
-    // border-right: 1px solid transparent;
     &:hover {
       color: white;
     }
@@ -574,25 +646,27 @@ $transitions: (
     margin-left: 7px;
   }
   &__search {
-    // width: 500px;
     flex: 1;
-    // max-width: 100%;
     display: flex;
-    margin: 0px 10px;
-    // margin-right: auto;
+    margin: 0px 3vw;
     border-radius: 4px;
-    overflow: hidden;
   }
   &__search-input {
     flex: 1;
     padding: 4px 7px;
+    position: relative;
     border: none;
     background-color: getColor(light-night);
     color: white;
-    outline-width: 1px;
-    outline-color: grey;
+    z-index: 3;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    outline: none;
     &::placeholder {
-      color: lightgrey;
+      color: getColor(secondary);
+    }
+    &:focus {
+      box-shadow: 0px 0px 3px rgb(227, 227, 227), 0px 0px 2px rgb(255, 255, 255);
     }
   }
   &__search-btn {
@@ -600,7 +674,9 @@ $transitions: (
     height: 30px;
     display: flex;
     background-color: getColor(light-night);
-    color: lightgrey;
+    color: getColor(secondary);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
     & > * {
       margin: auto;
     }
@@ -632,13 +708,19 @@ $transitions: (
     right: 0;
     width: 150px;
     position: absolute;
-    background-color: getColor(dark);
     transition: getTransition(smooth);
-    // border-top: 1px solid getColor(light-dark-night);
+    background-color: getColor(accent);
     opacity: 0;
     visibility: hidden;
     transform: translateY(-30%) scale(0.9);
     z-index: -1;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    overflow: hidden;
+    backdrop-filter: blur(4px);
+
+    border: 1px solid getColor(main);
+    border-top: none;
     &--open {
       opacity: 1;
       visibility: visible;
@@ -646,6 +728,15 @@ $transitions: (
     }
     .nav__link {
       width: 100%;
+      background-color: transparent;
+      color: getColor(dark);
+      &--active {
+        background-color: getColor(accent);
+        color: black;
+      }
+      &:hover {
+        color: black;
+      }
       // border-left: none !important;
       // border-bottom: 1px solid getColor(light-dark-night);
     }
@@ -765,12 +856,13 @@ $transitions: (
     &:hover {
       transform: scale(1.05);
       z-index: 5;
-      box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1), 0px 2px 2px rgba(0, 0, 0, 0.1),
-        0px 6px 7px rgba(0, 0, 0, 0.1);
+      border-color: getColor(primary);
+      // box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1), 0px 2px 2px rgba(0, 0, 0, 0.1),
+      //   0px 6px 7px rgba(0, 0, 0, 0.1);
     }
     &:active {
       transform: scale(0.9);
-      box-shadow: none;
+      // box-shadow: none;
     }
   }
   &__name {
@@ -816,12 +908,13 @@ $transitions: (
     border-radius: 5px;
     // box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05), 0px 4px 5px rgba(0, 0, 0, 0.1);
     &:hover {
-      box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1), 0px 6px 8px rgba(0, 0, 0, 0.1);
+      // box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1), 0px 6px 8px rgba(0, 0, 0, 0.1);
       transform: scale(1.05);
+      border-color: getColor(primary);
     }
     &:active {
       transform: scale(0.9);
-      box-shadow: none;
+      // box-shadow: none;
     }
   }
   &__container-img {
@@ -858,6 +951,8 @@ $transitions: (
     overflow: hidden;
     border-top: 1px solid getColor(secondary);
     background-color: getColor(main);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
   }
   &__price {
     top: 0;
@@ -900,7 +995,7 @@ $transitions: (
     // box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.1), 0px 10px 12px rgba(0, 0, 0, 0.1);
   }
   &__container-preview {
-    height: 65vh;
+    height: 69vh;
     position: relative;
   }
   &__preview-img {
@@ -910,7 +1005,6 @@ $transitions: (
     transform: scale(0.85);
     // border-radius: 5px;
     // overflow: hidden;
-    // // border: 1px solid getColor(secondary);
   }
   &__move-btn {
     position: absolute;
@@ -953,11 +1047,11 @@ $transitions: (
     display: flex;
     border-top: 1px solid getColor(secondary);
     background-color: getColor(main);
-    height: 161px;
+    height: 125px;
   }
   &__container-imgtabs {
     margin: auto;
-    width: 550px;
+    width: 500px;
     max-width: 100%;
     display: flex;
     align-items: center;
@@ -978,7 +1072,7 @@ $transitions: (
     // box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.1), 0px 10px 12px rgba(0, 0, 0, 0.1);
   }
   &__tab-btn {
-    height: 100px;
+    height: 90px;
     width: 18%;
     border: 1px solid getColor(secondary);
     transition: getTransition(smooth);
@@ -989,7 +1083,8 @@ $transitions: (
     background-color: white;
     &--active {
       transform: scale(1.1);
-      box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1), 0px 3px 5px rgba(0, 0, 0, 0.2);
+      border-color: getColor(primary);
+      // box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1), 0px 3px 5px rgba(0, 0, 0, 0.2);
     }
     &:first-child {
       margin-left: 0px;
@@ -999,6 +1094,8 @@ $transitions: (
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
+    border: 1px solid getColor(secondary);
   }
   &__title {
     font-size: 1.3em;
@@ -1042,13 +1139,13 @@ $transitions: (
   }
   &__description {
     padding: 10px;
-    border: 1px dashed getColor(secondary);
+    border: 1px solid getColor(secondary);
     // border: 1px solid white;
     // width: 109%;
     // border: 5px solid white;
     // box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2), 0px 1px 4px rgba(0, 0, 0, 0.2),
     //   0px 6px 6px rgba(0, 0, 0, 0.1);
-    height: 28vh;
+    height: 31vh;
     // overflow-x: hidden;
     overflow-y: auto;
     white-space: pre-wrap;
@@ -1065,8 +1162,8 @@ $transitions: (
     }
     &::-webkit-scrollbar-track {
       box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-      border-bottom-right-radius: 5px;
-      border-top-right-radius: 5px;
+      border-bottom-right-radius: 3px;
+      border-top-right-radius: 3px;
     }
     &::-webkit-scrollbar-thumb {
       background-color: getColor(primary);
@@ -1122,8 +1219,8 @@ $transitions: (
       rgb(71, 188, 214),
       rgb(213, 73, 73)
     );
-    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2), 0px 1px 4px rgba(0, 0, 0, 0.2),
-      0px 6px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2), 0px 3px 5px rgba(0, 0, 0, 0.1),
+      0px 10px 12px rgba(0, 0, 0, 0.1);
   }
   &__container-ava {
     width: 60px;
@@ -1225,7 +1322,6 @@ $transitions: (
   background-color: getColor(main);
   width: 350px;
   max-width: 100%;
-  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.2), 0px 14px 15px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   opacity: 0;
   visibility: hidden;
@@ -1285,7 +1381,8 @@ $transitions: (
   cursor: pointer;
   &:hover {
     transform: scale(1.05);
-    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1), 0px 6px 8px rgba(0, 0, 0, 0.1);
+    border-color: getColor(primary);
+    // box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1), 0px 6px 8px rgba(0, 0, 0, 0.1);
   }
   &__btn-delete {
     position: absolute;
@@ -1329,7 +1426,8 @@ $transitions: (
     justify-content: center;
     padding: 15px 0;
     border-top: 1px solid getColor(secondary);
-
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
     color: getColor(dark);
     background-color: getColor(main);
   }
@@ -1589,6 +1687,7 @@ $transitions: (
 
 .container-msgs {
   padding-left: 5px;
+  position: relative;
   border-left: 1px solid getColor(secondary);
 }
 .container-questions {
@@ -2063,6 +2162,7 @@ $transitions: (
   background-color: getColor(main);
   border: 1px solid getColor(secondary);
   border-radius: 5px;
+  position: relative;
   &__fields {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -2085,6 +2185,17 @@ $transitions: (
       opacity: 1;
       visibility: visible;
     }
+  }
+  &__date-container {
+    margin-right: auto;
+    font-size: 0.9em;
+    line-height: 23px;
+  }
+  &__date-label {
+    display: block;
+    color: grey;
+  }
+  &__date {
   }
   &__btn-apply {
     margin-left: 10px;

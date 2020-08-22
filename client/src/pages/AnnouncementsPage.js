@@ -5,6 +5,7 @@ import { Link } from "react-router-dom"
 import { BsCardImage } from "react-icons/bs"
 import { useSelector } from "react-redux"
 import { AiOutlineFileSearch } from "react-icons/ai"
+import PageLoader from "../components/PageLoader"
 
 function AnnouncementsPage(props) {
   const [data, setData] = useState([])
@@ -72,7 +73,11 @@ function AnnouncementsPage(props) {
   }
 
   if (load) {
-    return <div className='wrapper'>LOADIGN</div>
+    return (
+      <div className='wrapper'>
+        <PageLoader />
+      </div>
+    )
   }
 
   return (

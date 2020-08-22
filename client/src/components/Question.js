@@ -43,10 +43,6 @@ function Question({ question, owner, deleteQuestion }) {
     )
   })
 
-  if (load) {
-    return <div>LOADING</div>
-  }
-
   return (
     <div>
       <Message
@@ -56,7 +52,9 @@ function Question({ question, owner, deleteQuestion }) {
         setNewAnswer={setNewAnswer}
         deleteHandler={deleteQuestion}
       />
-      <div className='container-msgs container-questions'>{answersJSX}</div>
+      <div className='container-msgs container-questions'>
+        {load ? <div className='loader'></div> : answersJSX}
+      </div>
     </div>
   )
 }

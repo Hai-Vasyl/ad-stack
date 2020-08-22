@@ -73,10 +73,6 @@ function Questions({ announcement, owner }) {
     } catch (error) {}
   }
 
-  if (load) {
-    return <div>LOADING..</div>
-  }
-
   return (
     <>
       {token.token ? (
@@ -146,7 +142,9 @@ function Questions({ announcement, owner }) {
         </div>
       )}
 
-      <div className='container-msgs'>{messages}</div>
+      <div className='container-msgs'>
+        {load ? <div className='loader'></div> : messages}
+      </div>
     </>
   )
 }

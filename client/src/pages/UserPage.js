@@ -4,6 +4,7 @@ import useHTTP from "../hooks/useHTTP"
 import { RiUserSettingsLine, RiUserLine } from "react-icons/ri"
 import { Link } from "react-router-dom"
 import { FiPhoneCall, FiMail } from "react-icons/fi"
+import PageLoader from "../components/PageLoader"
 import {
   BsBookmarks,
   BsCollection,
@@ -31,6 +32,7 @@ function UserPage(props) {
   let {
     auth: {
       error,
+      load: formLoad,
       token: { user },
     },
     navbar: { popupImage },
@@ -374,13 +376,16 @@ function UserPage(props) {
   })
 
   if (load) {
-    return <div className='wrapper'>LOADING....</div>
+    return (
+      <div className='wrapper'>
+        <PageLoader />
+      </div>
+    )
   }
 
   user = userId ? userOther : user
   return (
     <div className='wrapper'>
-      {console.log(user, error)}
       <div className={`popup-img ${popupImage && "popup-img--active"}`}>
         <button
           className='auth-form__btn btn'
@@ -491,11 +496,26 @@ function UserPage(props) {
                 }`}
               >
                 <div className='user-form'>
+                  <div
+                    className={`auth-form__loader ${
+                      formLoad && "auth-form__loader--active"
+                    }`}
+                  >
+                    <div className='auth-form__spinner'></div>
+                  </div>
                   <form className='user-form__fields' onSubmit={handleSubmit}>
                     {fields}
                     <button className='user-form__btn-handler'></button>
                   </form>
                   <div className='user-form__container-btns'>
+                    <div className='user-form__date-container'>
+                      <span className='user-form__date-label'>
+                        Last updated:
+                      </span>
+                      <span className='user-form__date'>
+                        {user.date.slice(0, 10)}
+                      </span>
+                    </div>
                     <button
                       className={`user-form__btn-cancel btn btn-simple ${
                         reset && "user-form__btn-cancel--show"

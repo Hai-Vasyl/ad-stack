@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { togglePopupWarning, resetNavbar } from "../redux/navbar/navbarActions"
 import { FaRegTimesCircle, FaRegCheckCircle } from "react-icons/fa"
 import useTags from "../hooks/useTags"
+import PageLoader from "../components/PageLoader"
 
 function ModPage(props) {
   const { fetchData } = useHTTP()
@@ -324,7 +325,11 @@ function ModPage(props) {
   })
 
   if (load) {
-    return <div className='wrapper'>LOADING...</div>
+    return (
+      <div className='wrapper'>
+        <PageLoader />
+      </div>
+    )
   }
 
   return (

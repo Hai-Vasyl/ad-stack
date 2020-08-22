@@ -3,6 +3,7 @@ import useHTTP from "../hooks/useHTTP"
 import { RiUserSettingsLine, RiUserLine } from "react-icons/ri"
 import { BsX } from "react-icons/bs"
 import { FiUsers } from "react-icons/fi"
+import PageLoader from "../components/PageLoader"
 
 function UsersPage(props) {
   const { fetchData } = useHTTP()
@@ -63,7 +64,11 @@ function UsersPage(props) {
   })
 
   if (load) {
-    return <div className='wrapper'>LOADING...</div>
+    return (
+      <div className='wrapper'>
+        <PageLoader />
+      </div>
+    )
   }
 
   return (
