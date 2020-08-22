@@ -50,7 +50,7 @@ router.post(
   user_login
 )
 
-router.get("/get-users", auth, users_get)
+router.get("/get-users", users_get)
 
 router.delete("/delete-user", auth, user_delete)
 

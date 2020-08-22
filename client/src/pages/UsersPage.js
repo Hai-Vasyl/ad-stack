@@ -3,12 +3,16 @@ import useHTTP from "../hooks/useHTTP"
 import { RiUserSettingsLine, RiUserLine } from "react-icons/ri"
 import { BsX } from "react-icons/bs"
 import { FiUsers } from "react-icons/fi"
+import { useSelector } from "react-redux"
 import PageLoader from "../components/PageLoader"
 
 function UsersPage(props) {
   const { fetchData } = useHTTP()
   const [data, setData] = useState([])
   const [load, setLoad] = useState(true)
+  const {
+    auth: { token },
+  } = useSelector((state) => state)
 
   useEffect(() => {
     const fetch = async () => {
@@ -42,12 +46,14 @@ function UsersPage(props) {
         onClick={() => handleRedirectUser(user._id)}
         className='user-link'
       >
-        <button
-          className='user-link__btn-delete btn'
-          onClick={handleRemoveUser}
-        >
-          <BsX />
-        </button>
+        {token.user && token.user.typeUser === "admin" && (
+          <button
+            className='user-link__btn-delete btn'
+            onClick={handleRemoveUser}
+          >
+            <BsX />
+          </button>
+        )}
         <div className='user-link__container-img'>
           <img className='user-link__img' src={user.ava} alt='userAva' />
         </div>
@@ -76,11 +82,9 @@ function UsersPage(props) {
       <div className='title'>
         <div className='title__container-name'>
           <FiUsers />
-          <span className='title__name'>All users</span>
+          <span className='title__name'>Users</span>
         </div>
-        <span className='title__description'>
-          Access only for administrator
-        </span>
+        <span className='title__description'>All registered users</span>
       </div>
       <div className='users'>{users}</div>
     </div>

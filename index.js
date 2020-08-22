@@ -27,6 +27,10 @@ const startServer = async () => {
     app.use("/message", require("./api/routes/messages"))
     app.use("/announcement", require("./api/routes/announcements"))
 
+    if (process.env.NODE_ENV === "production") {
+      app.use(express.static("client/build"))
+    }
+
     app.listen(PORT, () => console.log(`Server started on port: ${PORT}`))
   } catch (error) {
     console.log(`Server error: ${error.message}`)
