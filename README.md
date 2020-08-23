@@ -1,2 +1,2 @@
 # ad-stack
-announcement website
+DEMO: https://ad-stack.herokuapp.com
