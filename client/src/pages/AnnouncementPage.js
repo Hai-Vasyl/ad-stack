@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import useHTTP from "../hooks/useHTTP"
 import useTags from "../hooks/useTags"
 import { Link } from "react-router-dom"
@@ -6,7 +6,6 @@ import { AiOutlinePicLeft } from "react-icons/ai"
 import {
   BsChevronLeft,
   BsChevronRight,
-  BsChat,
   BsCardImage,
   BsGear,
   BsArrowRight,
@@ -20,10 +19,13 @@ import {
   addBookmark,
   removeBookmark,
 } from "../redux/bookmarks/bookmarksActions"
+import { toggleAuthForm } from "../redux/navbar/navbarActions"
 import PageLoader from "../components/PageLoader"
+import { RiChatNewLine } from "react-icons/ri"
 
 function AnnouncementPage(props) {
   const [data, setData] = useState({ images: [] })
+  const focus = useRef()
   const { fetchData } = useHTTP()
   const tags = useTags()
   const [load, setLoad] = useState(true)
@@ -50,6 +52,14 @@ function AnnouncementPage(props) {
     }
     fetch()
   }, [announcementId, fetchData])
+
+  const handleFocusForm = () => {
+    if (token.token) {
+      focus.current.focus()
+    } else {
+      dispatch(toggleAuthForm())
+    }
+  }
 
   useEffect(() => {
     let isInclude = false
@@ -169,6 +179,19 @@ function AnnouncementPage(props) {
     return props
   }
 
+  const imagesJSX = data.images.map((img) => {
+    return (
+      <img
+        src={img.path}
+        key={img._id}
+        className={`details-ad__preview-img ${
+          img.statusPreview && "details-ad__preview-img--active"
+        }`}
+        alt='PreviewImg'
+      />
+    )
+  })
+
   if (load) {
     return (
       <div className='wrapper'>
@@ -192,11 +215,7 @@ function AnnouncementPage(props) {
           <div className='details-ad__container-preview'>
             {data.images.length ? (
               <>
-                <img
-                  src={getPreviewImage()}
-                  className='details-ad__preview-img'
-                  alt='PreviewImg'
-                />
+                {imagesJSX}
                 <button
                   className='details-ad__move-btn details-ad__right-btn'
                   onClick={() => handleMove(false)}
@@ -224,7 +243,7 @@ function AnnouncementPage(props) {
 
         <div className='details-ad__container-info'>
           {token.token &&
-            (token.user.typeUser === data.owner.typeUser ? (
+            (token.user._id === data.owner._id ? (
               <Link
                 className='details-ad__btn-edit link'
                 to={`/edit/${data._id}`}
@@ -243,9 +262,12 @@ function AnnouncementPage(props) {
             ))}
           <h3 className='details-ad__title'>{data.title}</h3>
           <div className='details-ad__container-price'>
-            <button className='details-ad__btn-message btn btn-primary'>
-              <BsChat className='btn__icon' />
-              <span className='btn__name'>Message Owner</span>
+            <button
+              className='details-ad__btn-message btn btn-primary'
+              onClick={handleFocusForm}
+            >
+              <RiChatNewLine className='btn__icon' />
+              <span className='btn__name'>Ask a question</span>
             </button>
             <div className='details-ad__price'>{data.price} &#8372;</div>
           </div>
@@ -310,7 +332,7 @@ function AnnouncementPage(props) {
           </div>
         </div>
       </div>
-      <Questions announcement={data._id} owner={data.owner._id} />
+      <Questions announcement={data._id} focus={focus} owner={data.owner._id} />
     </div>
   )
 }

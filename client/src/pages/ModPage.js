@@ -385,7 +385,7 @@ function ModPage(props) {
                 isEmptyFields()
                   ? "btn-disabled"
                   : announcementId
-                  ? "btn-warning"
+                  ? "btn-simple"
                   : "btn-success"
               }`}
               onClick={isEmptyFields() ? () => {} : handleSubmit}

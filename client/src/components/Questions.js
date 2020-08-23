@@ -3,15 +3,17 @@ import useHTTP from "../hooks/useHTTP"
 import Question from "./Question"
 import { BsArrowRight, BsInfoCircle } from "react-icons/bs"
 import { RiUserSettingsLine, RiUserLine } from "react-icons/ri"
-import { useSelector } from "react-redux"
+import { toggleAuthForm } from "../redux/navbar/navbarActions"
+import { useSelector, useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
 import { AiOutlineLogin } from "react-icons/ai"
 
-function Questions({ announcement, owner }) {
+function Questions({ announcement, owner, focus }) {
   const [questions, setQuestions] = useState([])
   const [comment, setComment] = useState("")
   const [load, setLoad] = useState(true)
   const { token } = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
   const { fetchData } = useHTTP()
 
   useEffect(() => {
@@ -112,6 +114,7 @@ function Questions({ announcement, owner }) {
                 value={comment}
                 onChange={handleChange}
                 placeholder='Leave a question'
+                ref={focus}
               ></textarea>
             </div>
             <button
@@ -135,7 +138,10 @@ function Questions({ announcement, owner }) {
           <span className='comment-warning__title'>
             Please login, to write a question
           </span>
-          <button className='comment-warning__btn btn btn-simple'>
+          <button
+            className='comment-warning__btn btn btn-simple'
+            onClick={() => dispatch(toggleAuthForm())}
+          >
             <AiOutlineLogin className='btn__icon' />
             <span className='btn__name'>Login</span>
           </button>
@@ -143,7 +149,13 @@ function Questions({ announcement, owner }) {
       )}
 
       <div className='container-msgs'>
-        {load ? <div className='loader'></div> : messages}
+        {load ? (
+          <div className='loader'></div>
+        ) : messages.length ? (
+          messages
+        ) : (
+          <div className='plug-text'>No questions</div>
+        )}
       </div>
     </>
   )

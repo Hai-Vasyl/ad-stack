@@ -445,6 +445,10 @@ function UserPage(props) {
           <div className='user__brief-info'>
             {user.brief ? (
               user.brief
+            ) : userId ? (
+              <span className='user__plug-text'>
+                Nothing about this user or his profession
+              </span>
             ) : (
               <span>
                 Type something about yourself, about your profession..{" "}
@@ -480,7 +484,11 @@ function UserPage(props) {
                 getStatus(0) && "user__tabpage--open"
               }`}
             >
-              {announcementsJSX}
+              {announcementsJSX.length ? (
+                announcementsJSX
+              ) : (
+                <div className='plug-text'>No Announcements</div>
+              )}
             </div>
             <div
               className={`user__tabpage ${

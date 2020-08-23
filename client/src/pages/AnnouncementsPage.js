@@ -18,6 +18,7 @@ function AnnouncementsPage(props) {
   useEffect(() => {
     const fetch = async () => {
       try {
+        setLoad(true)
         const data = await fetchData({
           url: categoryName
             ? `/announcement/get-announcements/${categoryName}`
@@ -95,7 +96,15 @@ function AnnouncementsPage(props) {
             : `Search results for: ${text}`}
         </span>
       </div>
-      <div className='announc'>{announcements}</div>
+      <div className={`announc ${!announcements.length && "announc-empty"}`}>
+        {announcements.length ? (
+          announcements
+        ) : (
+          <div className='plug-text'>
+            {categoryName ? "Temporary empty" : `No results for: ${text}`}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

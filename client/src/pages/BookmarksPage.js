@@ -105,7 +105,13 @@ function BookmarksPage() {
         </div>
         <span className='title__description'>Your favourite announcements</span>
       </div>
-      <div className='bookmarks'>{bookmarksJSX}</div>
+      <div className='bookmarks'>
+        {bookmarksJSX.length ? (
+          bookmarksJSX
+        ) : (
+          <div className='plug-text'>No bookmarks</div>
+        )}
+      </div>
     </div>
   )
 }

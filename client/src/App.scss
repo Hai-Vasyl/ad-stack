@@ -141,8 +141,10 @@ $transitions: (
   max-width: 100%;
   padding: 60px 50px 20px 50px;
   margin: 0 auto;
-  background-color: white;
+  // background-color: white;
   min-height: 100vh;
+  border-left: 1px dashed getColor(main);
+  border-right: 1px dashed getColor(main);
 }
 
 .main {
@@ -403,8 +405,9 @@ $transitions: (
   color: white;
 }
 .btn-danger {
-  background-color: getColor(danger);
+  background-color: getColor(dark);
   color: white;
+  box-shadow: none;
 }
 .btn-disabled {
   background-color: getColor(secondary);
@@ -981,6 +984,16 @@ $transitions: (
     padding: 4px;
   }
 }
+.announc-empty {
+  display: block;
+}
+
+.plug-text {
+  text-align: center;
+  padding: 5px 0;
+  font-size: 1.1em;
+  color: getColor(secondary);
+}
 
 .details-ad {
   display: flex;
@@ -1001,10 +1014,18 @@ $transitions: (
   &__preview-img {
     width: 100%;
     height: 100%;
+    position: absolute;
     object-fit: contain;
-    transform: scale(0.85);
-    // border-radius: 5px;
-    // overflow: hidden;
+    padding: 35px;
+    opacity: 0;
+    transform: scale(0.5);
+    visibility: hidden;
+    transition: getTransition(smooth);
+    &--active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+    }
   }
   &__move-btn {
     position: absolute;
@@ -1922,13 +1943,11 @@ $transitions: (
     object-fit: cover;
     border-radius: 50%;
     border: 1px solid getColor(secondary);
-    // box-shadow: inset 0px 0px 3px black;
   }
   &__type-icon {
     position: absolute;
     bottom: 20px;
     right: 20px;
-    // border: 1px solid getColor(secondary);
     width: 50px;
     height: 50px;
     padding: 10px;
@@ -2061,6 +2080,9 @@ $transitions: (
   &__contact-plug {
     color: lightgrey;
     font-weight: normal;
+  }
+  &__plug-text {
+    color: grey !important;
   }
 }
 
@@ -2236,5 +2258,8 @@ $transitions: (
     text-align: center;
     padding: 5px;
     display: block;
+    color: white;
+    margin-top: 10px;
+    font-size: 1.1em;
   }
 }
