@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const User = require("../models/User")
 const Quastion = require("../models/Question")
@@ -46,15 +46,18 @@ exports.user_login = async (req, res) => {
       })
     }
 
-    const validPassword = await bcrypt.compare(password, user.password)
-    if (!validPassword) {
-      return res
-        .status(400)
-        .json({ errors: [{ param: "password", msg: "Password is wrong!" }] })
-    }
+    // TODO://
+    bcrypt.compare(password, user.password, function (err, validPass) {
+      if (err) {
+        return res
+          .status(400)
+          .json({ errors: [{ param: "password", msg: "Password is wrong!" }] })
+      }
 
-    const token = jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET)
-    res.json({ token, user })
+      const token = jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET)
+      res.json({ token, user })
+    })
+    // TODO://
   } catch (error) {
     res.status(500).json(`Register error: ${error.message}`)
   }
@@ -99,20 +102,29 @@ exports.user_register = async (req, res) => {
         })
       }
     }
+    // TODO: ///
+    bcrypt.genSalt(12, function (err, salt) {
+      bcrypt.hash(password, salt, async function (err, hash) {
+        // Store hash in your password DB.
+        // const hashedPassword = await bcrypt.hash(password, 12)
 
-    const hashedPassword = await bcrypt.hash(password, 12)
+        const user = new User({
+          username,
+          email,
+          password: hash,
+          typeUser,
+          date: new Date(),
+        })
+        const newUser = await user.save()
 
-    const user = new User({
-      username,
-      email,
-      password: hashedPassword,
-      typeUser,
-      date: new Date(),
+        const token = jwt.sign(
+          { userId: newUser._id },
+          process.env.TOKEN_SECRET
+        )
+        res.json({ token, user: newUser })
+      })
     })
-    const newUser = await user.save()
-
-    const token = jwt.sign({ userId: newUser._id }, process.env.TOKEN_SECRET)
-    res.json({ token, user: newUser })
+    // TODO: ///
   } catch (error) {
     res.status(500).json(`Register error: ${error.message}`)
   }
