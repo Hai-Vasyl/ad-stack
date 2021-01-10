@@ -2,14 +2,14 @@
   "name": "06",
   "version": "1.0.0",
   "description": "announcement website",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "server": "nodemon index.js",
+    "server": "nodemon server.js",
     "client": "npm start --prefix client",
     "build": "cd client && npm run build",
     "install-client": "cd client && npm install",
     "heroku-postbuild": "npm run install-client && npm run build",
-    "start": "node index.js",
+    "start": "node server.js",
     "start-dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
