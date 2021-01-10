@@ -1,6 +1,34 @@
 const Announcement = require("../models/Announcement")
 const Image = require("../models/Image")
-const fs = require("fs")
+const AWS = require("aws-sdk")
+const { v4: uuidv4 } = require("uuid")
+require("dotenv").config()
+
+const { AWS_ID, AWS_SECRET, AWS_BUCKET } = process.env
+
+const s3 = new AWS.S3({
+  accessKeyId: AWS_ID,
+  secretAccessKey: AWS_SECRET,
+})
+
+const deleteImages = async (images, announId) => {
+  try {
+    for (let i = 0; i < images.length; i++) {
+      let imgKey = images[i].path.split("/")
+      imgKey = imgKey[imgKey.length - 1]
+      await s3
+        .deleteObject({
+          Key: imgKey,
+          Bucket: AWS_BUCKET,
+        })
+        .promise()
+    }
+
+    await Image.deleteMany({ announcement: announId })
+  } catch (error) {
+    res.status(400).json(`Error deleting images: ${error.message}`)
+  }
+}
 
 exports.announcement_create_edit = async (req, res) => {
   try {
@@ -10,18 +38,27 @@ exports.announcement_create_edit = async (req, res) => {
 
     const createImages = async (adId) => {
       try {
-        for (const img of files) {
+        for (let i = 0; i < files.length; i++) {
+          const uploaded = await s3
+            .upload({
+              ACL: "public-read",
+              Bucket: AWS_BUCKET,
+              Key: `${uuidv4()}.${files[i].originalname}`,
+              Body: files[i].buffer,
+              Conditions: [{ acl: "public-read" }],
+            })
+            .promise()
+
           const image = new Image({
-            path: `/${img.path}`,
+            path: uploaded.Location,
             announcement: adId,
             owner: userId,
-            statusPreview:
-              files.indexOf(img) === Number.parseInt(indexPreviewImage) && true,
+            statusPreview: i === Number.parseInt(indexPreviewImage),
           })
           await image.save()
         }
       } catch (error) {
-        res.json(`Error creating images: ${error.message}`)
+        res.status(400).json(`Error creating images: ${error.message}`)
       }
     }
 
@@ -32,17 +69,10 @@ exports.announcement_create_edit = async (req, res) => {
       )
       if (files.length) {
         const images = await Image.find({ announcement: announId })
-
         if (images.length) {
-          for (let i = 0; i < images.length; i++) {
-            let path = images[i].path.split("\\").join("/")
-            path = path.split("")
-            path[0] = ""
-            fs.unlinkSync(path.join(""))
-          }
-
-          await Image.deleteMany({ announcement: announId })
+          await deleteImages(images, announId)
         }
+
         await createImages(announId)
       }
 
@@ -65,7 +95,7 @@ exports.announcement_create_edit = async (req, res) => {
       res.status(201).json({ id: advertNew._id })
     }
   } catch (error) {
-    res.json(`Error creating announcement: ${error.message}`)
+    res.json(`Error creating or edittin announcement: ${error.message}`)
   }
 }
 
@@ -132,14 +162,7 @@ exports.announcement_delete = async (req, res) => {
     const images = await Image.find({ announcement: announId })
 
     if (images.length) {
-      for (let i = 0; i < images.length; i++) {
-        let path = images[i].path.split("\\").join("/")
-        path = path.split("")
-        path[0] = ""
-        fs.unlinkSync(path.join(""))
-      }
-
-      await Image.deleteMany({ announcement: announId })
+      await deleteImages(images, announId)
     }
 
     await Announcement.findByIdAndDelete(announId)

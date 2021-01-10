@@ -1,11 +1,32 @@
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const User = require("../models/User")
+const Quastion = require("../models/Question")
+const Answer = require("../models/Answer")
 const { validationResult } = require("express-validator")
 require("dotenv").config()
 const Announcement = require("../models/Announcement")
 const Image = require("../models/Image")
 const fs = require("fs")
+const AWS = require("aws-sdk")
+const { v4: uuidv4 } = require("uuid")
+const { AWS_ID, AWS_SECRET, AWS_BUCKET } = process.env
+
+const s3 = new AWS.S3({
+  accessKeyId: AWS_ID,
+  secretAccessKey: AWS_SECRET,
+})
+
+const deleteImage = async (image) => {
+  let imgKey = image.split("/")
+  imgKey = imgKey[imgKey.length - 1]
+  await s3
+    .deleteObject({
+      Key: imgKey,
+      Bucket: AWS_BUCKET,
+    })
+    .promise()
+}
 
 exports.user_login = async (req, res) => {
   try {
@@ -112,18 +133,23 @@ exports.user_delete = async (req, res) => {
     const { userId } = req.body
 
     const images = await Image.find({ owner: userId })
+    const user = await User.findById(userId)
 
     if (images.length) {
       for (let i = 0; i < images.length; i++) {
-        let path = images[i].path.split("\\").join("/")
-        path = path.split("")
-        path[0] = ""
-        fs.unlinkSync(path.join(""))
+        await deleteImage(images[i].path)
       }
-
       await Image.deleteMany({ owner: userId })
     }
+    if (
+      user.ava !==
+      "https://ad-stack-bucket.s3-eu-west-1.amazonaws.com/avatar.png"
+    ) {
+      await deleteImage(user.ava)
+    }
 
+    await Answer.deleteMany({ owner: userId })
+    await Quastion.deleteMany({ owner: userId })
     await Announcement.deleteMany({ owner: userId })
     await User.findByIdAndDelete(userId)
 
@@ -237,23 +263,28 @@ exports.user_update = async (req, res) => {
 
 exports.user_image_update = async (req, res) => {
   try {
-    const { userId } = req
+    const { userId, file } = req
     const user = await User.findById(userId)
 
-    const ava = `/${req.file.path}`
-    await User.updateOne({ _id: userId }, { ava })
-
-    try {
-      if (user.ava !== "/avatars\\34576358234-avatar.png") {
-        let path = user.ava.split("\\").join("/")
-        path = path.split("")
-        path[0] = ""
-        fs.unlinkSync(path.join(""))
-      }
-    } catch (error) {
-    } finally {
-      res.json(ava)
+    if (
+      user.ava !==
+      "https://ad-stack-bucket.s3-eu-west-1.amazonaws.com/avatar.png"
+    ) {
+      await deleteImage(user.ava)
     }
+    const uploaded = await s3
+      .upload({
+        ACL: "public-read",
+        Bucket: AWS_BUCKET,
+        Key: `${uuidv4()}.${file.originalname}`,
+        Body: file.buffer,
+        Conditions: [{ acl: "public-read" }],
+      })
+      .promise()
+
+    await User.updateOne({ _id: userId }, { ava: uploaded.Location })
+
+    res.json(uploaded.Location)
   } catch (error) {
     res.status(500).json(`Error updating user image: ${error.message}`)
   }
