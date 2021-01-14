@@ -8,6 +8,7 @@ import {
 import { BsX, BsCheck } from "react-icons/bs"
 import { useSelector } from "react-redux"
 import useHTTP from "../hooks/useHTTP"
+import moment from "moment"
 
 function Message({ message, isQuestion, owner, setNewAnswer, deleteHandler }) {
   const [dropReply, setDropReply] = useState(false)
@@ -96,7 +97,7 @@ function Message({ message, isQuestion, owner, setNewAnswer, deleteHandler }) {
           <Link to={`/user/${message.owner._id}`} className='msg__username'>
             {message.owner.username}
           </Link>
-          <span className='msg__date'>{message.date.slice(0, 10)}</span>
+          <span className='msg__date'>{moment(message.date).calendar()}</span>
         </div>
 
         <div className='msg__content'>{message.content}</div>

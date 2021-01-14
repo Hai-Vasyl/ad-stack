@@ -42,6 +42,7 @@ function Questions({ announcement, owner, focus }) {
       <Question
         key={question._id}
         question={question}
+        isNewQuestion={question.isNewQuestion}
         owner={owner}
         deleteQuestion={deleteQuestion}
       />
@@ -70,7 +71,7 @@ function Questions({ announcement, owner, focus }) {
         username: token.user.username,
         _id: token.user._id,
       }
-      setQuestions([{ ...data, owner }, ...questions])
+      setQuestions([{ ...data, owner, isNewQuestion: true }, ...questions])
       setComment("")
     } catch (error) {}
   }

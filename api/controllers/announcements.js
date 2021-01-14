@@ -2,9 +2,27 @@ const Announcement = require("../models/Announcement")
 const Image = require("../models/Image")
 const AWS = require("aws-sdk")
 const { v4: uuidv4 } = require("uuid")
-require("dotenv").config()
+require("dotenv").config({ path: "../../.env" })
 
 const { AWS_ID, AWS_SECRET, AWS_BUCKET } = process.env
+
+// const getData = () => {
+//   let params = {
+//     TableName: "Announcement",
+//     Key: {
+//       id: "some_mew_id",
+//     },
+//   }
+//   docClient.get(params, (err, data) => {
+//     if (err) {
+//       return console.log({ err })
+//     }
+
+//     console.log({ data })
+//   })
+// }
+
+// getData()
 
 const s3 = new AWS.S3({
   accessKeyId: AWS_ID,

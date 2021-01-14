@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import Message from "./Message"
 import useHTTP from "../hooks/useHTTP"
 
-function Question({ question, owner, deleteQuestion }) {
+function Question({ question, isNewQuestion, owner, deleteQuestion }) {
   const [answers, setAnswers] = useState([])
   const [load, setLoad] = useState(true)
   const { fetchData } = useHTTP()
@@ -21,8 +21,12 @@ function Question({ question, owner, deleteQuestion }) {
         setLoad(false)
       } catch (error) {}
     }
-    fetch()
-  }, [fetchData, question])
+    if (!isNewQuestion) {
+      fetch()
+    } else {
+      setLoad(false)
+    }
+  }, [fetchData, question, isNewQuestion])
 
   const setNewAnswer = (answerNew) => {
     setAnswers([answerNew, ...answers])
@@ -32,16 +36,18 @@ function Question({ question, owner, deleteQuestion }) {
     setAnswers(answers.filter((answer) => answer._id !== answerId))
   }
 
-  const answersJSX = answers.map((answer) => {
-    return (
-      <Message
-        message={answer}
-        key={answer._id}
-        owner={owner}
-        deleteHandler={deleteAnswer}
-      />
-    )
-  })
+  const answersJSX =
+    answers &&
+    answers.map((answer) => {
+      return (
+        <Message
+          message={answer}
+          key={answer._id}
+          owner={owner}
+          deleteHandler={deleteAnswer}
+        />
+      )
+    })
 
   return (
     <div>

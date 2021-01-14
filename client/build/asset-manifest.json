@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/static/css/main.d7f84306.chunk.css",
-    "main.js": "/static/js/main.7b11f676.chunk.js",
-    "main.js.map": "/static/js/main.7b11f676.chunk.js.map",
+    "main.js": "/static/js/main.09f4f8a6.chunk.js",
+    "main.js.map": "/static/js/main.09f4f8a6.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.c012fedc.js",
     "runtime-main.js.map": "/static/js/runtime-main.c012fedc.js.map",
-    "static/js/2.d7e06065.chunk.js": "/static/js/2.d7e06065.chunk.js",
-    "static/js/2.d7e06065.chunk.js.map": "/static/js/2.d7e06065.chunk.js.map",
+    "static/js/2.8ebcb884.chunk.js": "/static/js/2.8ebcb884.chunk.js",
+    "static/js/2.8ebcb884.chunk.js.map": "/static/js/2.8ebcb884.chunk.js.map",
     "index.html": "/index.html",
     "static/css/main.d7f84306.chunk.css.map": "/static/css/main.d7f84306.chunk.css.map",
-    "static/js/2.d7e06065.chunk.js.LICENSE.txt": "/static/js/2.d7e06065.chunk.js.LICENSE.txt",
+    "static/js/2.8ebcb884.chunk.js.LICENSE.txt": "/static/js/2.8ebcb884.chunk.js.LICENSE.txt",
     "static/media/undraw_Cautious_dog_q83f.808fa8f2.svg": "/static/media/undraw_Cautious_dog_q83f.808fa8f2.svg",
     "static/media/undraw_Design_thinking_re_644h.1b161425.svg": "/static/media/undraw_Design_thinking_re_644h.1b161425.svg",
     "static/media/undraw_Vehicle_sale_a645.108aaaf4.svg": "/static/media/undraw_Vehicle_sale_a645.108aaaf4.svg",
@@ -26,8 +26,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.c012fedc.js",
-    "static/js/2.d7e06065.chunk.js",
+    "static/js/2.8ebcb884.chunk.js",
     "static/css/main.d7f84306.chunk.css",
-    "static/js/main.7b11f676.chunk.js"
+    "static/js/main.09f4f8a6.chunk.js"
   ]
 }

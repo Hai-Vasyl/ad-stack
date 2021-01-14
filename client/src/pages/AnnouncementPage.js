@@ -138,7 +138,8 @@ function AnnouncementPage(props) {
         className={`details-ad__tab-btn ${
           img.statusPreview && "details-ad__tab-btn--active"
         }`}
-        onClick={() => handleTabActive(img._id)}>
+        onClick={() => handleTabActive(img._id)}
+      >
         <img src={img.path} className='details-ad__tab-image' alt='imgTab' />
       </button>
     )
@@ -217,12 +218,14 @@ function AnnouncementPage(props) {
                 {imagesJSX}
                 <button
                   className='details-ad__move-btn details-ad__right-btn'
-                  onClick={() => handleMove(false)}>
+                  onClick={() => handleMove(false)}
+                >
                   <BsChevronRight />
                 </button>
                 <button
                   className='details-ad__move-btn details-ad__left-btn'
-                  onClick={() => handleMove(true)}>
+                  onClick={() => handleMove(true)}
+                >
                   <BsChevronLeft />
                 </button>
               </>
@@ -243,7 +246,8 @@ function AnnouncementPage(props) {
             (token.user._id === data.owner._id ? (
               <Link
                 className='details-ad__btn-edit link'
-                to={`/edit/${data._id}`}>
+                to={`/edit/${data._id}`}
+              >
                 <BsGear />
               </Link>
             ) : (
@@ -251,7 +255,8 @@ function AnnouncementPage(props) {
                 className={`details-ad__btn-edit link ${
                   includeBkmarks && "details-ad__bookmark"
                 }`}
-                onClick={handleBookmark}>
+                onClick={handleBookmark}
+              >
                 {includeBkmarks ? <BsBookmarkCheck /> : <BsBookmarkPlus />}
               </button>
             ))}
@@ -259,7 +264,8 @@ function AnnouncementPage(props) {
           <div className='details-ad__container-price'>
             <button
               className='details-ad__btn-message btn btn-primary'
-              onClick={handleFocusForm}>
+              onClick={handleFocusForm}
+            >
               <RiChatNewLine className='btn__icon' />
               <span className='btn__name'>Ask a question</span>
             </button>
@@ -273,7 +279,8 @@ function AnnouncementPage(props) {
                 <span className='details-ad__column-title'>Category:</span>
                 <Link
                   to={`/categories/${data.tag}`}
-                  className='details-ad__link btn link'>
+                  className='details-ad__link btn link'
+                >
                   {icon}
                   <span className='btn__name'>{name}</span>
                 </Link>
@@ -288,7 +295,8 @@ function AnnouncementPage(props) {
             <div className='details-ad__container-row-user'>
               <Link
                 to={`/user/${data.owner._id}`}
-                className='details-ad__container-ava'>
+                className='details-ad__container-ava'
+              >
                 <img
                   src={data.owner.ava}
                   alt='userImg'
@@ -298,7 +306,8 @@ function AnnouncementPage(props) {
               <div className='details-ad__container-user-info'>
                 <Link
                   to={`/user/${data.owner._id}`}
-                  className='details-ad__username'>
+                  className='details-ad__username'
+                >
                   {data.owner.username}
                 </Link>
                 <span className='details-ad__typeUser'>
@@ -314,7 +323,8 @@ function AnnouncementPage(props) {
               </div>
               <Link
                 to={`/user/${data.owner._id}`}
-                className='details-ad__btn-user btn link'>
+                className='details-ad__btn-user btn link'
+              >
                 <span className='btn__name'>Other announce</span>
                 <BsArrowRight className='btn__icon' />
               </Link>
